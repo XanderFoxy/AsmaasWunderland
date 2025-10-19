@@ -1,10 +1,12 @@
 /* GRUNDLEGENDE DEFINITIONEN */
 body {
-    margin: 0; padding: 0; 
+    margin: 0; 
+    padding: 0; 
+    /* WICHTIG: Erlaubt nur vertikales Scrollen, blockiert horizontales */
     overflow-x: hidden; 
     display: flex; 
-    justify-content: center; /* ZENTRIERT das Bild horizontal */
-    align-items: flex-start; /* ZENTRIERT das Bild VERTICAL nicht, wenn es kleiner ist, aber hält es oben. */
+    justify-content: center; /* ZENTRIERT das Bild horizontal (damit links/rechts auslaufen kann) */
+    align-items: center;    /* ZENTRIERT das Bild vertikal (Oben/Unten ist bündig) */
     min-height: 100vh;      
     background-color: #000;
 }
@@ -27,7 +29,8 @@ body {
     --start-links-mitte: calc(683 / var(--gesamt-breite-px) * 100%); /* 683px */
     --start-rechts-mitte-s3: calc(979 / var(--gesamt-breite-px) * 100%); /* 979px (Ende S11 / Start S3) */
     --start-rechts-mitte-s12: calc(1139 / var(--gesamt-breite-px) * 100%); /* 1139px (Ende S3 / Start S12) */
-    --start-rechts-oben-s15: calc(1490 / var(--gesamt-breite-px) * 100%); /* 1490px (Ende S12 / Start S8/S15) */
+    --start-rechts-oben-s15-andock: calc(1490 / var(--gesamt-breite-px) * 100%); /* 1490px (Ende S12 / Start S8/S15) - SCHLIESST DIE LÜCKE! */
+    --start-s10-korr: calc(1362 / var(--gesamt-breite-px) * 100%); /* 1362px (Start S10) - SCHLIESST DIE IPAD LÜCKE! */
     
     --spalte-links-unten-breite: calc(917 / var(--gesamt-breite-px) * 100%);
     --start-fuellelemente-unten: calc(1194 / var(--gesamt-breite-px) * 100%); /* 1194px (Start S5/S19/S17) */
@@ -41,7 +44,7 @@ body {
 
 
 /* -------------------------------------------
- * OBERE HÄLFTE (bis 1278px Höhe) 
+ * OBERE HÄLFTE (bis 1278px Höhe) - MITTE KORRIGIERT
  * ------------------------------------------- */
 /* Linke Spalte */
 #slice-7 { width: calc(683 / var(--gesamt-breite-px) * 100%); height: calc(677 / var(--gesamt-breite-px) * 100%); top: 0; left: 0; }
@@ -51,11 +54,12 @@ body {
 #slice-1 { width: calc(807 / var(--gesamt-breite-px) * 100%); height: calc(464 / var(--gesamt-breite-px) * 100%); top: 0; left: var(--start-links-mitte); }
 #slice-9 { width: calc(135 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: var(--start-links-mitte); }
 #slice-2 { width: calc(544 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: calc(var(--start-links-mitte) + (135 / var(--gesamt-breite-px) * 100%)); }
-/* KORRIGIERT: Slice 10 - Startet exakt bei 1362px */
+
+/* KORRIGIERT: Slice 10 - Startet exakt bei 1362px (behebt Lücke) */
 #slice-10 { 
     width: calc(128 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); 
     top: calc(464 / var(--gesamt-breite-px) * 100%); 
-    left: calc(1362 / var(--gesamt-breite-px) * 100%); /* Startet bei 683 + 135 + 544 = 1362px */
+    left: var(--start-s10-korr); 
 }
 
 #slice-11 { width: calc(296 / var(--gesamt-breite-px) * 100%); height: calc(95 / var(--gesamt-breite-px) * 100%); top: calc(582 / var(--gesamt-breite-px) * 100%); left: var(--start-links-mitte); }
@@ -71,14 +75,14 @@ body {
 }
 
 /* Rechte Spalte (Rechtsbündig und angedockt) */
-#slice-8 { /* 558x677, Top 0 */
+#slice-8 { /* 558x677, Top 0. Startet bei 1490px */
     width: calc(558 / var(--gesamt-breite-px) * 100%); height: calc(677 / var(--gesamt-breite-px) * 100%); top: 0; 
-    left: calc(var(--rechte-kante) - (558 / var(--gesamt-breite-px) * 100%)); /* Startet bei 1490px */
+    left: calc(var(--rechte-kante) - (558 / var(--gesamt-breite-px) * 100%)); 
 }
-/* KORRIGIERT: Slice 15 - Startet exakt bei 1490px (Ende S12) und ist 558px breit */
+/* KORRIGIERT: Slice 15 - Startet exakt bei 1490px (Ende S12/S3) und ist 558px breit */
 #slice-15 { 
     width: calc(558 / var(--gesamt-breite-px) * 100%); height: calc(601 / var(--gesamt-breite-px) * 100%); top: calc(677 / var(--gesamt-breite-px) * 100%); 
-    left: var(--start-rechts-oben-s15); /* Startet bei 1490px */
+    left: var(--start-rechts-oben-s15-andock); /* Startet bei 1490px */
 }
 
 
