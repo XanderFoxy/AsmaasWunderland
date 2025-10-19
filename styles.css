@@ -4,6 +4,8 @@ html {
     height: 100%; 
 }
 body {
+    /* KORREKTUR: Versteckt den gesamten body, bis JS ihn sichtbar macht, behebt das Durchscheinen */
+    visibility: hidden; 
     margin: 0; 
     padding: 0; 
     overflow: hidden; 
@@ -26,11 +28,8 @@ body {
     position: relative; 
     overflow: hidden; 
     
-    /* NEU: Bildinhalt von Anfang an verstecken, damit nichts durchscheint */
-    visibility: hidden; 
-    
-    /* STARTZUSTAND: Nur die Feinjustierung, KEIN Zoom (scale(1)). */
-    transform: translateX(-3.0%) scale(1);
+    /* KORREKTUR ZENTRIERUNG: Reduzierte Verschiebung für schmale Geräte (iPhone) */
+    transform: translateX(-2.0%) scale(1);
     
     /* WICHTIG: Die Skalierung geht vom unteren Rand aus (50% = Mitte, 100% = Unten) */
     transform-origin: 50% 100%;
@@ -47,7 +46,8 @@ body {
 /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
 /* !important erzwingt diesen Endzustand für die Animation */
 .zoom-in {
-    transform: translateX(-3.0%) scale(1.2) !important;
+    /* KORREKTUR ZENTRIERUNG */
+    transform: translateX(-2.0%) scale(1.2) !important;
 }
 
 
@@ -62,12 +62,12 @@ body {
 @keyframes glow-pulse {
     0%, 100% {
         /* Minimales Leuchten */
-        /* NEU: SVG-Filter + drop-shadow in Keyframes für konsistente Animation */
-        filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='alphablend'><feColorMatrix type='matrix' values='0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 1 0'/></filter></svg>#alphablend") drop-shadow(0 0 5px #ffcc80) drop-shadow(0 0 2px #FFF); 
+        /* WICHTIG: Die Animation wirkt NUR auf den drop-shadow-Wert */
+        filter: drop-shadow(0 0 5px #ffcc80) drop-shadow(0 0 2px #FFF); 
     }
     50% {
         /* Maximales Leuchten (Goldgelb) */
-        filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='alphablend'><feColorMatrix type='matrix' values='0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 1 0'/></filter></svg>#alphablend") drop-shadow(0 0 15px #FFD700) drop-shadow(0 0 8px #FFFFFF);
+        filter: drop-shadow(0 0 15px #FFD700) drop-shadow(0 0 8px #FFFFFF);
     }
 }
 
@@ -109,15 +109,18 @@ body {
     height: 100%;
     z-index: 2; /* Liegt über dem img */
     
-    /* Opacity auf 1 lassen, damit der Shadow funktioniert */
     opacity: 1;
 
-    /* Läd das neue, transparente Bild. KORRIGIERTE GROSS-/KLEINSCHREIBUNG! */
+    /* KORREKTUR: Originale Groß-/Kleinschreibung des Pfads */
     background-image: url('https://xanderfoxy.github.io/AsmaasWunderland/Slice2 2.png'); 
     background-size: 100% 100%;
     background-repeat: no-repeat;
     
-    /* SVG-Filter im Element, damit die Animation nur noch den drop-shadow ändert */
+    /* KORREKTUR: Macht das BILD selbst unsichtbar (nur Konturen bleiben), um Leuchten zu zeigen */
+    background-color: transparent; 
+    filter: opacity(0); 
+
+    /* Animation steuert den drop-shadow, der jetzt auf der unsichtbaren Kontur wirkt */
     animation: glow-pulse 4s infinite alternate ease-in-out;
 }
 
