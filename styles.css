@@ -20,9 +20,8 @@ body {
     position: relative; 
     overflow: hidden; 
     
-    /* NEU: Visuelle Feinjustierung des gesamten Bildes um 1.5% nach links */
-    /* Dies verschiebt das gesamte, zentrierte 1:1-Bild proportional nach links. */
-    transform: translateX(-1.5%);
+    /* NEU: Visuelle Feinjustierung des gesamten Bildes um insgesamt 2.25% nach links */
+    transform: translateX(-2.25%);
 
     /* Hilfsvariablen (Basis: 2048px) */
     --gesamt-breite-px: 2048;
@@ -48,7 +47,7 @@ body {
     left: 0; 
 }
 
-/* Mittlere Spalte (zentrierte Slices - ZURÜCK AUF URSPRÜNGLICHE WERTE) */
+/* Mittlere Spalte (zentrierte Slices - URSPRÜNGLICHE WERTE) */
 #slice-1 { width: calc(807 / 2048 * 100%); height: calc(464 / 2048 * 100%); top: 0; left: calc(683 / 2048 * 100%); }
 #slice-9 { width: calc(135 / 2048 * 100%); height: calc(118 / 2048 * 100%); top: calc(464 / 2048 * 100%); left: calc(683 / 2048 * 100%); }
 #slice-2 { width: calc(544 / 2048 * 100%); height: calc(118 / 2048 * 100%); top: calc(464 / 2048 * 100%); left: calc((683 + 135) / 2048 * 100%); }
