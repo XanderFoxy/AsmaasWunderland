@@ -1,13 +1,19 @@
 // Funktion zum Überwachen des Ladefortschritts
 function trackLoadingProgress() {
+    // Bezieht alle Bilder im Bild-Container mit ein
     const images = document.querySelectorAll('#bild-container img');
     const loadingBar = document.getElementById('loading-bar');
     let loadedCount = 0;
     const totalCount = images.length;
 
+    // Mindestwartezeit, selbst wenn alles sofort im Cache ist (für sichtbaren Ladebalken)
+    const MIN_WAIT_TIME = 800;
+    const startTime = Date.now();
+
     // Nur fortfahren, wenn es Bilder gibt
     if (totalCount === 0) {
-        return Promise.resolve();
+        // Warte die Mindestzeit, bevor aufgelöst wird
+        return new Promise(resolve => setTimeout(resolve, MIN_WAIT_TIME));
     }
     
     // Funktion zum Aktualisieren des Ladebalkens
@@ -19,7 +25,6 @@ function trackLoadingProgress() {
     const promises = [];
 
     images.forEach(img => {
-        // Nur fortfahren, wenn das Bild noch nicht komplett geladen ist
         if (!img.complete) {
             promises.push(new Promise(resolve => {
                 const onLoadOrError = () => {
@@ -28,31 +33,30 @@ function trackLoadingProgress() {
                     resolve();
                 };
                 img.onload = onLoadOrError;
-                img.onerror = onLoadOrError; // Fehler zählen auch als "erledigt"
+                img.onerror = onLoadOrError; 
             }));
         } else {
-            // Bilder, die bereits im Cache sind, müssen trotzdem gezählt werden
+            // Bereits geladene Bilder müssen trotzdem gezählt werden
             loadedCount++;
             updateProgress();
         }
     });
 
-    // Wenn alle Bilder schon geladen waren (promises.length ist 0), 
-    // muss die Ladebalken-Breite manuell auf 100% gesetzt werden und eine minimale Wartezeit eingehalten werden.
-    if (promises.length === 0 && totalCount > 0) {
-        loadingBar.style.width = '100%';
-        return new Promise(resolve => setTimeout(resolve, 500));
-    }
-
-    // Warten auf alle Promises
-    return Promise.all(promises);
+    // Kombinierter Promise: Alle Ressourcen geladen UND Mindestzeit abgelaufen
+    return Promise.all([
+        Promise.all(promises),
+        new Promise(resolve => {
+            const timeElapsed = Date.now() - startTime;
+            const remainingTime = MIN_WAIT_TIME - timeElapsed;
+            setTimeout(resolve, Math.max(0, remainingTime));
+        })
+    ]);
 }
 
 // Funktion zum Starten der Zoom-Animation
 function startZoomAnimation() {
     const bildContainer = document.getElementById('bild-container');
     // Fügt die CSS-Klasse hinzu, die den Endpunkt der Transformation definiert (scale(1.2))
-    // Die im CSS definierte 'transition' sorgt für die weiche Animation
     bildContainer.classList.add('zoom-in');
 }
 
@@ -60,18 +64,19 @@ function startZoomAnimation() {
 function hidePreloader() {
     const preloader = document.getElementById('preloader');
     
-    // Zoom-Animation starten, bevor der Preloader ausgeblendet wird, 
-    // damit der Zoom im Hintergrund beginnt.
-    startZoomAnimation();
-    
-    // Sanftes Ausblenden des Preloaders
+    // 1. Sanftes Ausblenden des Preloaders
     preloader.style.opacity = '0';
     
-    // Nach dem Ausblenden das Element endgültig deaktivieren
+    // 2. Startet den Zoom kurz NACHDEM die Transparenz-Animation beginnt. 
+    // Eine 100ms Verzögerung stellt sicher, dass der Browser den Startzustand registriert.
+    setTimeout(startZoomAnimation, 100);
+    
+    // 3. Nach dem Ausblenden das Element endgültig deaktivieren
+    // (Transition-Dauer ist 1.5s im CSS)
     setTimeout(() => {
         preloader.style.display = 'none';
-        preloader.style.pointerEvents = 'none'; // Gibt Interaktionen mit dem Bild frei
-    }, 1500); // Entspricht der Transition-Dauer im CSS
+        preloader.style.pointerEvents = 'none'; 
+    }, 1500); 
 }
 
 // Hauptlogik, die beim Laden der Seite startet
