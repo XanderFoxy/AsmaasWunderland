@@ -36,12 +36,15 @@
     overflow: hidden;
   }
 
+  /* Szene skaliert für Smartphone */
   .scene {
     position: absolute;
-    width: 2048px;  /* Originalbildgröße */
+    width: 2048px;
     height: 2048px;
-    top: -650px;    /* Verschiebung nach oben, damit Asmaas Wunderland mittig ist */
-    left: -400px;   /* Verschiebung nach links, falls nötig, für horizontales Zentrum */
+    top: 0;
+    left: 0;
+    transform: scale(0.439); /* Skalierungsfaktor */
+    transform-origin: top left;
     transition: transform 6s ease-out;
   }
 
@@ -52,7 +55,7 @@
 
   /* Zoom-Kamerafahrt */
   .zoom-in {
-    transform: scale(1.2); /* Optionaler Zoom auf den mittleren Bereich */
+    transform: scale(0.55); /* optional leicht zoom auf die Mitte */
   }
 </style>
 </head>
@@ -62,7 +65,7 @@
 
 <div class="viewport">
   <div class="scene" id="scene">
-    <!-- Hier alle 20 Slices -->
+    <!-- Slices in Originalposition, werden durch scale automatisch kleiner -->
     <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice7.png" style="top:0px; left:0px; width:683px; height:677px;">
     <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice1.jpg" style="top:0px; left:683px; width:807px; height:464px;">
     <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice8.png" style="top:0px; left:1490px; width:558px; height:677px;">
@@ -96,7 +99,7 @@
 
     setTimeout(() => {
       preloader.style.display = "none";
-      scene.classList.add("zoom-in"); // Zoom optional
+      scene.classList.add("zoom-in"); // optionaler Zoom
     }, 800);
   });
 </script>
