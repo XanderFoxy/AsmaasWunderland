@@ -1,29 +1,33 @@
 /* GRUNDLEGENDE DEFINITIONEN */
 body {
     margin: 0; padding: 0; 
-    overflow-x: hidden; /* Verhindert horizontales Scrollen im Body */
+    overflow-x: hidden; 
     display: flex; 
     justify-content: center; /* ZENTRIERT das Bild horizontal */
-    align-items: center;    /* ZENTRIERT das Bild vertikal */
+    align-items: flex-start; /* ZENTRIERT das Bild VERTICAL nicht, wenn es kleiner ist, aber hält es oben. */
     min-height: 100vh;      
     background-color: #000;
 }
 
 /* HAUPT-CONTAINER: Skalierung (QUADRATISCH & VERTIKAL BILDSCHIRMFÜLLEND) */
 #bild-container {
-    height: 100vh;     /* Die Höhe füllt 100% der sichtbaren Bildschirmhöhe */
-    width: 100vh;      /* Da es 1:1 sein muss, ist die Breite ebenfalls 100vh (ragt über) */
+    height: 100vh;     /* Die Höhe füllt 100% der sichtbaren Bildschirmhöhe (Oben/Unten bündig) */
+    width: 100vh;      /* Die Breite ist gleich der Höhe, um das Quadrat zu erhalten (läuft links/rechts aus) */
     
+    /* ZUSÄTZLICH: Erzwingt das 1:1 Verhältnis, um Stauchen zu verhindern */
+    aspect-ratio: 1 / 1; 
+
     position: relative; 
-    overflow: hidden;  
+    overflow: hidden; /* Versteckt Ränder, wenn das Bild größer ist als der Viewport */
     
     /* Hilfsvariablen (Basis: 2048px) */
     --gesamt-breite-px: 2048;
     
     /* DEFINITION DER SPALTEN STARTS */
     --start-links-mitte: calc(683 / var(--gesamt-breite-px) * 100%); /* 683px */
-    --start-rechts-mitte: calc(979 / var(--gesamt-breite-px) * 100%); /* 979px (Ende S11 / Start S3) */
-    --start-rechts-oben: calc(1490 / var(--gesamt-breite-px) * 100%); /* 1490px (Start S8/S15) */
+    --start-rechts-mitte-s3: calc(979 / var(--gesamt-breite-px) * 100%); /* 979px (Ende S11 / Start S3) */
+    --start-rechts-mitte-s12: calc(1139 / var(--gesamt-breite-px) * 100%); /* 1139px (Ende S3 / Start S12) */
+    --start-rechts-oben-s15: calc(1490 / var(--gesamt-breite-px) * 100%); /* 1490px (Ende S12 / Start S8/S15) */
     
     --spalte-links-unten-breite: calc(917 / var(--gesamt-breite-px) * 100%);
     --start-fuellelemente-unten: calc(1194 / var(--gesamt-breite-px) * 100%); /* 1194px (Start S5/S19/S17) */
@@ -47,20 +51,23 @@ body {
 #slice-1 { width: calc(807 / var(--gesamt-breite-px) * 100%); height: calc(464 / var(--gesamt-breite-px) * 100%); top: 0; left: var(--start-links-mitte); }
 #slice-9 { width: calc(135 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: var(--start-links-mitte); }
 #slice-2 { width: calc(544 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: calc(var(--start-links-mitte) + (135 / var(--gesamt-breite-px) * 100%)); }
-#slice-10 { width: calc(128 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: calc(var(--start-rechts-mitte) + (544 / var(--gesamt-breite-px) * 100%)); }
-#slice-11 { width: calc(296 / var(--gesamt-breite-px) * 100%); height: calc(95 / var(--gesamt-breite-px) * 100%); top: calc(582 / var(--gesamt-breite-px) * 100%); left: var(--start-links-mitte); }
+/* KORRIGIERT: Slice 10 - Startet exakt bei 1362px */
+#slice-10 { 
+    width: calc(128 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); 
+    top: calc(464 / var(--gesamt-breite-px) * 100%); 
+    left: calc(1362 / var(--gesamt-breite-px) * 100%); /* Startet bei 683 + 135 + 544 = 1362px */
+}
 
-/* Slice 3 (LANGE NASE) */
+#slice-11 { width: calc(296 / var(--gesamt-breite-px) * 100%); height: calc(95 / var(--gesamt-breite-px) * 100%); top: calc(582 / var(--gesamt-breite-px) * 100%); left: var(--start-links-mitte); }
 #slice-3 { 
     width: calc(160 / var(--gesamt-breite-px) * 100%); height: calc(696 / var(--gesamt-breite-px) * 100%); 
     top: calc(582 / var(--gesamt-breite-px) * 100%); 
-    left: var(--start-rechts-mitte); /* Startet bei 979px */
+    left: var(--start-rechts-mitte-s3); /* Startet bei 979px */
 }
-/* Slice 12 (RECHTS NEBEN NASE) */
 #slice-12 { 
     width: calc(351 / var(--gesamt-breite-px) * 100%); height: calc(95 / var(--gesamt-breite-px) * 100%); 
     top: calc(582 / var(--gesamt-breite-px) * 100%); 
-    left: calc(var(--start-rechts-mitte) + (160 / var(--gesamt-breite-px) * 100%)); /* Startet bei 979+160 = 1139px */
+    left: var(--start-rechts-mitte-s12); /* Startet bei 1139px */
 }
 
 /* Rechte Spalte (Rechtsbündig und angedockt) */
@@ -71,7 +78,7 @@ body {
 /* KORRIGIERT: Slice 15 - Startet exakt bei 1490px (Ende S12) und ist 558px breit */
 #slice-15 { 
     width: calc(558 / var(--gesamt-breite-px) * 100%); height: calc(601 / var(--gesamt-breite-px) * 100%); top: calc(677 / var(--gesamt-breite-px) * 100%); 
-    left: var(--start-rechts-oben); /* Startet bei 1490px */
+    left: var(--start-rechts-oben-s15); /* Startet bei 1490px */
 }
 
 
@@ -79,7 +86,7 @@ body {
  * UNTERE HÄLFTE (ab 1278px Höhe) 
  * ------------------------------------------- */
 /* Linke Spalte (OK) */
-#slice-16 { width: calc(917 / var(--gesamt-breite-px) * 100%); height: calc(770 / var(--gesamt-breite-px) * 100%); top: calc(1278 / var(--gesamt-breite-px) * 100%); left: 0; }
+#slice-16 { width: var(--spalte-links-unten-breite); height: calc(770 / var(--gesamt-breite-px) * 100%); top: calc(1278 / var(--gesamt-breite-px) * 100%); left: 0; }
 
 /* Mittlerer Block (OK) */
 #slice-13 { width: calc(277 / var(--gesamt-breite-px) * 100%); height: calc(232 / var(--gesamt-breite-px) * 100%); top: calc(1278 / var(--gesamt-breite-px) * 100%); left: var(--spalte-links-unten-breite); }
