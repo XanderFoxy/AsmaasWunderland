@@ -25,65 +25,75 @@
     z-index: 1000;
   }
 
-  /* Szene (Container für alle Slices) */
+  /* Szene */
+  .scene-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .scene {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 2048px;
+    position: relative;
+    width: 2048px;   /* Originalbildgröße */
     height: 2048px;
-    transform: translate(-50%, -50%) scale(1);
     transform-origin: center center;
+    transform: scale(0.45); /* Startmaßstab für Viewport */
     transition: transform 7s ease-out;
-  }
-
-  /* Zoom-Animation: Fokus leicht nach unten versetzt */
-  .zoom-in {
-    transform: translate(-50%, -50%) scale(1.6) translateY(5%);
-  }
-
-  @media (max-width: 768px) {
-    .zoom-in {
-      transform: translate(-50%, -50%) scale(1.9) translateY(14%);
-    }
   }
 
   .scene img {
     position: absolute;
     display: block;
   }
+
+  /* Zoom & Verschiebung für Fokus auf Asmaas Wunderland */
+  .zoom-in {
+    transform: scale(0.8) translateY(-18%);
+  }
+
+  @media (max-width: 768px) {
+    .zoom-in {
+      transform: scale(1) translateY(-22%);
+    }
+  }
 </style>
 </head>
-
 <body>
+
 <div id="preloader">✨ Betrete Asmaas Wunderland ...</div>
 
-<div class="scene" id="scene">
-  <!-- Obere Reihe -->
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice7.png" style="top:0; left:0; width:683px; height:677px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice1.jpg" style="top:0; left:683px; width:807px; height:464px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice8.png" style="top:0; left:1490px; width:558px; height:677px;">
+<div class="scene-container">
+  <div class="scene" id="scene">
+    <!-- Obere Reihe -->
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice7.png" style="top:0; left:0; width:683px; height:677px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice1.jpg" style="top:0; left:683px; width:807px; height:464px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice8.png" style="top:0; left:1490px; width:558px; height:677px;">
 
-  <!-- Zweite Reihe -->
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice9.jpg" style="top:677px; left:0; width:135px; height:118px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice2.png" style="top:677px; left:135px; width:544px; height:118px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice10.jpg" style="top:677px; left:679px; width:128px; height:118px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice11.jpg" style="top:795px; left:0; width:296px; height:95px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice3.png" style="top:795px; left:296px; width:160px; height:696px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice12.jpg" style="top:795px; left:456px; width:351px; height:95px;">
+    <!-- Zweite Reihe -->
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice9.jpg" style="top:677px; left:0; width:135px; height:118px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice2.png" style="top:677px; left:135px; width:544px; height:118px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice10.jpg" style="top:677px; left:679px; width:128px; height:118px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice11.jpg" style="top:795px; left:0; width:296px; height:95px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice3.png" style="top:795px; left:296px; width:160px; height:696px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice12.jpg" style="top:795px; left:456px; width:351px; height:95px;">
 
-  <!-- Mittlere + untere Bereiche -->
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice14.jpg" style="top:890px; left:0; width:979px; height:801px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice15.jpg" style="top:890px; left:979px; width:909px; height:601px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice16.jpg" style="top:1691px; left:0; width:917px; height:770px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice13.png" style="top:1691px; left:917px; width:277px; height:232px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice17.jpg" style="top:1691px; left:1194px; width:854px; height:371px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice4.png" style="top:1923px; left:917px; width:277px; height:202px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice5.png" style="top:1923px; left:1194px; width:296px; height:237px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice18.jpg" style="top:1923px; left:1490px; width:558px; height:399px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice6.png" style="top:2125px; left:917px; width:277px; height:295px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice19.jpg" style="top:2125px; left:1194px; width:296px; height:162px;">
-  <img src="https://xanderfoxy.github.io/AsmaWunderland/Slice20.jpg" style="top:2420px; left:917px; width:277px; height:41px;">
+    <!-- Mittlere + untere Bereiche -->
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice14.jpg" style="top:890px; left:0; width:979px; height:801px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice15.jpg" style="top:890px; left:979px; width:909px; height:601px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice16.jpg" style="top:1691px; left:0; width:917px; height:770px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice13.png" style="top:1691px; left:917px; width:277px; height:232px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice17.jpg" style="top:1691px; left:1194px; width:854px; height:371px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice4.png" style="top:1923px; left:917px; width:277px; height:202px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice5.png" style="top:1923px; left:1194px; width:296px; height:237px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice18.jpg" style="top:1923px; left:1490px; width:558px; height:399px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice6.png" style="top:2125px; left:917px; width:277px; height:295px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice19.jpg" style="top:2125px; left:1194px; width:296px; height:162px;">
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice20.jpg" style="top:2420px; left:917px; width:277px; height:41px;">
+  </div>
 </div>
 
 <script>
@@ -91,13 +101,14 @@
     const scene = document.getElementById("scene");
     const preloader = document.getElementById("preloader");
 
-    preloader.style.transition = "opacity 1s ease";
+    // Preloader ausblenden
+    preloader.style.transition = "opacity 0.8s ease";
     preloader.style.opacity = 0;
-
     setTimeout(() => {
       preloader.style.display = "none";
+      // Kamerafahrt starten
       scene.classList.add("zoom-in");
-    }, 1000);
+    }, 800);
   });
 </script>
 </body>
