@@ -35,6 +35,8 @@ body {
     /* Die Kante, an die Slice 15 andocken soll (Ende Slice 3/12/10) */
     --andock-links-kante-15: calc(1490 / var(--gesamt-breite-px) * 100%); 
     --rechte-kante: 100%;
+
+    --andock-links-kante-unten: calc((917 + 277) / var(--gesamt-breite-px) * 100%); /* 1194px */
 }
 
 /* ALLGEMEINE SLICE-STYLES */
@@ -45,11 +47,11 @@ body {
 /* -------------------------------------------
  * OBERE HÄLFTE (bis 1278px Höhe) 
  * ------------------------------------------- */
-/* Linke Spalte */
+/* Linke Spalte (OK) */
 #slice-7 { width: var(--spalte-links-oben-breite); height: calc(677 / var(--gesamt-breite-px) * 100%); top: 0; left: 0; }
 #slice-14 { width: calc(979 / var(--gesamt-breite-px) * 100%); height: calc(601 / var(--gesamt-breite-px) * 100%); top: calc(677 / var(--gesamt-breite-px) * 100%); left: 0; }
 
-/* Mittlere Spalte */
+/* Mittlere Spalte (OK) */
 :root { --spalte-mitte-start: calc(683 / var(--gesamt-breite-px) * 100%); }
 #slice-1 { width: var(--spalte-mitte-breite); height: calc(464 / var(--gesamt-breite-px) * 100%); top: 0; left: var(--spalte-mitte-start); }
 #slice-9 { width: calc(135 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: var(--spalte-mitte-start); }
@@ -98,11 +100,11 @@ body {
 #slice-5 { 
     width: calc(296 / var(--gesamt-breite-px) * 100%); height: calc(237 / var(--gesamt-breite-px) * 100%); 
     top: calc(1649 / var(--gesamt-breite-px) * 100%); 
-    left: var(--unten-rechts-start); /* Startet bei 1194px */
+    left: var(--andock-links-kante-unten); /* Startet bei 1194px */
 }
 /* Slice 19: 296x162. Start Top 1886. Start Left: 1194px */
 #slice-19 { 
     width: calc(296 / var(--gesamt-breite-px) * 100%); height: calc(162 / var(--gesamt-breite-px) * 100%); 
     top: calc(1886 / var(--gesamt-breite-px) * 100%); 
-    left: var(--unten-rechts-start); /* Startet bei 1194px */
+    left: var(--andock-links-kante-unten); /* Startet bei 1194px */
 }
