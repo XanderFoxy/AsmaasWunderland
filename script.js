@@ -63,6 +63,7 @@ function startZoomAnimation() {
 // Funktion zum Verbergen des Preloaders und Starten der Zoom-Animation
 function hidePreloader() {
     const preloader = document.getElementById('preloader');
+    const bildContainer = document.getElementById('bild-container'); // NEU: Bild-Container holen
     
     // 1. Sanftes Ausblenden des Preloaders
     preloader.style.opacity = '0';
@@ -76,6 +77,10 @@ function hidePreloader() {
     setTimeout(() => {
         preloader.style.display = 'none';
         preloader.style.pointerEvents = 'none'; 
+        
+        // NEU: Bild-Container jetzt sichtbar machen!
+        bildContainer.style.visibility = 'visible';
+        
     }, 1500); 
 }
 
