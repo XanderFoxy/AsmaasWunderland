@@ -24,67 +24,72 @@ body {
     
     /* Hilfsvariablen (Basis: 2048px) */
     --gesamt-breite-px: 2048;
-    
-    /* DEFINITION DER SPALTEN STARTS (Wird in den Slices 3, 10, 12 und 15 durch feste calc() Werte ersetzt) */
-    --start-links-mitte: calc(683 / var(--gesamt-breite-px) * 100%); 
-    
     --spalte-links-unten-breite: calc(917 / var(--gesamt-breite-px) * 100%);
-    --start-fuellelemente-unten: calc(1194 / var(--gesamt-breite-px) * 100%); 
-    
     --rechte-kante: 100%;
 }
 
 /* ALLGEMEINE SLICE-STYLES */
 .slice-wrapper { position: absolute; box-sizing: border-box; }
-.slice-wrapper img { display: block; width: 100%; height: 100%; }
+.slice-wrapper img { display: block; width: 100%; height: 100%; object-fit: fill; }
 
 
 /* -------------------------------------------
  * OBERE HÄLFTE (bis 1278px Höhe) 
  * ------------------------------------------- */
 /* Linke Spalte */
-#slice-7 { width: calc(683 / var(--gesamt-breite-px) * 100%); height: calc(677 / var(--gesamt-breite-px) * 100%); top: 0; left: 0; }
-#slice-14 { width: calc(979 / var(--gesamt-breite-px) * 100%); height: calc(601 / var(--gesamt-breite-px) * 100%); top: calc(677 / var(--gesamt-breite-px) * 100%); left: 0; }
+#slice-7 { width: calc(683 / 2048 * 100%); height: calc(677 / 2048 * 100%); top: 0; left: 0; }
+/* S14: BREITE IST 979px. */
+#slice-14 { 
+    width: calc(979 / 2048 * 100%); 
+    height: calc(601 / 2048 * 100%); 
+    top: calc(677 / 2048 * 100%); 
+    left: 0; 
+}
 
 /* Mittlere Spalte (zentrierte Slices) */
-#slice-1 { width: calc(807 / var(--gesamt-breite-px) * 100%); height: calc(464 / var(--gesamt-breite-px) * 100%); top: 0; left: var(--start-links-mitte); }
-#slice-9 { width: calc(135 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: var(--start-links-mitte); }
-#slice-2 { width: calc(544 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: calc(var(--start-links-mitte) + (135 / var(--gesamt-breite-px) * 100%)); }
-
-/* Slice 10 - KORRIGIERT: Startet exakt bei 1362px (behebt Lücke) */
+#slice-1 { width: calc(807 / 2048 * 100%); height: calc(464 / 2048 * 100%); top: 0; left: calc(683 / 2048 * 100%); }
+#slice-9 { width: calc(135 / 2048 * 100%); height: calc(118 / 2048 * 100%); top: calc(464 / 2048 * 100%); left: calc(683 / 2048 * 100%); }
+#slice-2 { width: calc(544 / 2048 * 100%); height: calc(118 / 2048 * 100%); top: calc(464 / 2048 * 100%); left: calc((683 + 135) / 2048 * 100%); }
 #slice-10 { 
-    width: calc(128 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); 
-    top: calc(464 / var(--gesamt-breite-px) * 100%); 
-    left: calc(1362 / var(--gesamt-breite-px) * 100%); /* 683 + 135 + 544 = 1362px */
+    width: calc(128 / 2048 * 100%); height: calc(118 / 2048 * 100%); 
+    top: calc(464 / 2048 * 100%); 
+    left: calc(1362 / 2048 * 100%); 
 }
 
-#slice-11 { width: calc(296 / var(--gesamt-breite-px) * 100%); height: calc(95 / var(--gesamt-breite-px) * 100%); top: calc(582 / var(--gesamt-breite-px) * 100%); left: var(--start-links-mitte); }
+/* S11: Startet bei 683px. Endet bei 979px. */
+#slice-11 { 
+    width: calc(296 / 2048 * 100%); height: calc(95 / 2048 * 100%); 
+    top: calc(582 / 2048 * 100%); 
+    left: calc(683 / 2048 * 100%); 
+}
 
-/* Slice 3 - ABSOLUTER START: 979px */
+/* S3 (Nase): Startet bei 979px (Ende S14). Endet bei 1139px. */
 #slice-3 { 
-    width: calc(160 / var(--gesamt-breite-px) * 100%); height: calc(696 / var(--gesamt-breite-px) * 100%); 
-    top: calc(582 / var(--gesamt-breite-px) * 100%); 
-    left: calc(979 / var(--gesamt-breite-px) * 100%); 
+    width: calc(160 / 2048 * 100%); height: calc(696 / 2048 * 100%); 
+    top: calc(582 / 2048 * 100%); 
+    left: calc(979 / 2048 * 100%); 
 }
 
-/* Slice 12 - ABSOLUTER START: 1139px (Ende Slice 3) */
+/* S12: Startet bei 1139px. Endet bei 1490px. */
 #slice-12 { 
-    width: calc(351 / var(--gesamt-breite-px) * 100%); height: calc(95 / var(--gesamt-breite-px) * 100%); 
-    top: calc(582 / var(--gesamt-breite-px) * 100%); 
-    left: calc(1139 / var(--gesamt-breite-px) * 100%); 
+    width: calc(351 / 2048 * 100%); 
+    height: calc(95 / 2048 * 100%); 
+    top: calc(582 / 2048 * 100%); 
+    left: calc(1139 / 2048 * 100%); 
 }
 
-/* Rechte Spalte (Rechtsbündig und angedockt) */
-/* Slice 8 (Startet bei 1490px) */
+/* Rechte Spalte (S8) */
 #slice-8 { 
-    width: calc(558 / var(--gesamt-breite-px) * 100%); height: calc(677 / var(--gesamt-breite-px) * 100%); top: 0; 
-    left: calc(2048 / var(--gesamt-breite-px) * 100% - 558 / var(--gesamt-breite-px) * 100%); 
+    width: calc(558 / 2048 * 100%); height: calc(677 / 2048 * 100%); top: 0; 
+    left: calc(1490 / 2048 * 100%); 
 }
 
-/* KORRIGIERT: Slice 15 - ABSOLUTER START: 1490px (Ende Slice 12) - SCHLIESST DIE LÜCKE */
+/* S15: KORRIGIERT - Startet EXAKT bei 1139px (Ende S3). BREITE IST 909px. */
 #slice-15 { 
-    width: calc(558 / var(--gesamt-breite-px) * 100%); height: calc(601 / var(--gesamt-breite-px) * 100%); top: calc(677 / var(--gesamt-breite-px) * 100%); 
-    left: calc(1490 / var(--gesamt-breite-px) * 100%); 
+    width: calc(909 / 2048 * 100%); 
+    height: calc(601 / 2048 * 100%); 
+    top: calc(677 / 2048 * 100%); 
+    left: calc(1139 / 2048 * 100%); 
 }
 
 
@@ -92,32 +97,32 @@ body {
  * UNTERE HÄLFTE (ab 1278px Höhe) 
  * ------------------------------------------- */
 /* Linke Spalte (OK) */
-#slice-16 { width: var(--spalte-links-unten-breite); height: calc(770 / var(--gesamt-breite-px) * 100%); top: calc(1278 / var(--gesamt-breite-px) * 100%); left: 0; }
+#slice-16 { width: var(--spalte-links-unten-breite); height: calc(770 / 2048 * 100%); top: calc(1278 / 2048 * 100%); left: 0; }
 
 /* Mittlerer Block (OK) */
-#slice-13 { width: calc(277 / var(--gesamt-breite-px) * 100%); height: calc(232 / var(--gesamt-breite-px) * 100%); top: calc(1278 / var(--gesamt-breite-px) * 100%); left: var(--spalte-links-unten-breite); }
-#slice-4 { width: calc(277 / var(--gesamt-breite-px) * 100%); height: calc(202 / var(--gesamt-breite-px) * 100%); top: calc(1510 / var(--gesamt-breite-px) * 100%); left: var(--spalte-links-unten-breite); }
-#slice-6 { width: calc(277 / var(--gesamt-breite-px) * 100%); height: calc(295 / var(--gesamt-breite-px) * 100%); top: calc(1712 / var(--gesamt-breite-px) * 100%); left: var(--spalte-links-unten-breite); }
-#slice-20 { width: calc(277 / var(--gesamt-breite-px) * 100%); height: calc(41 / var(--gesamt-breite-px) * 100%); top: calc(2007 / var(--gesamt-breite-px) * 100%); left: var(--spalte-links-unten-breite); }
+#slice-13 { width: calc(277 / 2048 * 100%); height: calc(232 / 2048 * 100%); top: calc(1278 / 2048 * 100%); left: var(--spalte-links-unten-breite); }
+#slice-4 { width: calc(277 / 2048 * 100%); height: calc(202 / 2048 * 100%); top: calc(1510 / 2048 * 100%); left: var(--spalte-links-unten-breite); }
+#slice-6 { width: calc(277 / 2048 * 100%); height: calc(295 / 2048 * 100%); top: calc(1712 / 2048 * 100%); left: var(--spalte-links-unten-breite); }
+#slice-20 { width: calc(277 / 2048 * 100%); height: calc(41 / 2048 * 100%); top: calc(2007 / 2048 * 100%); left: var(--spalte-links-unten-breite); }
 
 /* Rechter Block (Rechtsbündig) */
 #slice-17 { 
-    width: calc(854 / var(--gesamt-breite-px) * 100%); height: calc(371 / var(--gesamt-breite-px) * 100%); top: calc(1278 / var(--gesamt-breite-px) * 100%); 
-    left: calc(var(--rechte-kante) - (854 / var(--gesamt-breite-px) * 100%)); 
+    width: calc(854 / 2048 * 100%); height: calc(371 / 2048 * 100%); top: calc(1278 / 2048 * 100%); 
+    left: calc(1194 / 2048 * 100%); 
 }
 #slice-18 { 
-    width: calc(558 / var(--gesamt-breite-px) * 100%); height: calc(399 / var(--gesamt-breite-px) * 100%); top: calc(1649 / var(--gesamt-breite-px) * 100%); 
-    left: calc(var(--rechte-kante) - (558 / var(--gesamt-breite-px) * 100%)); 
+    width: calc(558 / 2048 * 100%); height: calc(399 / 2048 * 100%); top: calc(1649 / 2048 * 100%); 
+    left: calc(1490 / 2048 * 100%); 
 }
 
 /* Fülls-Slices rechts von der Mitte (links neben Slice 18) */
 #slice-5 { 
-    width: calc(296 / var(--gesamt-breite-px) * 100%); height: calc(237 / var(--gesamt-breite-px) * 100%); 
-    top: calc(1649 / var(--gesamt-breite-px) * 100%); 
-    left: calc(1194 / var(--gesamt-breite-px) * 100%); /* Startet bei 1194px */
+    width: calc(296 / 2048 * 100%); height: calc(237 / 2048 * 100%); 
+    top: calc(1649 / 2048 * 100%); 
+    left: calc(1194 / 2048 * 100%); 
 }
 #slice-19 { 
-    width: calc(296 / var(--gesamt-breite-px) * 100%); height: calc(162 / var(--gesamt-breite-px) * 100%); 
-    top: calc(1886 / var(--gesamt-breite-px) * 100%); 
-    left: calc(1194 / var(--gesamt-breite-px) * 100%); /* Startet bei 1194px */
+    width: calc(296 / 2048 * 100%); height: calc(162 / 2048 * 100%); 
+    top: calc(1886 / 2048 * 100%); 
+    left: calc(1194 / 2048 * 100%); 
 }
