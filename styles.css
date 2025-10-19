@@ -36,6 +36,7 @@ body {
 }
 
 /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
+/* !important erzwingt diesen Endzustand für die Animation */
 .zoom-in {
     transform: translateX(-3.0%) scale(1.2) !important;
 }
@@ -78,7 +79,7 @@ body {
 #slice-1 { width: calc(807 / 2048 * 100%); height: calc(464 / 2048 * 100%); top: 0; left: calc(683 / 2048 * 100%); }
 #slice-9 { width: calc(135 / 2048 * 100%); height: calc(118 / 2048 * 100%); top: calc(464 / 2048 * 100%); left: calc(683 / 2048 * 100%); }
 
-/* Slice 2: ÜBERSCHRIFTEN-CONTAINER */
+/* Slice 2: ÜBERSCHRIFTEN-CONTAINER (Jetzt 'relative' für das Overlay) */
 #slice-2 { 
     width: calc(544 / 2048 * 100%); 
     height: calc(118 / 2048 * 100%); 
@@ -90,6 +91,7 @@ body {
 
 /* NEU: GLOW-OVERLAY STYLES */
 #glow-overlay {
+    /* Positioniert sich über dem img-Tag in #slice-2 */
     position: absolute;
     top: 0;
     left: 0;
@@ -97,8 +99,8 @@ body {
     height: 100%;
     z-index: 2; /* Liegt über dem img */
 
-    /* Läd das neue, transparente Bild. KLEIN GESCHRIEBEN! */
-    background-image: url('https://xanderfoxy.github.io/asmaaswunderland/slice2 2.png'); 
+    /* Läd das neue, transparente Bild. KORRIGIERTE GROSS-/KLEINSCHREIBUNG! */
+    background-image: url('https://xanderfoxy.github.io/AsmaasWunderland/Slice2 2.png'); 
     background-size: 100% 100%;
     background-repeat: no-repeat;
     
