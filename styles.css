@@ -41,7 +41,7 @@ body {
 /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
 /* !important erzwingt diesen Endzustand für die Animation */
 .zoom-in {
-    transform: translateX(-3.0%) scale(1.2) !important;
+    transform: translateX(-0.0%) scale(1.2) !important;
 }
 
 
