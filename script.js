@@ -63,22 +63,19 @@ function startZoomAnimation() {
 // Funktion zum Verbergen des Preloaders und Starten der Zoom-Animation
 function hidePreloader() {
     const preloader = document.getElementById('preloader');
-    const body = document.body; // Referenz auf den body
     
     // 1. Sanftes Ausblenden des Preloaders
     preloader.style.opacity = '0';
     
-    // 2. Startet den Zoom
+    // 2. Startet den Zoom kurz NACHDEM die Transparenz-Animation beginnt. 
+    // Eine 100ms Verzögerung stellt sicher, dass der Browser den Startzustand registriert.
     setTimeout(startZoomAnimation, 100);
     
     // 3. Nach dem Ausblenden das Element endgültig deaktivieren
+    // (Transition-Dauer ist 1.5s im CSS)
     setTimeout(() => {
         preloader.style.display = 'none';
         preloader.style.pointerEvents = 'none'; 
-        
-        // Den gesamten body-Inhalt sichtbar machen!
-        body.style.visibility = 'visible';
-        
     }, 1500); 
 }
 
