@@ -11,8 +11,8 @@ body {
 
 /* HAUPT-CONTAINER: Skalierung für Smartphone (QUADRATISCH & VERTIKAL BILDSCHIRMFÜLLEND) */
 #bild-container {
-    height: 100vh;     /* Die Höhe füllt 100% der sichtbaren Bildschirmhöhe */
-    width: 100vh;      /* Da es 1:1 sein muss, ist die Breite ebenfalls 100vh (ragt über) */
+    height: 100vh;     
+    width: 100vh;      
     
     position: relative; 
     overflow: hidden;  
@@ -37,6 +37,9 @@ body {
     --rechte-kante: 100%;
 
     --andock-links-kante-unten: calc((917 + 277) / var(--gesamt-breite-px) * 100%); /* 1194px */
+    
+    /* KORRIGIERT: Start der Mitte-Spalte (683px) */
+    --spalte-mitte-start: calc(683 / var(--gesamt-breite-px) * 100%); 
 }
 
 /* ALLGEMEINE SLICE-STYLES */
@@ -51,23 +54,27 @@ body {
 #slice-7 { width: var(--spalte-links-oben-breite); height: calc(677 / var(--gesamt-breite-px) * 100%); top: 0; left: 0; }
 #slice-14 { width: calc(979 / var(--gesamt-breite-px) * 100%); height: calc(601 / var(--gesamt-breite-px) * 100%); top: calc(677 / var(--gesamt-breite-px) * 100%); left: 0; }
 
-/* Mittlere Spalte (OK) */
-:root { --spalte-mitte-start: calc(683 / var(--gesamt-breite-px) * 100%); }
+/* Mittlere Spalte (KORRIGIERT: Fester Start bei 683px) */
 #slice-1 { width: var(--spalte-mitte-breite); height: calc(464 / var(--gesamt-breite-px) * 100%); top: 0; left: var(--spalte-mitte-start); }
 #slice-9 { width: calc(135 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: var(--spalte-mitte-start); }
-#slice-2 { width: calc(544 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: calc((683 + 135) / var(--gesamt-breite-px) * 100%); }
-#slice-10 { width: calc(128 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: calc((683 + 135 + 544) / var(--gesamt-breite-px) * 100%); }
+#slice-2 { width: calc(544 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: calc(var(--spalte-mitte-start) + (135 / var(--gesamt-breite-px) * 100%)); }
+#slice-10 { width: calc(128 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: calc(var(--spalte-mitte-start) + (135 + 544) / var(--gesamt-breite-px) * 100%); }
 #slice-11 { width: calc(296 / var(--gesamt-breite-px) * 100%); height: calc(95 / var(--gesamt-breite-px) * 100%); top: calc(582 / var(--gesamt-breite-px) * 100%); left: var(--spalte-mitte-start); }
-#slice-3 { width: calc(160 / var(--gesamt-breite-px) * 100%); height: calc(696 / var(--gesamt-breite-px) * 100%); top: calc(582 / var(--gesamt-breite-px) * 100%); left: calc((683 + 296) / var(--gesamt-breite-px) * 100%); }
-#slice-12 { width: calc(351 / var(--gesamt-breite-px) * 100%); height: calc(95 / var(--gesamt-breite-px) * 100%); top: calc(582 / var(--gesamt-breite-px) * 100%); left: calc(1139 / var(--gesamt-breite-px) * 100%); }
+#slice-3 { width: calc(160 / var(--gesamt-breite-px) * 100%); height: calc(696 / var(--gesamt-breite-px) * 100%); top: calc(582 / var(--gesamt-breite-px) * 100%); left: calc(var(--spalte-mitte-start) + (296 / var(--gesamt-breite-px) * 100%)); }
+/* KORREKTE POSITION: Slice 12 - direkt rechts neben Slice 3 */
+#slice-12 { 
+    width: calc(351 / var(--gesamt-breite-px) * 100%); height: calc(95 / var(--gesamt-breite-px) * 100%); 
+    top: calc(582 / var(--gesamt-breite-px) * 100%); 
+    left: calc(1139 / var(--gesamt-breite-px) * 100%); /* Startet bei 683+296+160 = 1139px */
+}
 
 /* Rechte Spalte (Rechtsbündig) */
-#slice-8 { /* 558x677, Top 0. Startet bei 1490px */
+#slice-8 { 
     width: var(--spalte-rechts-breite-8); height: calc(677 / var(--gesamt-breite-px) * 100%); top: 0; 
     left: calc(var(--rechte-kante) - var(--spalte-rechts-breite-8)); 
 }
 /* KORRIGIERT: Slice 15 - Muss an 1490px andocken und bei 2048px enden */
-#slice-15 { /* 558x601, Top 677 */
+#slice-15 { 
     width: var(--spalte-rechts-breite-15-korr); height: calc(601 / var(--gesamt-breite-px) * 100%); top: calc(677 / var(--gesamt-breite-px) * 100%); 
     left: var(--andock-links-kante-15); /* Startet bei 1490px */
 }
@@ -86,23 +93,21 @@ body {
 #slice-20 { width: calc(277 / var(--gesamt-breite-px) * 100%); height: calc(41 / var(--gesamt-breite-px) * 100%); top: calc(2007 / var(--gesamt-breite-px) * 100%); left: var(--unten-mitte-start); }
 
 /* Rechter Block (Rechtsbündig) */
-#slice-17 { /* 854x371, Top 1278. Startet bei 1194px */
+#slice-17 { 
     width: var(--spalte-rechts-breite-17); height: calc(371 / var(--gesamt-breite-px) * 100%); top: var(--unten-start-top); 
     left: calc(var(--rechte-kante) - var(--spalte-rechts-breite-17)); 
 }
-#slice-18 { /* 558x399, Stapelt sich rechts außen am Boden, Top 1649. Startet bei 1490px */
+#slice-18 { 
     width: var(--spalte-rechts-breite-18); height: calc(399 / var(--gesamt-breite-px) * 100%); top: calc(1649 / var(--gesamt-breite-px) * 100%); 
     left: calc(var(--rechte-kante) - var(--spalte-rechts-breite-18)); 
 }
 
 /* Fülls-Slices rechts von der Mitte (links neben Slice 18) */
-/* Slice 5: 296x237. Start Top 1649. Start Left: Ende Mitte (1194px) */
 #slice-5 { 
     width: calc(296 / var(--gesamt-breite-px) * 100%); height: calc(237 / var(--gesamt-breite-px) * 100%); 
     top: calc(1649 / var(--gesamt-breite-px) * 100%); 
     left: var(--andock-links-kante-unten); /* Startet bei 1194px */
 }
-/* Slice 19: 296x162. Start Top 1886. Start Left: 1194px */
 #slice-19 { 
     width: calc(296 / var(--gesamt-breite-px) * 100%); height: calc(162 / var(--gesamt-breite-px) * 100%); 
     top: calc(1886 / var(--gesamt-breite-px) * 100%); 
