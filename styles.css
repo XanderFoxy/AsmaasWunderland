@@ -1,7 +1,8 @@
 /* GRUNDLEGENDE DEFINITIONEN */
 body {
     margin: 0; padding: 0; 
-    overflow-x: hidden; 
+    overflow-x: hidden; /* Verhindert ungewolltes horizontales Scrollen des BODY */
+    overflow-y: hidden; /* Verhindert ungewolltes vertikales Scrollen des BODY */
     display: flex; 
     justify-content: center; /* ZENTRIERT das Bild horizontal */
     align-items: center;    /* ZENTRIERT das Bild vertikal */
@@ -9,15 +10,27 @@ body {
     background-color: #000;
 }
 
-/* HAUPT-CONTAINER: Skalierung (2048x2048) auf 100vh */
+/* HAUPT-CONTAINER: Skalierung für Smartphone (QUADRATISCH & VOLLSTÄNDIG SICHTBAR) */
 #bild-container {
-    height: 100vh;     
-    width: 100vh;      
-    max-width: 100vw;
-    max-height: 100vh;
+    /* WICHTIG: Stellt sicher, dass das Bild quadratisch bleibt (1:1 Seitenverhältnis) */
+    aspect-ratio: 1 / 1; 
+    
+    /* Stellt sicher, dass das Bild immer komplett sichtbar ist und in den Viewport passt */
+    /* Es nimmt entweder die volle Breite oder die volle Höhe des Viewports ein, je nachdem, was kleiner ist. */
+    max-width: 100vw;   
+    max-height: 100vh; 
+
+    width: auto; /* Erlaubt dem Browser, die Breite basierend auf max-height zu berechnen, wenn height begrenzt ist */
+    height: auto; /* Erlaubt dem Browser, die Höhe basierend auf max-width zu berechnen, wenn width begrenzt ist */
+
+    /* Die tatsächliche Größe des Containers wird durch min(100vw, 100vh) bestimmt, 
+       um sicherzustellen, dass das Quadrat immer vollständig in den Viewport passt. 
+       Das ist besser als feste 100vh/100vw, die zu Überlappungen führen könnten. */
+    
     position: relative; 
-    overflow: hidden;  
-    /* Hilfsvariablen für die Haupt-Spaltenbreiten in Prozent */
+    overflow: hidden;  /* Versteckt ggf. Überläufe von Slices, die außerhalb des 2048x2048-Rasters definiert sind (sollten keine sein) */
+
+    /* Hilfsvariablen für die Haupt-Spaltenbreiten in Prozent (Basis: 2048px) */
     --gesamt-breite-px: 2048;
     
     --spalte-links-oben-breite: calc(683 / var(--gesamt-breite-px) * 100%);
@@ -32,7 +45,7 @@ body {
 
     --unten-start-top: calc(1278 / var(--gesamt-breite-px) * 100%); /* Start der unteren Hälfte */
     --unten-mitte-start: calc(917 / var(--gesamt-breite-px) * 100%); /* Start nach Slice 16 (917px) */
-    --unten-rechts-start: calc((917 + 277) / var(--gesamt-breite-px) * 100%); /* Start der rechten Spalte (1194px) */
+    --rechte-spalte-links-start-unten: calc((917 + 277) / var(--gesamt-breite-px) * 100%); /* Start der rechten Spalte (1194px) */
     --rechte-kante: 100%; /* Die rechte Kante des Containers */
 }
 
@@ -56,16 +69,22 @@ body {
 #slice-10 { width: calc(128 / var(--gesamt-breite-px) * 100%); height: calc(118 / var(--gesamt-breite-px) * 100%); top: calc(464 / var(--gesamt-breite-px) * 100%); left: calc((683 + 135 + 544) / var(--gesamt-breite-px) * 100%); }
 #slice-11 { width: calc(296 / var(--gesamt-breite-px) * 100%); height: calc(95 / var(--gesamt-breite-px) * 100%); top: calc(582 / var(--gesamt-breite-px) * 100%); left: var(--spalte-mitte-start); }
 #slice-3 { width: calc(160 / var(--gesamt-breite-px) * 100%); height: calc(696 / var(--gesamt-breite-px) * 100%); top: calc(582 / var(--gesamt-breite-px) * 100%); left: calc((683 + 296) / var(--gesamt-breite-px) * 100%); }
-#slice-12 { width: calc(351 / var(--gesamt-breite-px) * 100%); height: calc(95 / var(--gesamt-breite-px) * 100%); top: calc(582 / var(--gesamt-breite-px) * 100%); left: calc((683 + 296 + 160) / var(--gesamt-breite-px) * 100%); }
+
+/* KORRIGIERT: Slice 12 - direkt rechts neben Slice 3 */
+#slice-12 { /* 351x95. Start Left: Ende von Slice 3 (683 + 296 + 160 = 1139px) */
+    width: calc(351 / var(--gesamt-breite-px) * 100%); height: calc(95 / var(--gesamt-breite-px) * 100%); 
+    top: calc(582 / var(--gesamt-breite-px) * 100%); 
+    left: calc(1139 / var(--gesamt-breite-px) * 100%); 
+}
 
 /* Rechte Spalte (KORRIGIERT: Rechtsbündig, von 100% minus Breite) */
 #slice-8 { /* 558x677, Top 0 */
     width: var(--spalte-rechts-breite-8); height: calc(677 / var(--gesamt-breite-px) * 100%); top: 0; 
-    left: calc(100% - var(--spalte-rechts-breite-8)); 
+    left: calc(var(--rechte-kante) - var(--spalte-rechts-breite-8)); 
 }
 #slice-15 { /* 909x601, Top 677 */
     width: var(--spalte-rechts-breite-15); height: calc(601 / var(--gesamt-breite-px) * 100%); top: calc(677 / var(--gesamt-breite-px) * 100%); 
-    left: calc(100% - var(--spalte-rechts-breite-15)); 
+    left: calc(var(--rechte-kante) - var(--spalte-rechts-breite-15)); 
 }
 
 
@@ -84,11 +103,11 @@ body {
 /* Rechter Block (KORRIGIERT: Rechtsbündig) */
 #slice-17 { /* 854x371, Top 1278 */
     width: var(--spalte-rechts-breite-17); height: calc(371 / var(--gesamt-breite-px) * 100%); top: var(--unten-start-top); 
-    left: calc(100% - var(--spalte-rechts-breite-17)); 
+    left: calc(var(--rechte-kante) - var(--spalte-rechts-breite-17)); 
 }
 #slice-18 { /* 558x399, Stapelt sich rechts außen am Boden, Top 1649 */
     width: var(--spalte-rechts-breite-18); height: calc(399 / var(--gesamt-breite-px) * 100%); top: calc(1649 / var(--gesamt-breite-px) * 100%); 
-    left: calc(100% - var(--spalte-rechts-breite-18)); /* rechte Kante */
+    left: calc(var(--rechte-kante) - var(--spalte-rechts-breite-18)); 
 }
 
 /* Fülls-Slices rechts von der Mitte (links neben Slice 18) */
