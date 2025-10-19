@@ -25,32 +25,32 @@
     z-index: 1000;
   }
 
-  /* Hauptcontainer */
+  /* Szene (Container für alle Slices) */
   .scene {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     width: 2048px;
     height: 2048px;
-    transform-origin: center;
+    transform: translate(-50%, -50%) scale(1);
+    transform-origin: center center;
     transition: transform 7s ease-out;
-    margin: 0 auto;
   }
 
-  /* Alle Slices */
+  /* Zoom-Animation: Fokus leicht nach unten versetzt */
+  .zoom-in {
+    transform: translate(-50%, -50%) scale(1.6) translateY(5%);
+  }
+
+  @media (max-width: 768px) {
+    .zoom-in {
+      transform: translate(-50%, -50%) scale(1.9) translateY(14%);
+    }
+  }
+
   .scene img {
     position: absolute;
     display: block;
-  }
-
-  /* Kamerafahrt */
-  .zoom-in {
-    transform: scale(1.4) translateY(8%);
-  }
-
-  /* Handy-Fokus tiefer + stärkerer Zoom */
-  @media (max-width: 768px) {
-    .zoom-in {
-      transform: scale(1.8) translateY(18%);
-    }
   }
 </style>
 </head>
@@ -87,18 +87,15 @@
 </div>
 
 <script>
-  // Warten, bis alle Bilder geladen sind
   window.addEventListener("load", () => {
     const scene = document.getElementById("scene");
     const preloader = document.getElementById("preloader");
 
-    // Preloader langsam ausblenden
     preloader.style.transition = "opacity 1s ease";
     preloader.style.opacity = 0;
 
     setTimeout(() => {
       preloader.style.display = "none";
-      // Kamerafahrt starten
       scene.classList.add("zoom-in");
     }, 1000);
   });
