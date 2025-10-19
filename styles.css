@@ -26,6 +26,9 @@ body {
     position: relative; 
     overflow: hidden; 
     
+    /* NEU: Bildinhalt von Anfang an verstecken, damit nichts durchscheint */
+    visibility: hidden; 
+    
     /* STARTZUSTAND: Nur die Feinjustierung, KEIN Zoom (scale(1)). */
     transform: translateX(-3.0%) scale(1);
     
@@ -59,11 +62,12 @@ body {
 @keyframes glow-pulse {
     0%, 100% {
         /* Minimales Leuchten */
-        filter: drop-shadow(0 0 5px #ffcc80) drop-shadow(0 0 2px #FFF); 
+        /* NEU: SVG-Filter + drop-shadow in Keyframes für konsistente Animation */
+        filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='alphablend'><feColorMatrix type='matrix' values='0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 1 0'/></filter></svg>#alphablend") drop-shadow(0 0 5px #ffcc80) drop-shadow(0 0 2px #FFF); 
     }
     50% {
         /* Maximales Leuchten (Goldgelb) */
-        filter: drop-shadow(0 0 15px #FFD700) drop-shadow(0 0 8px #FFFFFF);
+        filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='alphablend'><feColorMatrix type='matrix' values='0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 1 0'/></filter></svg>#alphablend") drop-shadow(0 0 15px #FFD700) drop-shadow(0 0 8px #FFFFFF);
     }
 }
 
@@ -105,7 +109,7 @@ body {
     height: 100%;
     z-index: 2; /* Liegt über dem img */
     
-    /* KORREKTUR für Konsistenz: Wir lassen opacity: 1, damit drop-shadow immer wirkt. */
+    /* Opacity auf 1 lassen, damit der Shadow funktioniert */
     opacity: 1;
 
     /* Läd das neue, transparente Bild. KORRIGIERTE GROSS-/KLEINSCHREIBUNG! */
@@ -113,12 +117,7 @@ body {
     background-size: 100% 100%;
     background-repeat: no-repeat;
     
-    /* KORREKTUR: Filter-Kette, um das BILD unsichtbar zu machen, ABER drop-shadow zu erhalten.
-       (saturate(0) de-saturiert das Bild, brightness(0) macht es schwarz, invert(1) macht es transparent.)
-       Das Wichtigste ist der color-filter-Trick, der das Bild transparent macht. */
-    filter: invert(1) brightness(0);
-    
-    /* Animation steuert den drop-shadow, der jetzt auf der unsichtbaren Kontur wirkt */
+    /* SVG-Filter im Element, damit die Animation nur noch den drop-shadow ändert */
     animation: glow-pulse 4s infinite alternate ease-in-out;
 }
 
