@@ -2,13 +2,16 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Asmaas Wunderland</title>
 <style>
-  body {
+  html, body {
     margin: 0;
+    padding: 0;
     overflow: hidden;
-    background-color: #000;
+    height: 100%;
+    width: 100%;
+    background: #000;
   }
 
   /* Preloader */
@@ -20,28 +23,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Trebuchet MS', sans-serif;
+    font-family: sans-serif;
     font-size: 1.2rem;
     z-index: 1000;
   }
 
-  /* Szene */
+  /* Container für die Szene */
   .scene-container {
     position: relative;
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 
   .scene {
     position: relative;
-    width: 2048px;   /* Originalbildgröße */
+    width: 2048px;
     height: 2048px;
-    transform-origin: center center;
-    transform: scale(0.45); /* Startmaßstab für Viewport */
+    transform-origin: top center;
+    /* Skalierung, damit die Höhe komplett im Viewport sichtbar ist */
+    transform: scale(calc(100vh / 2048));
     transition: transform 7s ease-out;
   }
 
@@ -50,15 +51,9 @@
     display: block;
   }
 
-  /* Zoom & Verschiebung für Fokus auf Asmaas Wunderland */
+  /* Zoom-Fokus auf Asmaas Wunderland */
   .zoom-in {
-    transform: scale(0.8) translateY(-18%);
-  }
-
-  @media (max-width: 768px) {
-    .zoom-in {
-      transform: scale(1) translateY(-22%);
-    }
+    transform: scale(calc(100vh / 2048)) translateY(-18%);
   }
 </style>
 </head>
@@ -106,10 +101,11 @@
     preloader.style.opacity = 0;
     setTimeout(() => {
       preloader.style.display = "none";
-      // Kamerafahrt starten
+      // Zoom-Kamerafahrt starten
       scene.classList.add("zoom-in");
     }, 800);
   });
 </script>
+
 </body>
 </html>
