@@ -36,7 +36,6 @@ body {
 }
 
 /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
-/* !important erzwingt diesen Endzustand für die Animation */
 .zoom-in {
     transform: translateX(-3.0%) scale(1.2) !important;
 }
@@ -48,7 +47,22 @@ body {
 
 
 /* -------------------------------------------
- * SLICE-POSITIONEN (Bleiben unverändert) 
+ * ZUSÄTZLICHE KEYFRAMES FÜR DAS PULSIERENDE LEUCHTEN
+ * ------------------------------------------- */
+@keyframes glow-pulse {
+    0%, 100% {
+        /* Minimales Leuchten */
+        filter: drop-shadow(0 0 5px #ffcc80) drop-shadow(0 0 2px #FFF); 
+    }
+    50% {
+        /* Maximales Leuchten (Goldgelb) */
+        filter: drop-shadow(0 0 15px #FFD700) drop-shadow(0 0 8px #FFFFFF);
+    }
+}
+
+
+/* -------------------------------------------
+ * SLICE-POSITIONEN 
  * ------------------------------------------- */
 /* Linke Spalte */
 #slice-7 { width: calc(683 / 2048 * 100%); height: calc(677 / 2048 * 100%); top: 0; left: 0; }
@@ -63,7 +77,35 @@ body {
 /* Mittlere Spalte (zentrierte Slices - URSPRÜNGLICHE WERTE) */
 #slice-1 { width: calc(807 / 2048 * 100%); height: calc(464 / 2048 * 100%); top: 0; left: calc(683 / 2048 * 100%); }
 #slice-9 { width: calc(135 / 2048 * 100%); height: calc(118 / 2048 * 100%); top: calc(464 / 2048 * 100%); left: calc(683 / 2048 * 100%); }
-#slice-2 { width: calc(544 / 2048 * 100%); height: calc(118 / 2048 * 100%); top: calc(464 / 2048 * 100%); left: calc((683 + 135) / 2048 * 100%); }
+
+/* Slice 2: ÜBERSCHRIFTEN-CONTAINER */
+#slice-2 { 
+    width: calc(544 / 2048 * 100%); 
+    height: calc(118 / 2048 * 100%); 
+    top: calc(464 / 2048 * 100%); 
+    left: calc((683 + 135) / 2048 * 100%); 
+    /* WICHTIG: Für das absolute Overlay benötigt */
+    position: relative;
+}
+
+/* NEU: GLOW-OVERLAY STYLES */
+#glow-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* Liegt über dem img */
+
+    /* Läd das neue, transparente Bild. KLEIN GESCHRIEBEN! */
+    background-image: url('https://xanderfoxy.github.io/asmaaswunderland/slice2 2.png'); 
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    
+    /* Leuchten nur auf die transparenten Kanten anwenden */
+    animation: glow-pulse 4s infinite alternate ease-in-out;
+}
+
 #slice-10 { 
     width: calc(128 / 2048 * 100%); height: calc(118 / 2048 * 100%); 
     top: calc(464 / 2048 * 100%); 
