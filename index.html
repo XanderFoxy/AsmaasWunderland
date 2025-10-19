@@ -1,114 +1,84 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asmaas Wunderland</title>
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background: #000;
-    width: 100%;
-    height: 100%;
-  }
-
-  #preloader {
-    position: fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background:#000;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:#fff;
-    font-family:sans-serif;
-    font-size:24px;
-    z-index:1000;
-  }
-
-  #scene-wrapper {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  #scene-container {
-    position: absolute;
-    width: 2048px;
-    height: 2048px;
-    top: 0;
-    left: 0;
-    transform-origin: top left;
-  }
-
-  .slice {
-    position: absolute;
-    display: block;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asmars Wunderland - Interaktive Webseite</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div id="preloader">Loading...</div>
+    <div id="bild-container">
 
-<div id="scene-wrapper">
-  <div id="scene-container">
+        <div class="slice-wrapper" id="slice-7">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice7.png" alt="Himmel links, animierbar">
+        </div>
+        <div class="slice-wrapper" id="slice-14">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice14.jpg" alt="Mittlerer linker Bereich">
+        </div>
+        <div class="slice-wrapper" id="slice-16">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice16.jpg" alt="Unterer linker Bereich">
+        </div>
 
-    <!-- Slices laden mit vollständigem GitHub-Pfad und data-name -->
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice7.png" class="slice" data-name="Slice7" style="top:0px; left:0px; width:683px; height:677px; z-index:1;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice1.jpg" class="slice" data-name="Slice1" style="top:0px; left:683px; width:807px; height:464px; z-index:2;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice8.png" class="slice" data-name="Slice8" style="top:0px; left:1490px; width:558px; height:677px; z-index:3;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice9.jpg" class="slice" data-name="Slice9" style="top:464px; left:683px; width:135px; height:118px; z-index:4;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice2.png" class="slice" data-name="Slice2" style="top:464px; left:818px; width:544px; height:118px; z-index:5;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice10.jpg" class="slice" data-name="Slice10" style="top:464px; left:1362px; width:128px; height:118px; z-index:6;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice11.jpg" class="slice" data-name="Slice11" style="top:582px; left:683px; width:296px; height:95px; z-index:7;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice3.png" class="slice" data-name="Slice3" style="top:582px; left:979px; width:160px; height:696px; z-index:8;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice12.jpg" class="slice" data-name="Slice12" style="top:582px; left:1139px; width:351px; height:95px; z-index:9;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice14.jpg" class="slice" data-name="Slice14" style="top:582px; left:0px; width:979px; height:801px; z-index:10;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice15.jpg" class="slice" data-name="Slice15" style="top:582px; left:1139px; width:909px; height:601px; z-index:11;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice16.jpg" class="slice" data-name="Slice16" style="top:1278px; left:0px; width:917px; height:770px; z-index:12;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice13.png" class="slice" data-name="Slice13" style="top:1278px; left:160px; width:277px; height:232px; z-index:13;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice17.jpg" class="slice" data-name="Slice17" style="top:1278px; left:437px; width:854px; height:371px; z-index:14;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice4.png" class="slice" data-name="Slice4" style="top:1609px; left:437px; width:277px; height:202px; z-index:15;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice5.png" class="slice" data-name="Slice5" style="top:1580px; left:714px; width:296px; height:237px; z-index:16;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice18.jpg" class="slice" data-name="Slice18" style="top:1580px; left:1010px; width:558px; height:399px; z-index:17;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice6.png" class="slice" data-name="Slice6" style="top:1809px; left:437px; width:277px; height:295px; z-index:18;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice19.jpg" class="slice" data-name="Slice19" style="top:1809px; left:714px; width:296px; height:162px; z-index:19;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice20.jpg" class="slice" data-name="Slice20" style="top:2104px; left:437px; width:277px; height:41px; z-index:20;">
+        <div class="slice-wrapper" id="slice-1">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice1.jpg" alt="Himmel Mitte">
+        </div>
 
-  </div>
-</div>
+        <div class="slice-wrapper" id="slice-9">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice9.jpg" alt="Kleines Bildchen links der Überschrift">
+        </div>
+        <div class="slice-wrapper" id="slice-2">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice2.png" alt="Überschrift Asmars Wunderland, animierbar">
+        </div>
+        <div class="slice-wrapper" id="slice-10">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice10.jpg" alt="Kleines Bildchen rechts der Überschrift">
+        </div>
+        
+        <div class="slice-wrapper" id="slice-11">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice11.jpg" alt="Bereich links neben Nase">
+        </div>
+        <div class="slice-wrapper" id="slice-3">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice3.png" alt="Lange Nase in der Mitte, animierbar">
+        </div>
+        <div class="slice-wrapper" id="slice-12">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice12.jpg" alt="Bereich rechts neben Nase">
+        </div>
 
-<script>
-window.addEventListener('load', () => {
-  const preloader = document.getElementById('preloader');
-  preloader.style.display = 'none';
+        <div class="slice-wrapper" id="slice-13">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice13.png" alt="Mitte unter Nase, animierbar">
+        </div>
+        <div class="slice-wrapper" id="slice-4">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice4.png" alt="Mitte, animierbar">
+        </div>
+        <div class="slice-wrapper" id="slice-6">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice6.png" alt="Mitte, animierbar">
+        </div>
+        <div class="slice-wrapper" id="slice-20">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice20.jpg" alt="Unterer Abschluss Mitte">
+        </div>
 
-  const scene = document.getElementById('scene-container');
+        <div class="slice-wrapper" id="slice-8">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice8.png" alt="Mond und Himmel rechts, animierbar">
+        </div>
+        <div class="slice-wrapper" id="slice-15">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice15.jpg" alt="Mittlerer rechter Bereich">
+        </div>
+        <div class="slice-wrapper" id="slice-17">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice17.jpg" alt="Oberer rechter Bereich unten">
+        </div>
+        <div class="slice-wrapper" id="slice-18">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice18.jpg" alt="Unterer rechter Bereich, schließt rechts ab">
+        </div>
 
-  // Dynamische Berechnung für Zentrierung
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
+        <div class="slice-wrapper" id="slice-5">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice5.png" alt="Bereich rechts neben Slice 4, animierbar">
+        </div>
+        <div class="slice-wrapper" id="slice-19">
+            <img src="xanderfoxy.github.io/AsmaasWunderland/Slice19.jpg" alt="Bereich rechts neben Slice 6">
+        </div>
+        
+    </div>
 
-  // Fokusbereich: ungefähr Mitte von Asmaas Wunderland + Nase + Plattformen
-  const focusX = 1024; // Mittelpunkt im 2048x2048-Canvas, X
-  const focusY = 1280; // Mittelpunkt im 2048x2048-Canvas, Y
-
-  // Skaliere, um 9:16 Viewporthöhe auszufüllen
-  const scale = viewportHeight / 2048;
-
-  // Transform: Container verschieben, damit Fokus in der Mitte ist
-  const translateX = -focusX + (viewportWidth / 2) / scale;
-  const translateY = -focusY + (viewportHeight / 2) / scale;
-
-  // Sanfte Zoomfahrt
-  scene.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-  scene.style.transition = 'transform 5s ease-out';
-});
-</script>
-
+    <script src="script.js"></script>
 </body>
 </html>
