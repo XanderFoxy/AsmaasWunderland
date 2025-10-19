@@ -104,7 +104,10 @@ body {
     background-size: 100% 100%;
     background-repeat: no-repeat;
     
-    /* Leuchten nur auf die transparenten Kanten anwenden */
+    /* NEU: Bildinhalt (Schrift) unsichtbar machen, aber Kontur für Shadow behalten */
+    filter: brightness(0); /* Die eigentliche Schriftfarbe wird unsichtbar */
+    
+    /* Leuchten (drop-shadow) wird weiterhin auf die Kontur angewendet */
     animation: glow-pulse 4s infinite alternate ease-in-out;
 }
 
