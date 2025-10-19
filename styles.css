@@ -1,9 +1,15 @@
 /* GRUNDLEGENDE DEFINITIONEN */
+html {
+    /* WICHTIG: Sicherstellen, dass html und body 100% der Viewport-Größe haben */
+    height: 100%; 
+}
 body {
     margin: 0; 
     padding: 0; 
     overflow: hidden; 
     
+    /* WICHTIG: body-Höhe an html-Höhe binden */
+    height: 100%;
     /* Grid-Layout für stabilste Zentrierung */
     display: grid;
     place-items: center; 
@@ -98,14 +104,14 @@ body {
     width: 100%;
     height: 100%;
     z-index: 2; /* Liegt über dem img */
+    
+    /* KORREKTUR: Opacity auf 0 macht das Bild selbst unsichtbar, behält aber den drop-shadow */
+    opacity: 0; 
 
     /* Läd das neue, transparente Bild. KORRIGIERTE GROSS-/KLEINSCHREIBUNG! */
     background-image: url('https://xanderfoxy.github.io/AsmaasWunderland/Slice2 2.png'); 
     background-size: 100% 100%;
     background-repeat: no-repeat;
-    
-    /* NEU: Bildinhalt (Schrift) unsichtbar machen, aber Kontur für Shadow behalten */
-    filter: brightness(0); /* Die eigentliche Schriftfarbe wird unsichtbar */
     
     /* Leuchten (drop-shadow) wird weiterhin auf die Kontur angewendet */
     animation: glow-pulse 4s infinite alternate ease-in-out;
@@ -195,8 +201,9 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw; 
-    height: 100vh;
+    /* KORREKTUR: 100% Breite/Höhe für bessere mobile Abdeckung */
+    width: 100%; 
+    height: 100%;
     background-color: #000; 
     z-index: 9999; 
     display: flex;
