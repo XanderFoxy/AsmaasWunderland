@@ -4,9 +4,9 @@ body {
     padding: 0; 
     overflow-x: hidden; 
     
-    /* NEUE ZENTRIER-METHODE: Grid-Layout für stabilere Zentrierung */
+    /* Grid-Layout für stabilste Zentrierung */
     display: grid;
-    place-items: center; /* Zentriert horizontal und vertikal */
+    place-items: center; 
 
     min-height: 100vh;      
     background-color: #000;
@@ -14,16 +14,16 @@ body {
 
 /* HAUPT-CONTAINER: Skalierung (QUADRATISCH & VERTIKAL BILDSCHIRMFÜLLEND) */
 #bild-container {
-    height: 100vh;     /* Die Höhe füllt 100% der sichtbaren Bildschirmhöhe (Oben/Unten bündig) */
-    
-    aspect-ratio: 1 / 1; /* Erzwingt das 1:1 Verhältnis (Breite = Höhe = 100vh) */
+    height: 100vh;     /* Höhe = 100% der Viewport-Höhe */
+    aspect-ratio: 1 / 1; /* Erzwingt das 1:1 Verhältnis (Breite = Höhe) */
 
     position: relative; 
-    
-    /* overflow: hidden muss bleiben, damit keine horizontalen Scrollbalken entstehen. 
-       Da die Breite durch aspect-ratio erzwungen wird, sind links/rechts Überstände die korrekte Darstellung. */
     overflow: hidden; 
     
+    /* NEU: Visuelle Feinjustierung des gesamten Bildes um 1.5% nach links */
+    /* Dies verschiebt das gesamte, zentrierte 1:1-Bild proportional nach links. */
+    transform: translateX(-1.5%);
+
     /* Hilfsvariablen (Basis: 2048px) */
     --gesamt-breite-px: 2048;
     --spalte-links-unten-breite: calc(917 / var(--gesamt-breite-px) * 100%);
@@ -36,7 +36,7 @@ body {
 
 
 /* -------------------------------------------
- * OBERE HÄLFTE (bis 1278px Höhe) 
+ * OBERE HÄLFTE (Bis 1278px Höhe) 
  * ------------------------------------------- */
 /* Linke Spalte */
 #slice-7 { width: calc(683 / 2048 * 100%); height: calc(677 / 2048 * 100%); top: 0; left: 0; }
@@ -48,7 +48,7 @@ body {
     left: 0; 
 }
 
-/* Mittlere Spalte (zentrierte Slices) */
+/* Mittlere Spalte (zentrierte Slices - ZURÜCK AUF URSPRÜNGLICHE WERTE) */
 #slice-1 { width: calc(807 / 2048 * 100%); height: calc(464 / 2048 * 100%); top: 0; left: calc(683 / 2048 * 100%); }
 #slice-9 { width: calc(135 / 2048 * 100%); height: calc(118 / 2048 * 100%); top: calc(464 / 2048 * 100%); left: calc(683 / 2048 * 100%); }
 #slice-2 { width: calc(544 / 2048 * 100%); height: calc(118 / 2048 * 100%); top: calc(464 / 2048 * 100%); left: calc((683 + 135) / 2048 * 100%); }
