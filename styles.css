@@ -20,7 +20,7 @@ body {
     overflow: hidden; 
     
     /* STARTZUSTAND: Nur die Feinjustierung, KEIN Zoom (scale(1)). */
-    transform: translateX(-0.0%) scale(1);
+    transform: translateX(0) scale(1);
     
     /* WICHTIG: Die Skalierung geht vom unteren Rand aus (50% = Mitte, 100% = Unten) */
     transform-origin: 50% 100%;
@@ -41,7 +41,7 @@ body {
 /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
 /* !important erzwingt diesen Endzustand für die Animation */
 .zoom-in {
-    transform: translateX(-0.0%) scale(1.2) !important;
+    transform: translateX(0) scale(1.2) !important;
 }
 
 
