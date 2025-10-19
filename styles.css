@@ -1,17 +1,9 @@
 /* GRUNDLEGENDE DEFINITIONEN */
-html {
-    /* Sicherstellen, dass html 100% der Viewport-Größe hat */
-    height: 100%; 
-}
 body {
-    /* KORREKTUR: Versteckt den gesamten body, bis JS ihn sichtbar macht, behebt das Durchscheinen */
-    visibility: hidden; 
     margin: 0; 
     padding: 0; 
     overflow: hidden; 
     
-    /* body-Höhe an html-Höhe binden */
-    height: 100%;
     /* Grid-Layout für stabilste Zentrierung */
     display: grid;
     place-items: center; 
@@ -28,8 +20,8 @@ body {
     position: relative; 
     overflow: hidden; 
     
-    /* KORREKTUR ZENTRIERUNG: Reduzierte Verschiebung für schmale Geräte (iPhone) */
-    transform: translateX(-2.0%) scale(1);
+    /* STARTZUSTAND: Nur die Feinjustierung, KEIN Zoom (scale(1)). */
+    transform: translateX(-3.0%) scale(1);
     
     /* WICHTIG: Die Skalierung geht vom unteren Rand aus (50% = Mitte, 100% = Unten) */
     transform-origin: 50% 100%;
@@ -46,8 +38,7 @@ body {
 /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
 /* !important erzwingt diesen Endzustand für die Animation */
 .zoom-in {
-    /* KORREKTUR ZENTRIERUNG */
-    transform: translateX(-2.0%) scale(1.2) !important;
+    transform: translateX(-3.0%) scale(1.2) !important;
 }
 
 
@@ -62,7 +53,6 @@ body {
 @keyframes glow-pulse {
     0%, 100% {
         /* Minimales Leuchten */
-        /* WICHTIG: Die Animation wirkt NUR auf den drop-shadow-Wert */
         filter: drop-shadow(0 0 5px #ffcc80) drop-shadow(0 0 2px #FFF); 
     }
     50% {
@@ -108,19 +98,13 @@ body {
     width: 100%;
     height: 100%;
     z-index: 2; /* Liegt über dem img */
-    
-    opacity: 1;
 
-    /* KORREKTUR: Originale Groß-/Kleinschreibung des Pfads */
+    /* Läd das neue, transparente Bild. KORRIGIERTE GROSS-/KLEINSCHREIBUNG! */
     background-image: url('https://xanderfoxy.github.io/AsmaasWunderland/Slice2 2.png'); 
     background-size: 100% 100%;
     background-repeat: no-repeat;
     
-    /* KORREKTUR: Macht das BILD selbst unsichtbar (nur Konturen bleiben), um Leuchten zu zeigen */
-    background-color: transparent; 
-    filter: opacity(0); 
-
-    /* Animation steuert den drop-shadow, der jetzt auf der unsichtbaren Kontur wirkt */
+    /* Leuchten nur auf die transparenten Kanten anwenden */
     animation: glow-pulse 4s infinite alternate ease-in-out;
 }
 
@@ -208,11 +192,8 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    /* KORREKTUR: Dynamic Viewport Height (dvh) für bessere iOS-Abdeckung */
-    width: 100%; 
-    height: 100vh; /* Fallback */
-    height: 100dvh; /* Dynamic Viewport Height für moderne Browser/iOS */
-    
+    width: 100vw; 
+    height: 100vh;
     background-color: #000; 
     z-index: 9999; 
     display: flex;
