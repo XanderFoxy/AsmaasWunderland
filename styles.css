@@ -14,20 +14,21 @@ body {
 
 /* HAUPT-CONTAINER: Skalierung (QUADRATISCH & VERTIKAL BILDSCHIRMFÜLLEND) */
 #bild-container {
-    height: 100vh;     /* Höhe = 100% der Viewport-Höhe */
-    aspect-ratio: 1 / 1; /* Erzwingt das 1:1 Verhältnis (Breite = Höhe) */
+    height: 100vh;     
+    aspect-ratio: 1 / 1; 
 
     position: relative; 
     overflow: hidden; 
     
-    /* VISUELLE FEINJUSTIERUNG: Verschiebung um 3.0% nach links und Zoom (Scale 1.2) */
-    transform: translateX(-3.0%) scale(1.2);
+    /* STARTZUSTAND: Nur die Feinjustierung, kein Zoom (scale(1)). */
+    /* Der Zoom wird erst nach dem Preloader per JavaScript hinzugefügt. */
+    transform: translateX(-3.0%) scale(1);
     
     /* WICHTIG: Die Skalierung geht vom unteren Rand aus (50% = Mitte, 100% = Unten) */
     transform-origin: 50% 100%;
 
-    /* Geschmeidiger Übergang für den Zoom-Effekt, falls er später animiert werden soll */
-    transition: transform 1.5s ease-out; 
+    /* Geschmeidiger Übergang für den Zoom-Effekt (jetzt 3s, damit er langsamer ist) */
+    transition: transform 3s ease-out; 
 
     /* Hilfsvariablen (Basis: 2048px) */
     --gesamt-breite-px: 2048;
@@ -35,13 +36,19 @@ body {
     --rechte-kante: 100%;
 }
 
+/* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
+.zoom-in {
+    transform: translateX(-3.0%) scale(1.2) !important;
+}
+
+
 /* ALLGEMEINE SLICE-STYLES */
 .slice-wrapper { position: absolute; box-sizing: border-box; }
 .slice-wrapper img { display: block; width: 100%; height: 100%; object-fit: fill; }
 
 
 /* -------------------------------------------
- * OBERE HÄLFTE (Bis 1278px Höhe) 
+ * SLICE-POSITIONEN (Bleiben unverändert) 
  * ------------------------------------------- */
 /* Linke Spalte */
 #slice-7 { width: calc(683 / 2048 * 100%); height: calc(677 / 2048 * 100%); top: 0; left: 0; }
@@ -141,8 +148,9 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    /* SICHERSTELLEN, DASS ES AUF ALLEN DISPLAYS DECKEND IST */
+    width: 100vw; 
+    height: 100vh;
     background-color: #000; 
     z-index: 9999; 
     display: flex;
@@ -152,20 +160,38 @@ body {
     color: #fff; 
     font-size: 1.5em;
     opacity: 1;
-    transition: opacity 1s ease-out; 
+    transition: opacity 1.5s ease-out; /* Übergang für das Ausblenden verlängert */
     pointer-events: all; 
+}
+
+#preloader-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: sans-serif; 
 }
 
 #preloader-text {
     display: flex;
     align-items: center;
-    font-family: sans-serif; 
-    white-space: pre; 
+    white-space: nowrap; /* Text auf einer Zeile halten */
+    margin-bottom: 10px; /* Abstand zum Ladebalken */
 }
 
-.dot {
-    opacity: 0;
-    width: 0.5em; 
-    text-align: left;
-    transition: opacity 0.1s; 
+/* Ladebalken Container */
+#loading-bar-container {
+    width: 250px;
+    height: 8px;
+    background-color: #333; /* Dunkler Hintergrund für den Balken */
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Der lila Ladebalken */
+#loading-bar {
+    height: 100%;
+    width: 0%; /* Start bei 0% */
+    background-color: #8A2BE2; /* Lila/Blue Violet - die Lieblingsfarbe */
+    border-radius: 4px;
+    transition: width 0.1s linear; /* Schnelle Updates des Fortschritts */
 }
