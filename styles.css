@@ -20,8 +20,8 @@ body {
     position: relative; 
     overflow: hidden; 
     
-    /* NEU: Visuelle Feinjustierung des gesamten Bildes um insgesamt 2.25% nach links */
-    transform: translateX(-2.25%);
+    /* NEU: Visuelle Feinjustierung des gesamten Bildes um insgesamt 3.0% nach links */
+    transform: translateX(-3.0%);
 
     /* Hilfsvariablen (Basis: 2048px) */
     --gesamt-breite-px: 2048;
