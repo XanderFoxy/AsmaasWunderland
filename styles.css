@@ -14,21 +14,17 @@ body {
 
 /* HAUPT-CONTAINER: Skalierung (QUADRATISCH & VERTIKAL BILDSCHIRMFÜLLEND) */
 #bild-container {
-    /* *** ANPASSUNG START *** */
-    /* Wir entfernen height: 100vh und verwenden min() um die Stauchung zu verhindern. */
-    max-height: 100vh;
-    max-width: 100vw;
-    /* Stellt sicher, dass das Quadrat immer die maximale Größe im Viewport hat */
-    width: min(100vh, 100vw); 
-    height: min(100vh, 100vw);
-    /* *** ANPASSUNG ENDE *** */
+    /* *** WIEDERHERGESTELLTE LOGIK *** */
+    /* Füllt den Bildschirm von oben nach unten (100vh) und ist quadratisch (100vh Breite) */
+    height: 100vh;
+    width: 100vh;
     
     aspect-ratio: 1 / 1; /* Erzwingt das 1:1 Verhältnis */
 
     position: relative; 
     overflow: hidden; 
     
-    /* STARTZUSTAND: Die Verschiebung auf 0 zurückgesetzt (Zentrierung) */
+    /* STARTZUSTAND: Horizontale Verschiebung (translateX) auf NULL (Zentrierung) */
     transform: translateX(0) scale(1);
     
     /* WICHTIG: Die Skalierung geht vom unteren Rand aus (50% = Mitte, 100% = Unten) */
@@ -46,10 +42,8 @@ body {
 /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
 /* !important erzwingt diesen Endzustand für die Animation */
 .zoom-in {
-    /* *** ANPASSUNG START *** */
     /* Die Verschiebung auf 0 zurückgesetzt, damit die Zoom-Animation zentriert startet */
     transform: translateX(0) scale(1.2) !important;
-    /* *** ANPASSUNG ENDE *** */
 }
 
 
