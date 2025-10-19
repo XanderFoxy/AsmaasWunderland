@@ -2,105 +2,89 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Asmaas Wunderland</title>
 <style>
   html, body {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
     overflow: hidden;
     background: #000;
+    height: 100%;
+    width: 100%;
   }
-
-  /* Preloader */
   #preloader {
     position: fixed;
-    inset: 0;
-    background: #000;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: sans-serif;
-    font-size: 1.2rem;
-    z-index: 1000;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:#000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+    font-family:sans-serif;
+    font-size:24px;
+    z-index:1000;
   }
-
-  /* Container für 9:16 Viewport */
-  .viewport {
+  #scene-container {
     position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-
-  /* Szene skaliert für Smartphone */
-  .scene {
-    position: absolute;
-    width: 2048px;
+    width: 2048px; /* Originalbildgröße */
     height: 2048px;
+    transform-origin: center center;
+    /* Start kleiner für Zoom-Fokus auf Smartphone */
+    transform: scale(0.44);
     top: 0;
     left: 0;
-    transform: scale(0.439); /* Skalierungsfaktor */
-    transform-origin: top left;
-    transition: transform 6s ease-out;
   }
-
-  .scene img {
+  .slice {
     position: absolute;
     display: block;
-  }
-
-  /* Zoom-Kamerafahrt */
-  .zoom-in {
-    transform: scale(0.55); /* optional leicht zoom auf die Mitte */
   }
 </style>
 </head>
 <body>
 
-<div id="preloader">✨ Betrete Asmaas Wunderland ...</div>
+<div id="preloader">Loading...</div>
 
-<div class="viewport">
-  <div class="scene" id="scene">
-    <!-- Slices in Originalposition, werden durch scale automatisch kleiner -->
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice7.png" style="top:0px; left:0px; width:683px; height:677px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice1.jpg" style="top:0px; left:683px; width:807px; height:464px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice8.png" style="top:0px; left:1490px; width:558px; height:677px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice9.jpg" style="top:464px; left:683px; width:135px; height:118px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice2.png" style="top:464px; left:818px; width:544px; height:118px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice10.jpg" style="top:464px; left:1362px; width:128px; height:118px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice11.jpg" style="top:582px; left:683px; width:296px; height:95px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice3.png" style="top:582px; left:979px; width:160px; height:696px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice12.jpg" style="top:582px; left:1139px; width:351px; height:95px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice14.jpg" style="top:582px; left:0px; width:979px; height:801px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice15.jpg" style="top:582px; left:1139px; width:909px; height:601px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice16.jpg" style="top:1383px; left:0px; width:917px; height:770px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice13.png" style="top:1383px; left:979px; width:277px; height:232px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice17.jpg" style="top:1383px; left:1256px; width:854px; height:371px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice4.png" style="top:1615px; left:979px; width:277px; height:202px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice5.png" style="top:1615px; left:1256px; width:296px; height:237px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice18.jpg" style="top:1615px; left:1552px; width:558px; height:399px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice6.png" style="top:1817px; left:979px; width:277px; height:295px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice19.jpg" style="top:2112px; left:1256px; width:296px; height:162px;">
-    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slice20.jpg" style="top:2407px; left:979px; width:277px; height:41px;">
+<div id="scene-wrapper" style="position: relative; width: 100vw; height: 100vh; overflow: hidden;">
+  <div id="scene-container">
+
+    <!-- Slices, Z-Index von hinten nach vorne -->
+    <img src="Slice7.png" class="slice" style="top:0px; left:0px; width:683px; height:677px; z-index:1;">
+    <img src="Slice1.jpg" class="slice" style="top:0px; left:683px; width:807px; height:464px; z-index:2;">
+    <img src="Slice8.png" class="slice" style="top:0px; left:1490px; width:558px; height:677px; z-index:3;">
+    <img src="Slice9.jpg" class="slice" style="top:464px; left:683px; width:135px; height:118px; z-index:4;">
+    <img src="Slice2.png" class="slice" style="top:464px; left:818px; width:544px; height:118px; z-index:5;">
+    <img src="Slice10.jpg" class="slice" style="top:464px; left:1362px; width:128px; height:118px; z-index:6;">
+    <img src="Slice11.jpg" class="slice" style="top:582px; left:683px; width:296px; height:95px; z-index:7;">
+    <img src="Slice3.png" class="slice" style="top:582px; left:979px; width:160px; height:696px; z-index:8;">
+    <img src="Slice12.jpg" class="slice" style="top:582px; left:1139px; width:351px; height:95px; z-index:9;">
+    <img src="Slice14.jpg" class="slice" style="top:582px; left:0px; width:979px; height:801px; z-index:10;">
+    <img src="Slice15.jpg" class="slice" style="top:582px; left:1139px; width:909px; height:601px; z-index:11;">
+    <img src="Slice16.jpg" class="slice" style="top:1278px; left:0px; width:917px; height:770px; z-index:12;">
+    <img src="Slice13.png" class="slice" style="top:1278px; left:160px; width:277px; height:232px; z-index:13;">
+    <img src="Slice17.jpg" class="slice" style="top:1278px; left:437px; width:854px; height:371px; z-index:14;">
+    <img src="Slice4.png" class="slice" style="top:1609px; left:437px; width:277px; height:202px; z-index:15;">
+    <img src="Slice5.png" class="slice" style="top:1580px; left:714px; width:296px; height:237px; z-index:16;">
+    <img src="Slice18.jpg" class="slice" style="top:1580px; left:1010px; width:558px; height:399px; z-index:17;">
+    <img src="Slice6.png" class="slice" style="top:1809px; left:437px; width:277px; height:295px; z-index:18;">
+    <img src="Slice19.jpg" class="slice" style="top:1809px; left:714px; width:296px; height:162px; z-index:19;">
+    <img src="Slice20.jpg" class="slice" style="top:2104px; left:437px; width:277px; height:41px; z-index:20;">
+
   </div>
 </div>
 
 <script>
-  window.addEventListener("load", () => {
-    const preloader = document.getElementById("preloader");
-    const scene = document.getElementById("scene");
-    
-    preloader.style.transition = "opacity 0.8s ease";
-    preloader.style.opacity = 0;
+  // Warten bis alles geladen ist
+  window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    preloader.style.display = 'none';
 
-    setTimeout(() => {
-      preloader.style.display = "none";
-      scene.classList.add("zoom-in"); // optionaler Zoom
-    }, 800);
+    const scene = document.getElementById('scene-container');
+    // Sanfte Zoom-Kamerafahrt
+    scene.style.transition = 'transform 5s ease-out';
+    scene.style.transform = 'scale(0.6)'; // Beispiel: zoom von 0.44 -> 0.6
+    // Optional: zusätzlich zentrieren
   });
 </script>
 
