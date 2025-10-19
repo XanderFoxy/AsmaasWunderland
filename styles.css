@@ -1,0 +1,131 @@
+/* GRUNDLEGENDE DEFINITIONEN */
+body {
+    margin: 0; padding: 0; 
+    overflow-x: hidden; /* Verhindert ungewolltes horizontales Scrollen des BODY */
+    display: flex; 
+    justify-content: center; /* ZENTRIERT das Bild horizontal */
+    align-items: center;    /* ZENTRIERT das Bild vertikal */
+    min-height: 100vh;      /* Stellt sicher, dass die Höhe des Telefons gefüllt wird */
+    background-color: #000;
+}
+
+/* HAUPT-CONTAINER: Skalierung für Smartphone (Höhe 100% gefüllt) */
+#bild-container {
+    height: 100vh;     /* Die Höhe füllt immer 100% der sichtbaren Bildschirmhöhe */
+    width: 100vh;      /* Da das Bild 1:1 ist, wird die Breite auch 100vh */
+    max-width: 100vw;
+    max-height: 100vh;
+    
+    position: relative; /* Positionierungskontext für absolute Slices */
+    overflow: hidden;  /* Versteckt die Teile, die über die Seiten ragen (wie gewünscht) */
+
+    /* Hilfsvariablen für die Haupt-Spaltenbreiten in Prozent */
+    --spalte-links-oben-breite: calc(683 / 2048 * 100%);
+    --spalte-mitte-breite: calc(807 / 2048 * 100%);
+    --spalte-rechts-oben-breite: calc(558 / 2048 * 100%);
+    
+    --spalte-links-unten-breite: calc(917 / 2048 * 100%);
+    --spalte-mitte-unten-breite: calc(277 / 2048 * 100%);
+    --spalte-rechts-unten-breite: calc(854 / 2048 * 100%);
+
+    --unten-start-top: calc(1278 / 2048 * 100%); /* Start der unteren Hälfte */
+    --unten-mitte-start: calc(917 / 2048 * 100%); /* Start nach Slice 16 */
+    --unten-rechts-start: calc((917 + 277) / 2048 * 100%); /* Start nach Mitte */
+}
+
+/* ALLGEMEINE SLICE-STYLES */
+.slice-wrapper {
+    position: absolute; /* Ermöglicht die pixelgenaue Platzierung */
+    box-sizing: border-box; 
+}
+.slice-wrapper img {
+    display: block; width: 100%; height: 100%;
+}
+
+
+/* -------------------------------------------
+ * OBERE HÄLFTE (bis 1278px Höhe) - 683px | 807px | 558px 
+ * ------------------------------------------- */
+/* Linke Spalte */
+#slice-7 { /* 683x677, Top 0 */
+    width: var(--spalte-links-oben-breite); height: calc(677 / 2048 * 100%); top: 0; left: 0;
+}
+#slice-14 { /* 979x601 (Achtung: 979px Breite), Top 677 */
+    width: calc(979 / 2048 * 100%); height: calc(601 / 2048 * 100%); 
+    top: calc(677 / 2048 * 100%); left: 0;
+}
+
+/* Mittlere Spalte (Start Left: 683px) */
+:root {
+    --spalte-mitte-start: calc(683 / 2048 * 100%);
+}
+#slice-1 { /* 807x464, Top 0 */
+    width: var(--spalte-mitte-breite); height: calc(464 / 2048 * 100%); top: 0; left: var(--spalte-mitte-start);
+}
+
+/* Überschrift (Top 464) */
+#slice-9 { /* 135x118 */
+    width: calc(135 / 2048 * 100%); height: calc(118 / 2048 * 100%); top: calc(464 / 2048 * 100%); left: var(--spalte-mitte-start);
+}
+#slice-2 { /* 544x118 */
+    width: calc(544 / 2048 * 100%); height: calc(118 / 2048 * 100%); top: calc(464 / 2048 * 100%); left: calc((683 + 135) / 2048 * 100%);
+}
+#slice-10 { /* 128x118 */
+    width: calc(128 / 2048 * 100%); height: calc(118 / 2048 * 100%); top: calc(464 / 2048 * 100%); left: calc((683 + 135 + 544) / 2048 * 100%);
+}
+
+/* Mittlere Obere Hälfte (Top 582) */
+#slice-11 { /* 296x95 */
+    width: calc(296 / 2048 * 100%); height: calc(95 / 2048 * 100%); top: calc(582 / 2048 * 100%); left: var(--spalte-mitte-start);
+}
+#slice-3 { /* 160x696 (Die Nase, endet bei 1278) */
+    width: calc(160 / 2048 * 100%); height: calc(696 / 2048 * 100%); top: calc(582 / 2048 * 100%); left: calc((683 + 296) / 2048 * 100%);
+}
+#slice-12 { /* 351x95 */
+    width: calc(351 / 2048 * 100%); height: calc(95 / 2048 * 100%); top: calc(582 / 2048 * 100%); left: calc((683 + 296 + 160) / 2048 * 100%);
+}
+
+/* Rechte Spalte (Start Left: 1490px) */
+#slice-8 { /* 558x677, Top 0 */
+    width: var(--spalte-rechts-oben-breite); height: calc(677 / 2048 * 100%); top: 0; left: calc(1490 / 2048 * 100%);
+}
+#slice-15 { /* 909x601 (Achtung: 909px Breite), Top 677 */
+    width: calc(909 / 2048 * 100%); height: calc(601 / 2048 * 100%); top: calc(677 / 2048 * 100%); left: calc(1490 / 2048 * 100%);
+}
+
+
+/* -------------------------------------------
+ * UNTERE HÄLFTE (ab 1278px Höhe) - 917px | 277px | 854px 
+ * ------------------------------------------- */
+/* Linke Spalte (Breite 917px) */
+#slice-16 { /* 917x770, Top 1278 */
+    width: var(--spalte-links-unten-breite); height: calc(770 / 2048 * 100%); top: var(--unten-start-top); left: 0;
+}
+
+/* Mittlerer Block (Breite 277px) */
+#slice-13 { /* 277x232, Top 1278 */
+    width: var(--spalte-mitte-unten-breite); height: calc(232 / 2048 * 100%); top: var(--unten-start-top); left: var(--unten-mitte-start);
+}
+#slice-4 { /* 277x202, Top 1510 */
+    width: var(--spalte-mitte-unten-breite); height: calc(202 / 2048 * 100%); top: calc(1510 / 2048 * 100%); left: var(--unten-mitte-start);
+}
+#slice-6 { /* 277x295, Top 1712 */
+    width: var(--spalte-mitte-unten-breite); height: calc(295 / 2048 * 100%); top: calc(1712 / 2048 * 100%); left: var(--unten-mitte-start);
+}
+#slice-20 { /* 277x41, Top 2007 (Gesamthöhe 2048) */
+    width: var(--spalte-mitte-unten-breite); height: calc(41 / 2048 * 100%); top: calc(2007 / 2048 * 100%); left: var(--unten-mitte-start);
+}
+
+/* Rechter Block (Breite 854px) */
+#slice-17 { /* 854x371, Top 1278 */
+    width: var(--spalte-rechts-unten-breite); height: calc(371 / 2048 * 100%); top: var(--unten-start-top); left: var(--unten-rechts-start);
+}
+#slice-5 { /* 296x237, Rechts neben Slice 4, Top 1510 */
+    width: calc(296 / 2048 * 100%); height: calc(237 / 2048 * 100%); top: calc(1510 / 2048 * 100%); left: var(--unten-rechts-start);
+}
+#slice-18 { /* 558x399, Unter Slice 17, Rechts außen, Top 1649 */
+    width: calc(558 / 2048 * 100%); height: calc(399 / 2048 * 100%); top: calc(1649 / 2048 * 100%); left: calc((917 + 277 + 296) / 2048 * 100%); 
+}
+#slice-19 { /* 296x162, Unter Slice 5, Top 1747 */
+    width: calc(296 / 2048 * 100%); height: calc(162 / 2048 * 100%); top: calc(1747 / 2048 * 100%); left: var(--unten-rechts-start);
+}
