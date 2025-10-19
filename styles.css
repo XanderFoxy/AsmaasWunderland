@@ -4,9 +4,9 @@ body {
     padding: 0; 
     overflow: hidden; 
     
-    /* Grid-Layout für stabilste Zentrierung */
-    display: grid;
-    place-items: center; 
+    /* *** KORREKTUR: Entferne Grid-Zentrierung, da der Container absolut positioniert wird *** */
+    display: block;
+    /* place-items: center;  <-- ENTFERNT */
 
     min-height: 100vh;      
     background-color: #000;
@@ -14,18 +14,21 @@ body {
 
 /* HAUPT-CONTAINER: Skalierung (QUADRATISCH & VERTIKAL BILDSCHIRMFÜLLEND) */
 #bild-container {
-    /* *** WIEDERHERGESTELLTE LOGIK *** */
-    /* Füllt den Bildschirm von oben nach unten (100vh) und ist quadratisch (100vh Breite) */
+    /* WIEDERHERGESTELLTE LOGIK: Füllt den Bildschirm von oben nach unten (100vh) und ist quadratisch (100vh Breite) */
     height: 100vh;
     width: 100vh;
     
     aspect-ratio: 1 / 1; /* Erzwingt das 1:1 Verhältnis */
 
-    position: relative; 
+    /* *** KORREKTUR: Absolute Positionierung für präzise Steuerung *** */
+    position: absolute; 
+    top: 0;         /* Sorgt dafür, dass die oberste Karte IMMER sichtbar ist */
+    left: 50%;      /* Setzt den Startpunkt auf die Mitte des Bildschirms */
+    
     overflow: hidden; 
     
-    /* STARTZUSTAND: Horizontale Verschiebung (translateX) auf NULL (Zentrierung) */
-    transform: translateX(0) scale(1);
+    /* STARTZUSTAND: Horizontale Verschiebung (translateX) auf -50% (zieht das Element in die Mitte) */
+    transform: translateX(-50%) scale(1);
     
     /* WICHTIG: Die Skalierung geht vom unteren Rand aus (50% = Mitte, 100% = Unten) */
     transform-origin: 50% 100%;
@@ -42,8 +45,8 @@ body {
 /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
 /* !important erzwingt diesen Endzustand für die Animation */
 .zoom-in {
-    /* Die Verschiebung auf 0 zurückgesetzt, damit die Zoom-Animation zentriert startet */
-    transform: translateX(0) scale(1.2) !important;
+    /* Die Verschiebung muss auch im Zoom-Zustand beibehalten werden */
+    transform: translateX(-50%) scale(1.2) !important;
 }
 
 
