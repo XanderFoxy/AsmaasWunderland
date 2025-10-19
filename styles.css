@@ -14,12 +14,21 @@ body {
 
 /* HAUPT-CONTAINER: Skalierung (QUADRATISCH & VERTIKAL BILDSCHIRMFÜLLEND) */
 #bild-container {
-    height: 100vh;     
-    aspect-ratio: 1 / 1; 
+    /* *** ANPASSUNG START *** */
+    /* Wir entfernen height: 100vh und verwenden min() um die Stauchung zu verhindern. */
+    max-height: 100vh;
+    max-width: 100vw;
+    /* Stellt sicher, dass das Quadrat immer die maximale Größe im Viewport hat */
+    width: min(100vh, 100vw); 
+    height: min(100vh, 100vw);
+    /* *** ANPASSUNG ENDE *** */
+    
+    aspect-ratio: 1 / 1; /* Erzwingt das 1:1 Verhältnis */
+
     position: relative; 
     overflow: hidden; 
     
-    /* STARTZUSTAND: Nur die Feinjustierung, KEIN Zoom (scale(1)). */
+    /* STARTZUSTAND: Die Verschiebung auf 0 zurückgesetzt (Zentrierung) */
     transform: translateX(0) scale(1);
     
     /* WICHTIG: Die Skalierung geht vom unteren Rand aus (50% = Mitte, 100% = Unten) */
@@ -32,16 +41,15 @@ body {
     --gesamt-breite-px: 2048;
     --spalte-links-unten-breite: calc(917 / var(--gesamt-breite-px) * 100%);
     --rechte-kante: 100%;
-
-    /* NEU: Horizontale Zentrierung und maximale Breite */
-    margin: 0 auto;
-    max-width: 100vw;
 }
 
 /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
 /* !important erzwingt diesen Endzustand für die Animation */
 .zoom-in {
+    /* *** ANPASSUNG START *** */
+    /* Die Verschiebung auf 0 zurückgesetzt, damit die Zoom-Animation zentriert startet */
     transform: translateX(0) scale(1.2) !important;
+    /* *** ANPASSUNG ENDE *** */
 }
 
 
@@ -70,6 +78,7 @@ body {
  * ------------------------------------------- */
 /* Linke Spalte */
 #slice-7 { width: calc(683 / 2048 * 100%); height: calc(677 / 2048 * 100%); top: 0; left: 0; }
+/* S14: BREITE IST 979px. */
 #slice-14 { 
     width: calc(979 / 2048 * 100%); 
     height: calc(601 / 2048 * 100%); 
@@ -87,22 +96,27 @@ body {
     height: calc(118 / 2048 * 100%); 
     top: calc(464 / 2048 * 100%); 
     left: calc((683 + 135) / 2048 * 100%); 
+    /* WICHTIG: Für das absolute Overlay benötigt */
     position: relative;
 }
 
 /* NEU: GLOW-OVERLAY STYLES */
 #glow-overlay {
+    /* Positioniert sich über dem img-Tag in #slice-2 */
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2; 
+    z-index: 2; /* Liegt über dem img */
+
+    /* Läd das neue, transparente Bild. KORRIGIERTE GROSS-/KLEINSCHREIBUNG! */
     background-image: url('https://xanderfoxy.github.io/AsmaasWunderland/Slice2 2.png'); 
     background-size: 100% 100%;
     background-repeat: no-repeat;
+    
+    /* Leuchten nur auf die transparenten Kanten anwenden */
     animation: glow-pulse 4s infinite alternate ease-in-out;
-    pointer-events: none;
 }
 
 #slice-10 { 
@@ -147,21 +161,48 @@ body {
     left: calc(1139 / 2048 * 100%); 
 }
 
-/* Untere Hälfte (ab 1278px Höhe) */
+
+/* -------------------------------------------
+ * UNTERE HÄLFTE (ab 1278px Höhe) 
+ * ------------------------------------------- */
+/* Linke Spalte (OK) */
 #slice-16 { width: var(--spalte-links-unten-breite); height: calc(770 / 2048 * 100%); top: calc(1278 / 2048 * 100%); left: 0; }
+
+/* Mittlerer Block (OK) */
 #slice-13 { width: calc(277 / 2048 * 100%); height: calc(232 / 2048 * 100%); top: calc(1278 / 2048 * 100%); left: var(--spalte-links-unten-breite); }
 #slice-4 { width: calc(277 / 2048 * 100%); height: calc(202 / 2048 * 100%); top: calc(1510 / 2048 * 100%); left: var(--spalte-links-unten-breite); }
 #slice-6 { width: calc(277 / 2048 * 100%); height: calc(295 / 2048 * 100%); top: calc(1712 / 2048 * 100%); left: var(--spalte-links-unten-breite); }
 #slice-20 { width: calc(277 / 2048 * 100%); height: calc(41 / 2048 * 100%); top: calc(2007 / 2048 * 100%); left: var(--spalte-links-unten-breite); }
-#slice-17 { width: calc(854 / 2048 * 100%); height: calc(371 / 2048 * 100%); top: calc(1278 / 2048 * 100%); left: calc(1194 / 2048 * 100%); }
-#slice-18 { width: calc(558 / 2048 * 100%); height: calc(399 / 2048 * 100%); top: calc(1649 / 2048 * 100%); left: calc(1490 / 2048 * 100%); }
-#slice-5 { width: calc(296 / 2048 * 100%); height: calc(237 / 2048 * 100%); top: calc(1649 / 2048 * 100%); left: calc(1194 / 2048 * 100%); }
-#slice-19 { width: calc(296 / 2048 * 100%); height: calc(162 / 2048 * 100%); top: calc(1886 / 2048 * 100%); left: calc(1194 / 2048 * 100%); }
 
-/* PRELOADER STYLES */
+/* Rechter Block (Rechtsbündig) */
+#slice-17 { 
+    width: calc(854 / 2048 * 100%); height: calc(371 / 2048 * 100%); top: calc(1278 / 2048 * 100%); 
+    left: calc(1194 / 2048 * 100%); 
+}
+#slice-18 { 
+    width: calc(558 / 2048 * 100%); height: calc(399 / 2048 * 100%); top: calc(1649 / 2048 * 100%); 
+    left: calc(1490 / 2048 * 100%); 
+}
+
+/* Fülls-Slices rechts von der Mitte (links neben Slice 18) */
+#slice-5 { 
+    width: calc(296 / 2048 * 100%); height: calc(237 / 2048 * 100%); 
+    top: calc(1649 / 2048 * 100%); 
+    left: calc(1194 / 2048 * 100%); 
+}
+#slice-19 { 
+    width: calc(296 / 2048 * 100%); height: calc(162 / 2048 * 100%); 
+    top: calc(1886 / 2048 * 100%); 
+    left: calc(1194 / 2048 * 100%); 
+}
+
+/* -------------------------------------------
+ * PRELOADER STYLES 
+ * ------------------------------------------- */
 #preloader {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100vw; 
     height: 100vh;
     background-color: #000; 
@@ -191,6 +232,7 @@ body {
     margin-bottom: 10px; 
 }
 
+/* Ladebalken Container */
 #loading-bar-container {
     width: 250px;
     height: 8px;
@@ -199,18 +241,11 @@ body {
     overflow: hidden;
 }
 
+/* Der lila Ladebalken */
 #loading-bar {
     height: 100%;
     width: 0%; 
-    background-color: #8A2BE2;
+    background-color: #8A2BE2; /* Lila/Blue Violet */
     border-radius: 4px;
     transition: width 0.1s linear; 
-}
-
-@media (max-width: 414px) {
-    #bild-container {
-        height: 100vw;
-        max-width: 100vw;
-        transform-origin: center center;
-    }
 }
