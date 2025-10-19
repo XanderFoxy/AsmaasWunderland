@@ -14,13 +14,13 @@ body {
 /* HAUPT-CONTAINER: Skalierung (QUADRATISCH & VERTIKAL BILDSCHIRMFÜLLEND) */
 #bild-container {
     height: 100vh;     /* Die Höhe füllt 100% der sichtbaren Bildschirmhöhe (Oben/Unten bündig) */
-    width: 100vh;      /* Die Breite ist gleich der Höhe, um das Quadrat zu erhalten (läuft links/rechts aus) */
     
-    /* ZUSÄTZLICH: Erzwingt das 1:1 Verhältnis, um Stauchen zu verhindern */
-    aspect-ratio: 1 / 1; 
+    /* width: 100vh ENTFERNT, um Verzerrung auf breiten Bildschirmen zu verhindern */
+    
+    aspect-ratio: 1 / 1; /* Erzwingt das 1:1 Verhältnis, Breite = Höhe = 100vh */
 
     position: relative; 
-    overflow: hidden; /* Versteckt Ränder, wenn das Bild größer ist als der Viewport */
+    overflow: hidden; 
     
     /* Hilfsvariablen (Basis: 2048px) */
     --gesamt-breite-px: 2048;
