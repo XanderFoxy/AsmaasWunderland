@@ -35,8 +35,11 @@
             /* MANUELLE ZENTRIERUNG und STARTZUSTAND (scale(1)) */
             transform: translateX(-50%) scale(1); 
             
-            /* Skalierung geht vom UNTEREN Rand aus */
-            transform-origin: 50% 100%;
+            /* ************************************************************* */
+            /* KORREKTUR DER VERTIKALEN POSITIONIERUNG: 100% -> 80% */
+            /* Skalierung geht von 80% der Höhe aus, um die Überschrift sichtbar zu halten. */
+            transform-origin: 50% 80%;
+            /* ************************************************************* */
 
             /* Geschmeidiger Übergang für den Zoom-Effekt (3s) */
             transition: transform 3s ease-out; 
@@ -45,15 +48,12 @@
         /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
         .zoom-in {
             /* ************************************************************* */
-            /* ZIEL-AUSSCHNITT KORREKTUR: Neuer Zoom-Faktor 1.914 */
-            /* VERTIKALE KORREKTUR: translateX und translateY kombinieren */
+            /* KORREKTUR DES ZIEL-AUSSCHNITTS: Zoom-Faktor 1.67 */
+            /* Zeigt 60% der Breite (mehr Umgebung) und korrigiert so die "zu riesig"-Wahrnehmung. */
+            transform: translateX(-50%) scale(1.67) !important; 
             /* ************************************************************* */
-            
-            /* Kombination aus horizontaler Zentrierung, vertikaler Verschiebung und neuem Zoom-Faktor */
-            /* translateY(2dvh) zieht das gesamte gezoomte Bild 2% der Viewporthöhe nach unten */
-            transform: translateX(-50%) translateY(2dvh) scale(1.914) !important; 
         }
-
+        
         /* -------------------------------------------
          * SLICE STYLES (Spalt-Korrektur beibehalten)
          * ------------------------------------------- */
