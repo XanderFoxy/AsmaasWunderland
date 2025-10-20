@@ -24,15 +24,9 @@
             top: 0;
             left: 50%; 
 
-            /* ************************************************************* */
-            /* KORREKTUR: HÖHE ERZWINGEN & PROPORTIONALITÄT SICHERSTELLEN */
-            /* ************************************************************* */
-            
-            /* Höchste Priorität: Das Frame soll mindestens die volle Viewport-Höhe einnehmen. */
+            /* Anti-Stauch-Korrektur (Breite = Höhe erzwingen) */
             min-height: 100vh; 
-            width: 100vh; /* Breite gleich Höhe erzwingen */
-            
-            /* Fallback für dicke Browser-Leisten (dvh) */
+            width: 100vh; 
             min-height: 100dvh; 
             width: 100dvh; 
 
@@ -51,9 +45,10 @@
         /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
         .zoom-in {
             /* ************************************************************* */
-            /* ZIEL-AUSSCHNITT KORREKTUR: Neuer Zoom-Faktor 1.7 */
+            /* KORRIGIERTER ZIEL-AUSSCHNITT: Zoom-Faktor 1.4 */
             /* ************************************************************* */
-            transform: translateX(-50%) scale(1.7) !important; 
+            /* 1.4 sollte mehr vom zentralen Bereich zeigen als 1.15, aber weniger als 1.7. */
+            transform: translateX(-50%) scale(1.4) !important; 
         }
 
         /* -------------------------------------------
@@ -74,7 +69,7 @@
         }
         
         /* -------------------------------------------
-         * PRELOADER STYLES (unverändert)
+         * PRELOADER & JS (unverändert)
          * ------------------------------------------- */
         #preloader {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -118,37 +113,28 @@
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice7.png" style="left: 0%; top: 0%; width: 33.359%; height: 28.418%;" alt="Slice 7 (Oben Links)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice1.jpg" style="left: 33.359%; top: 0%; width: 39.404%; height: 22.656%;" alt="Slice 1 (Mitte Oben)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice8.png" style="left: 72.763%; top: 0%; width: 27.237%; height: 28.418%;" alt="Slice 8 (Oben Rechts)">
-
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice9.jpg" style="left: 33.359%; top: 22.656%; width: 6.592%; height: 5.762%;" alt="Slice 9">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice2.png" style="left: 39.951%; top: 22.656%; width: 26.562%; height: 5.762%;" alt="Slice 2 (Webseitentitel/Überschrift)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice10.jpg" style="left: 66.513%; top: 22.656%; width: 6.25%; height: 5.762%;" alt="Slice 10">
-
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice23.png" style="left: 0%; top: 28.418%; width: 33.359%; height: 12.598%;" alt="Slice 23 (Unter Slice 7)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice27.jpg" style="left: 33.359%; top: 28.418%; width: 6.592%; height: 6.348%;" alt="Slice 27">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12.jpg" style="left: 39.951%; top: 28.418%; width: 26.562%; height: 6.348%;" alt="Slice 12 (Videosektion)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice28.jpg" style="left: 66.513%; top: 28.418%; width: 6.25%; height: 6.348%;" alt="Slice 28">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice22.jpg" style="left: 72.763%; top: 28.418%; width: 27.237%; height: 17.432%;" alt="Slice 22 (Unter Slice 8)">
-
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice11.png" style="left: 33.359%; top: 34.766%; width: 14.453%; height: 6.25%;" alt="Slice 11 (Musiklink)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice25.png" style="left: 47.812%; top: 34.766%; width: 6.25%; height: 6.25%;" alt="Slice 25 (Rechts neben Slice 11)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24.png" style="left: 54.062%; top: 34.766%; width: 18.701%; height: 11.084%;" alt="Slice 24 (Rechts neben Slice 25)">
-
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice29.jpg" style="left: 0%; top: 41.016%; width: 23.877%; height: 23.047%;" alt="Slice 29 (Unter Slice 23)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14.png" style="left: 23.877%; top: 41.016%; width: 23.926%; height: 23.047%;" alt="Slice 14 (Fuchs/Elefant)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice3.png" style="left: 47.803%; top: 41.016%; width: 6.25%; height: 23.047%;" alt="Slice 3 (Wasserfall - Unter Slice 25)">
-
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15.png" style="left: 54.062%; top: 45.84%; width: 35.205%; height: 18.213%;" alt="Slice 15 (Fotosektion - Bärenbild, Unter Slice 24)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice26.jpg" style="left: 89.267%; top: 45.84%; width: 10.733%; height: 18.213%;" alt="Slice 26 (Rechts neben Slice 15)">
-
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice16.jpg" style="left: 0%; top: 64.062%; width: 44.775%; height: 35.938%;" alt="Slice 16 (Linke untere Ecke)">
-
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice13.png" style="left: 44.775%; top: 64.062%; width: 13.525%; height: 9.668%;" alt="Slice 13 (Oben im Stapel)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice4.png" style="left: 44.775%; top: 73.73%; width: 13.525%; height: 9.863%;" alt="Slice 4">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice6.png" style="left: 44.775%; top: 83.593%; width: 13.525%; height: 14.453%;" alt="Slice 6">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice20.jpg" style="left: 44.775%; top: 98.046%; width: 13.525%; height: 2.002%;" alt="Slice 20 (Unten im Stapel)">
-
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice17.jpg" style="left: 58.300%; top: 64.062%; width: 41.700%; height: 16.455%;" alt="Slice 17 (Rechts Oben)">
-
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice5.png" style="left: 58.300%; top: 80.517%; width: 14.453%; height: 11.572%;" alt="Slice 5">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice19.jpg" style="left: 58.300%; top: 92.089%; width: 14.453%; height: 7.909%;" alt="Slice 19 (Unten links im Stapel)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice18.jpg" style="left: 72.753%; top: 80.517%; width: 27.247%; height: 19.483%;" alt="Slice 18 (Rechte untere Ecke)">
