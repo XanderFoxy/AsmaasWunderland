@@ -3,42 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <title>Asmaas Wunderland</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
         /* -------------------------------------------
          * GRUNDLEGENDE DEFINITIONEN
          * ------------------------------------------- */
-        body {
+        html, body {
+            height: 100%; /* Stellt sicher, dass d/vh korrekt berechnet wird */
             margin: 0; 
             padding: 0; 
-            overflow: hidden; 
-            min-height: 100vh;
+            overflow: hidden; /* VERHINDERT SCROLLEN */
             background-color: #000;
         }
 
         /* -------------------------------------------
-         * HAUPT-CONTAINER: KORRIGIERTE BASIS-DARSTELLUNG
+         * PRELOADER KORREKTUR (9:16 Basis und Skalierung)
+         * ------------------------------------------- */
+        #preloader {
+            position: fixed; top: 0; left: 0; 
+            
+            /* NEUE KORREKTUR: Preloader auf 9:16 Basis bringen und zentrieren */
+            width: 100dvh; 
+            height: 100dvh; 
+            left: 50%;
+            transform: translateX(-50%); 
+
+            background-color: #000; z-index: 9999; 
+            display: flex;
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center;
+            color: #fff; font-size: 1.5em; opacity: 1;
+            transition: opacity 1.5s ease-out; 
+            pointer-events: all; 
+            font-family: sans-serif;
+            
+            /* Sicherstellen, dass die Schrift nicht angeschnitten wird */
+            box-sizing: border-box;
+            padding: 20dvh 0; /* Vertikale Pufferung */
+        }
+
+        /* ... (Rest der Preloader-Schrift-Styles unverändert) */
+        
+        /* -------------------------------------------
+         * HAUPT-CONTAINER: KORRIGIERTE $9:16$ BASIS
          * ------------------------------------------- */
         .website-frame {
             position: absolute;
             
-            /* ************************************************************* */
-            /* NEUE BASIS: Bildgröße auf Viewport-Breite beschränken */
-            /* Dadurch passt das quadratische Bild unverzerrt in die Breite. */
-            width: 100dvw; 
-            height: 100dvw; 
+            /* BASIS: Bild füllt HÖHE, bleibt QUADRATISCH, zentriert horizontal */
+            height: 100dvh; 
+            width: 100dvh; 
             
-            /* START-ZENTRIERUNG FÜR DIE BASIS-DARSTELLUNG (Mitte des Viewports) */
-            top: 50%; /* Startpunkt in der Mitte */
+            /* Startpunkt Oben und Horizontal Zentriert */
+            top: 0; 
             left: 50%; 
-            transform: translate(-50%, -50%) scale(1); 
-            /* ************************************************************* */
+            transform: translateX(-50%) scale(1); /* Basis: Horizontale Zentrierung */
 
             overflow: hidden; 
             
-            /* Skalierung soll weiterhin von einem fixen Punkt ausgehen */
-            /* Wir verwenden 80% (etwas oberhalb des Bodens), um die Überschrift vertikal zu korrigieren. */
-            transform-origin: 50% 80%;
+            /* ************************************************************* */
+            /* KORREKTUR DER VERTIKALEN AUSRICHTUNG: Auf 30% des Frames fokussieren */
+            transform-origin: 50% 30%; 
+            /* ************************************************************* */
 
             /* Geschmeidiger Übergang für den Zoom-Effekt (3s) */
             transition: transform 3s ease-out; 
@@ -47,20 +74,14 @@
         /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
         .zoom-in {
             /* ************************************************************* */
-            /* NEUER ZOOM-ENDPUNKT: Korrigiert und zentriert */
-            /* Zoom 1.67 (zeigt 60% der Frame-Breite) */
-            /* Der Zoom-Punkt (80%) ist bereits in .website-frame definiert. */
-            /* Wir müssen das Bild am Ende nur noch neu zentrieren, da translate(-50%, -50%) in die falsche Position führt. */
-
-            /* Zoom-Endzustand: 
-               1. Horizontal mittig (-50%)
-               2. Vertikal leicht nach oben verschoben (-15dvh)
-               3. Auf 1.67 skaliert. */
-            transform: translateX(-50%) translateY(-15dvh) scale(1.67) !important; 
+            /* NEUER ZOOM-ENDPUNKT: Weniger aggressiver Zoom (1.45) */
+            /* Die Vertikal-Position wird nun durch 30% transform-origin gesteuert. */
+            transform: translateX(-50%) scale(1.45) !important; 
+            /* ************************************************************* */
         }
 
         /* -------------------------------------------
-         * SLICE STYLES (Spalt-Korrektur beibehalten)
+         * SLICE STYLES (Unverändert)
          * ------------------------------------------- */
         .slice {
             position: absolute;
@@ -77,17 +98,8 @@
         }
         
         /* -------------------------------------------
-         * PRELOADER & JS (unverändert)
+         * PRELOADER & JS (Unverändert)
          * ------------------------------------------- */
-        #preloader {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #000; z-index: 9999; display: flex;
-            flex-direction: column; justify-content: center; align-items: center;
-            color: #fff; font-size: 1.5em; opacity: 1;
-            transition: opacity 1.5s ease-out; pointer-events: all; 
-            font-family: sans-serif;
-        }
-
         #preloader-text {
             display: flex; align-items: center; white-space: nowrap; margin-bottom: 10px; 
         }
