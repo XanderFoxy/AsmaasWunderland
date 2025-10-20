@@ -3,60 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <title>Asmaas Wunderland</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        /* -------------------------------------------
+         * GRUNDLEGENDE DEFINITIONEN
+         * ------------------------------------------- */
         body {
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-            font-family: sans-serif;
+            margin: 0; 
+            padding: 0; 
+            overflow: hidden; /* KEIN Scrollen erlaubt */
             
-            /* Volle Höhe nutzen und Vertikales Scrollen verbieten */
-            min-height: 100dvh;
-            min-height: 100vh;
-            overflow-y: hidden;
-            
-            /* **WICHTIG:** Erlaube horizontalen Überlauf, der zentriert werden muss */
-            overflow-x: hidden; 
-            
-            /* Flexbox für horizontale Zentrierung */
-            display: flex; 
-            justify-content: center; /* Zentriert den überlaufenden Frame horizontal */
-            align-items: flex-start; /* Stellt den Frame oben bündig (Top: 0) */
+            /* Grid-Layout für stabilste Zentrierung des Frames */
+            display: grid;
+            place-items: center; /* Zentriert horizontal und vertikal (hilft beim Überlauf) */
+
+            min-height: 100dvh; /* Volle Höhe */
+            min-height: 100vh; /* Fallback */
+            background-color: #000;
         }
 
-        /* Der Container für das Gesamtbild (2048x2048px) */
+        /* -------------------------------------------
+         * HAUPT-CONTAINER: SKALIERUNGSLOGIK (vom alten Code übernommen)
+         * ------------------------------------------- */
         .website-frame {
-            position: relative;
+            position: relative; 
             
-            /* *************************************************************** */
-            /* ZWINGENDE PROPORTIONALE HÖHEN-ANPASSUNG UND ÜBERLAUF-BERECHNUNG */
-            /* *************************************************************** */
-            
-            /* 1. Höhe des Frames auf die Display-Höhe setzen (garantiert oben/unten bündig) */
-            height: 100dvh;
+            /* HÖHEN-SKALIERUNG ERZWINGEN (garantiert oben/unten bündig) */
+            height: 100dvh;     
             height: 100vh;
             
-            /* 2. Breite MUSS proportional zur Höhe sein, da das Original quadratisch ist (2048x2048).
-               Breite = Höhe, was Zwangsläufig zum Überlauf führt, wenn die Display-Breite kleiner ist. */
-            width: 100dvh;
-            width: 100vh;
+            /* PROPORTIONALITÄT ERZWINGEN (Breite wird gleich Höhe, führt zu Überlauf) */
+            aspect-ratio: 1 / 1; 
+
+            overflow: hidden; 
             
-            /* Da der Body Flexbox zur Zentrierung nutzt, ist keine zusätzliche transform: translateX(-50%) 
-               oder left: 50% mehr nötig. Der gesamte Frame wird in der Mitte des Viewports positioniert, 
-               wobei die Ränder links und rechts nach außen laufen. ✅ */
+            /* STARTZUSTAND FÜR DEN ÜBERGANG */
+            transform: scale(1); /* Skalierungs-Startpunkt ist 1 */
+            
+            /* Skalierung geht vom UNTEREN Rand aus */
+            transform-origin: 50% 100%;
+
+            /* Geschmeidiger Übergang für den Zoom-Effekt (3s) */
+            transition: transform 3s ease-out; 
         }
-        
+
+        /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
+        .zoom-in {
+            /* **WICHTIG:** Dieser Wert bestimmt den End-Zoom (z.B. 1.15 oder 1.2) */
+            transform: scale(1.15) !important; 
+        }
+
+        /* -------------------------------------------
+         * SLICE STYLES
+         * ------------------------------------------- */
         .slice {
             position: absolute;
             box-sizing: border-box;
             display: block;
         }
+        .slice img { display: block; width: 100%; height: 100%; object-fit: fill; } /* Neu hinzugefügt */
+        
+        /* -------------------------------------------
+         * PRELOADER STYLES (vom alten Code übernommen)
+         * ------------------------------------------- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw; 
+            height: 100vh;
+            background-color: #000; 
+            z-index: 9999; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff; 
+            font-size: 1.5em;
+            opacity: 1;
+            transition: opacity 1.5s ease-out; 
+            pointer-events: all; 
+            font-family: sans-serif;
+        }
+
+        #preloader-text {
+            display: flex;
+            align-items: center;
+            white-space: nowrap; 
+            margin-bottom: 10px; 
+        }
+
+        #loading-bar-container {
+            width: 250px;
+            height: 8px;
+            background-color: #333; 
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        #loading-bar {
+            height: 100%;
+            width: 0%; 
+            background-color: #8A2BE2;
+            border-radius: 4px;
+            transition: width 0.1s linear; 
+        }
     </style>
 </head>
 <body>
 
-<div class="website-frame">
+<div id="preloader">
+    <div id="preloader-text-container">
+        <div id="preloader-text">
+            <span style="font-size: 1.2em; margin-right: 0.5em;">✨</span>
+            <span>Betritt Asmaas Wunderland</span>
+        </div>
+        <div id="loading-bar-container">
+            <div id="loading-bar"></div>
+        </div>
+    </div>
+</div>
+
+<div class="website-frame" id="website-frame">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice7.png" style="left: 0%; top: 0%; width: 33.359%; height: 28.418%;" alt="Slice 7 (Oben Links)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice1.jpg" style="left: 33.359%; top: 0%; width: 39.404%; height: 22.656%;" alt="Slice 1 (Mitte Oben)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice8.png" style="left: 72.763%; top: 0%; width: 27.237%; height: 28.418%;" alt="Slice 8 (Oben Rechts)">
@@ -95,6 +163,87 @@
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice19.jpg" style="left: 58.300%; top: 92.089%; width: 14.453%; height: 7.909%;" alt="Slice 19 (Unten links im Stapel)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice18.jpg" style="left: 72.753%; top: 80.517%; width: 27.247%; height: 19.483%;" alt="Slice 18 (Rechte untere Ecke)">
 </div>
+
+<script>
+// -------------------------------------------
+// 2. JavaScript (vom alten Code übernommen)
+// -------------------------------------------
+
+// Funktion zum Überwachen des Ladefortschritts
+function trackLoadingProgress() {
+    const images = document.querySelectorAll('#website-frame img'); // Selektor angepasst
+    const loadingBar = document.getElementById('loading-bar');
+    let loadedCount = 0;
+    const totalCount = images.length;
+
+    const MIN_WAIT_TIME = 800;
+    const startTime = Date.now();
+
+    if (totalCount === 0) {
+        return new Promise(resolve => setTimeout(resolve, MIN_WAIT_TIME));
+    }
+    
+    const updateProgress = () => {
+        const progress = (loadedCount / totalCount) * 100;
+        loadingBar.style.width = progress + '%';
+    };
+
+    const promises = [];
+
+    images.forEach(img => {
+        if (!img.complete) {
+            promises.push(new Promise(resolve => {
+                const onLoadOrError = () => {
+                    loadedCount++;
+                    updateProgress();
+                    resolve();
+                };
+                img.onload = onLoadOrError;
+                img.onerror = onLoadOrError; 
+            }));
+        } else {
+            loadedCount++;
+            updateProgress();
+        }
+    });
+
+    return Promise.all([
+        Promise.all(promises),
+        new Promise(resolve => {
+            const timeElapsed = Date.now() - startTime;
+            const remainingTime = MIN_WAIT_TIME - timeElapsed;
+            setTimeout(resolve, Math.max(0, remainingTime));
+        })
+    ]);
+}
+
+// Funktion zum Starten der Zoom-Animation
+function startZoomAnimation() {
+    const bildContainer = document.getElementById('website-frame'); // ID angepasst
+    bildContainer.classList.add('zoom-in');
+}
+
+// Funktion zum Verbergen des Preloaders und Starten der Zoom-Animation
+function hidePreloader() {
+    const preloader = document.getElementById('preloader');
+    
+    preloader.style.opacity = '0';
+    
+    setTimeout(startZoomAnimation, 100);
+    
+    setTimeout(() => {
+        preloader.style.display = 'none';
+        preloader.style.pointerEvents = 'none'; 
+    }, 1500); 
+}
+
+// Hauptlogik, die beim Laden der Seite startet
+document.addEventListener('DOMContentLoaded', () => {
+    trackLoadingProgress().then(() => {
+        hidePreloader();
+    });
+});
+</script>
 
 </body>
 </html>
