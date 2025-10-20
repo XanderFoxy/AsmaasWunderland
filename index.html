@@ -83,11 +83,14 @@
             transform: translateX(-50%) scale(1); 
             overflow: hidden; 
             
+            /* Deaktiviert Schwenken (Panning), um ungewollte Verschiebung nach Zoom zu verhindern */
+            touch-action: none;
+            
             /* ************************************************************* */
             /* KORREKTUR DES ANKERPUNKTS (transform-origin) */
-            /* Horizontal: 68.064% (Unverändert) */
-            /* Vertikal: 76.321% (Nochmals eine ganze Box höher im Ausschnitt) */
-            transform-origin: 68.064% 76.321%; 
+            /* Horizontal: 68.064% */
+            /* Vertikal: 82.669% */
+            transform-origin: 68.064% 82.669%; 
             /* ************************************************************* */
 
             transition: transform 3s ease-out; 
@@ -95,7 +98,7 @@
         
         /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Skalierung unverändert) */
         .zoom-in {
-            /* Skalierung: 1.13 (Breiter Ausschnitt beibehalten) */
+            /* Skalierung: 1.13 */
             transform: translateX(-50%) scale(1.13) !important; 
         }
 
@@ -115,6 +118,13 @@
             height: 100%; 
             object-fit: fill; 
         }
+        
+        /* Stil für Link-Slices, um Bild und Link auf die gleiche Größe zu bringen */
+        .slice.link-slice {
+            text-decoration: none; 
+            color: inherit;
+        }
+
     </style>
 </head>
 <body>
@@ -149,7 +159,9 @@
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice29.jpg" style="left: 0%; top: 41.016%; width: 23.877%; height: 23.047%;" alt="Slice 29 (Unter Slice 23)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14.png" style="left: 23.877%; top: 41.016%; width: 23.926%; height: 23.047%;" alt="Slice 14 (Fuchs/Elefant)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice3.png" style="left: 47.803%; top: 41.016%; width: 6.25%; height: 23.047%;" alt="Slice 3 (Wasserfall - Unter Slice 25)">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15.png" style="left: 54.062%; top: 45.84%; width: 35.205%; height: 18.213%;" alt="Slice 15 (Fotosektion - Bärenbild, Unter Slice 24)">
+    <a href="https://xanderfoxy.github.io/Dabdoubi/" class="slice link-slice" style="left: 54.062%; top: 45.84%; width: 35.205%; height: 18.213%;">
+        <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15.png" style="left: 0; top: 0; width: 100%; height: 100%;" alt="Slice 15 (Fotosektion - Bärenbild, Link zur Dabdoubi-Seite)">
+    </a>
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice26.jpg" style="left: 89.267%; top: 45.84%; width: 10.733%; height: 18.213%;" alt="Slice 26 (Rechts neben Slice 15)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice16.jpg" style="left: 0%; top: 64.062%; width: 44.775%; height: 35.938%;" alt="Slice 16 (Linke untere Ecke)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice13.png" style="left: 44.775%; top: 64.062%; width: 13.525%; height: 9.668%;" alt="Slice 13 (Oben im Stapel)">
