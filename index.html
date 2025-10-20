@@ -9,10 +9,10 @@
          * GRUNDLEGENDE DEFINITIONEN
          * ------------------------------------------- */
         html, body {
-            height: 100%; /* Stellt sicher, dass d/vh korrekt berechnet wird */
+            height: 100%; 
             margin: 0; 
             padding: 0; 
-            overflow: hidden; /* VERHINDERT SCROLLEN */
+            overflow: hidden; 
             background-color: #000;
         }
 
@@ -22,7 +22,7 @@
         #preloader {
             position: fixed; top: 0; left: 0; 
             
-            /* NEUE KORREKTUR: Preloader auf 9:16 Basis bringen und zentrieren */
+            /* Preloader auf 9:16 Basis bringen und zentrieren */
             width: 100dvh; 
             height: 100dvh; 
             left: 50%;
@@ -40,11 +40,24 @@
             
             /* Sicherstellen, dass die Schrift nicht angeschnitten wird */
             box-sizing: border-box;
-            padding: 20dvh 0; /* Vertikale Pufferung */
+            padding-top: 20dvh; /* Oberer Puffer */
+            padding-bottom: 20dvh; /* Unterer Puffer */
         }
 
-        /* ... (Rest der Preloader-Schrift-Styles unverändert) */
-        
+        #preloader-text {
+            display: flex; align-items: center; white-space: nowrap; margin-bottom: 10px; 
+        }
+
+        #loading-bar-container {
+            width: 250px; height: 8px; background-color: #333; 
+            border-radius: 4px; overflow: hidden;
+        }
+
+        #loading-bar {
+            height: 100%; width: 0%; background-color: #8A2BE2;
+            border-radius: 4px; transition: width 0.1s linear; 
+        }
+
         /* -------------------------------------------
          * HAUPT-CONTAINER: KORRIGIERTE $9:16$ BASIS
          * ------------------------------------------- */
@@ -55,16 +68,17 @@
             height: 100dvh; 
             width: 100dvh; 
             
-            /* Startpunkt Oben und Horizontal Zentriert */
+            /* Startpunkt Oben und Horizontal Zentriert (Gesamtes Bild) */
             top: 0; 
             left: 50%; 
-            transform: translateX(-50%) scale(1); /* Basis: Horizontale Zentrierung */
+            transform: translateX(-50%) scale(1); 
 
             overflow: hidden; 
             
             /* ************************************************************* */
-            /* KORREKTUR DER VERTIKALEN AUSRICHTUNG: Auf 30% des Frames fokussieren */
-            transform-origin: 50% 30%; 
+            /* KORREKTUR DER VERTIKALEN & HORIZONTALEN ZENTRIERUNG FÜR ZOOM */
+            /* transform-origin liegt jetzt exakt im Zentrum der Überschrift */
+            transform-origin: 53.232% 25.537%; 
             /* ************************************************************* */
 
             /* Geschmeidiger Übergang für den Zoom-Effekt (3s) */
@@ -75,7 +89,7 @@
         .zoom-in {
             /* ************************************************************* */
             /* NEUER ZOOM-ENDPUNKT: Weniger aggressiver Zoom (1.45) */
-            /* Die Vertikal-Position wird nun durch 30% transform-origin gesteuert. */
+            /* transform-origin erledigt die vertikale und horizontale Positionierung. */
             transform: translateX(-50%) scale(1.45) !important; 
             /* ************************************************************* */
         }
@@ -95,23 +109,6 @@
             width: 100%; 
             height: 100%; 
             object-fit: fill; 
-        }
-        
-        /* -------------------------------------------
-         * PRELOADER & JS (Unverändert)
-         * ------------------------------------------- */
-        #preloader-text {
-            display: flex; align-items: center; white-space: nowrap; margin-bottom: 10px; 
-        }
-
-        #loading-bar-container {
-            width: 250px; height: 8px; background-color: #333; 
-            border-radius: 4px; overflow: hidden;
-        }
-
-        #loading-bar {
-            height: 100%; width: 0%; background-color: #8A2BE2;
-            border-radius: 4px; transition: width 0.1s linear; 
         }
     </style>
 </head>
