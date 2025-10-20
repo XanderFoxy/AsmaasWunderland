@@ -11,11 +11,11 @@
         body {
             margin: 0; 
             padding: 0; 
-            overflow: hidden; /* KEIN Scrollen erlaubt */
+            overflow: hidden; 
             
             /* Grid-Layout für stabilste Zentrierung des Frames */
             display: grid;
-            place-items: center; /* Zentriert horizontal und vertikal (hilft beim Überlauf) */
+            place-items: center; /* Zentriert horizontal und vertikal */
 
             min-height: 100dvh; /* Volle Höhe */
             min-height: 100vh; /* Fallback */
@@ -23,7 +23,7 @@
         }
 
         /* -------------------------------------------
-         * HAUPT-CONTAINER: SKALIERUNGSLOGIK (vom alten Code übernommen)
+         * HAUPT-CONTAINER: SKALIERUNGSLOGIK MIT FALLBACKS
          * ------------------------------------------- */
         .website-frame {
             position: relative; 
@@ -32,25 +32,42 @@
             height: 100dvh;     
             height: 100vh;
             
-            /* PROPORTIONALITÄT ERZWINGEN (Breite wird gleich Höhe, führt zu Überlauf) */
+            /* PROPORTIONALITÄT ERZWINGEN */
             aspect-ratio: 1 / 1; 
 
             overflow: hidden; 
             
             /* STARTZUSTAND FÜR DEN ÜBERGANG */
-            transform: scale(1); /* Skalierungs-Startpunkt ist 1 */
+            transform: scale(1); 
             
             /* Skalierung geht vom UNTEREN Rand aus */
             transform-origin: 50% 100%;
 
             /* Geschmeidiger Übergang für den Zoom-Effekt (3s) */
             transition: transform 3s ease-out; 
+            
+            /* *** NEU: IPHONE KORREKTUR ***
+               Das Frame wird niemals breiter als der Viewport.
+               Wenn die Höhe zu groß berechnet wird, zwingt uns dies dazu, die Breite als Basis zu nehmen. */
+            max-width: 100vw; 
         }
-
+        
+        /* Zusätzliche Zentrierungs-Korrektur für Mobilgeräte */
+        @media (orientation: portrait) {
+            .website-frame {
+                /* Manuelle Zentrierung für ältere iOS-Versionen, falls grid fehlschlägt */
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%) scale(1); 
+                transform-origin: 50% 100%;
+            }
+        }
+        
         /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
         .zoom-in {
-            /* **WICHTIG:** Dieser Wert bestimmt den End-Zoom (z.B. 1.15 oder 1.2) */
-            transform: scale(1.15) !important; 
+            /* Wir entfernen transform: scale(1.15) hier und verwenden es im JS, um Konflikte zu vermeiden.
+               Wir stellen sicher, dass die Zentrierung auch beim Zoomen korrekt funktioniert. */
+            transform: translateX(-50%) scale(1.15) !important; 
         }
 
         /* -------------------------------------------
@@ -61,52 +78,32 @@
             box-sizing: border-box;
             display: block;
         }
-        .slice img { display: block; width: 100%; height: 100%; object-fit: fill; } /* Neu hinzugefügt */
+        .slice img { display: block; width: 100%; height: 100%; object-fit: fill; }
         
         /* -------------------------------------------
-         * PRELOADER STYLES (vom alten Code übernommen)
+         * PRELOADER STYLES
          * ------------------------------------------- */
         #preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw; 
-            height: 100vh;
-            background-color: #000; 
-            z-index: 9999; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: #fff; 
-            font-size: 1.5em;
-            opacity: 1;
-            transition: opacity 1.5s ease-out; 
-            pointer-events: all; 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000; z-index: 9999; display: flex;
+            flex-direction: column; justify-content: center; align-items: center;
+            color: #fff; font-size: 1.5em; opacity: 1;
+            transition: opacity 1.5s ease-out; pointer-events: all; 
             font-family: sans-serif;
         }
 
         #preloader-text {
-            display: flex;
-            align-items: center;
-            white-space: nowrap; 
-            margin-bottom: 10px; 
+            display: flex; align-items: center; white-space: nowrap; margin-bottom: 10px; 
         }
 
         #loading-bar-container {
-            width: 250px;
-            height: 8px;
-            background-color: #333; 
-            border-radius: 4px;
-            overflow: hidden;
+            width: 250px; height: 8px; background-color: #333; 
+            border-radius: 4px; overflow: hidden;
         }
 
         #loading-bar {
-            height: 100%;
-            width: 0%; 
-            background-color: #8A2BE2;
-            border-radius: 4px;
-            transition: width 0.1s linear; 
+            height: 100%; width: 0%; background-color: #8A2BE2;
+            border-radius: 4px; transition: width 0.1s linear; 
         }
     </style>
 </head>
@@ -166,16 +163,14 @@
 
 <script>
 // -------------------------------------------
-// 2. JavaScript (vom alten Code übernommen)
+// JavaScript (unverändert)
 // -------------------------------------------
 
-// Funktion zum Überwachen des Ladefortschritts
 function trackLoadingProgress() {
-    const images = document.querySelectorAll('#website-frame img'); // Selektor angepasst
+    const images = document.querySelectorAll('#website-frame img');
     const loadingBar = document.getElementById('loading-bar');
     let loadedCount = 0;
     const totalCount = images.length;
-
     const MIN_WAIT_TIME = 800;
     const startTime = Date.now();
 
@@ -217,13 +212,11 @@ function trackLoadingProgress() {
     ]);
 }
 
-// Funktion zum Starten der Zoom-Animation
 function startZoomAnimation() {
-    const bildContainer = document.getElementById('website-frame'); // ID angepasst
+    const bildContainer = document.getElementById('website-frame');
     bildContainer.classList.add('zoom-in');
 }
 
-// Funktion zum Verbergen des Preloaders und Starten der Zoom-Animation
 function hidePreloader() {
     const preloader = document.getElementById('preloader');
     
@@ -237,7 +230,6 @@ function hidePreloader() {
     }, 1500); 
 }
 
-// Hauptlogik, die beim Laden der Seite startet
 document.addEventListener('DOMContentLoaded', () => {
     trackLoadingProgress().then(() => {
         hidePreloader();
