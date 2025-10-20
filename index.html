@@ -10,63 +10,49 @@
             padding: 0;
             background-color: #f0f0f0;
             font-family: sans-serif;
-            
-            /* **Grid-Container** für die Zentrierung: */
-            display: grid;
-            /* Zentriert den Inhalt horizontal und vertikal */
-            place-items: center; 
-            
-            /* Volle Höhe nutzen */
-            min-height: 100vh; 
-            min-height: 100dvh; 
-            
-            /* Nur horizontaler Überlauf erlaubt (für die Ränder) */
-            overflow-x: auto; 
-            overflow-y: hidden;
+            min-height: 100dvh; /* Volle dynamische Höhe */
+            overflow: hidden; 
         }
 
         /* Der Container für das Gesamtbild (2048x2048px) */
         .website-frame {
-            position: relative; 
+            position: absolute;
             
             /* Originalgröße des Inhalts */
             width: 2048px;
             height: 2048px; 
             
+            /* Startet oben bündig */
+            top: 0;
+            
+            /* **Horizontale Zentrierung** */
+            left: 50%;
+            
             /* *************************************************************** */
-            /* ZUVERLÄSSIGE LOGIK: VERTICAL BÜNDIG, HORIZONTAL ZENTRIERT DURCH GRID */
+            /* ZUVERLÄSSIGE LOGIK: VOLLE HÖHE SKALIEREN UND MITTIG POSITIONIEREN */
             /* *************************************************************** */
             
             /* 1. Skalierungsfaktor berechnen: (100% Viewport-Höhe / 2048px Originalhöhe) */
-            /* Wir verwenden die dynamische Höhe, um alle Display-Bereiche einzubeziehen */
             --scale: calc(100dvh / 2048); 
             
-            /* 2. Transformation anwenden: Nur die Skalierung! */
-            /* Grid kümmert sich um die horizontale Zentrierung */
-            transform: scale(var(--scale));
+            /* 2. Zentrierungspunkt festlegen: Obere Mitte des Frames (50% X, 0% Y) */
+            transform-origin: 50% 0; 
             
-            /* 3. Zentrierungspunkt festlegen: Obere Mitte des Frames (50% X, 0% Y) */
-            /* Damit die Skalierung vom oberen Rand beginnt und unten bündig abschließt. */
-            transform-origin: center top; 
-            
-            /* Da 'place-items: center' im Body den Frame standardmäßig vertikal zentrieren würde,
-               müssen wir ihn mit 'margin-top' ganz nach oben verschieben.
-               Der Wert ist negativ, da der Frame bereits (durch Grid) in der Mitte positioniert ist und wir ihn
-               um die Hälfte seiner SKALIERTEN Höhe nach oben verschieben müssen, um ihn oben bündig zu machen.
-               Da transform-origin: center top das meiste abfängt, setzen wir nur einen kleinen negativen 
-               Spielraum, um sicherzugehen. */
-            margin-top: calc(-50dvh + 50%); /* Korrigiert die vertikale Position, falls Grid ihn zentriert */
-        }
-        
-        /* Fallback für Browser, die dvh nicht unterstützen */
-        @supports not (height: 100dvh) {
-            body { min-height: 100vh; }
-            .website-frame {
+            /* 3. Transformation anwenden: Verschiebt um die Hälfte der Breite (Zentrierung) 
+               und skaliert auf die volle vertikale Höhe. */
+            transform: 
+                translateX(-50%) 
+                scale(var(--scale));
+                
+            /* Fallback für Browser, die dvh nicht unterstützen */
+            @supports not (height: 100dvh) {
                 --scale: calc(100vh / 2048);
-                transform: scale(var(--scale));
+                transform: 
+                    translateX(-50%) 
+                    scale(var(--scale));
             }
         }
-
+        
         .slice {
             position: absolute;
             box-sizing: border-box;
@@ -77,43 +63,43 @@
 <body>
 
 <div class="website-frame">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice7.png" style="left: 0px; top: 0px; width: 683px; height: 582px;" alt="Slice 7 (Oben Links)">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice1.jpg" style="left: 683px; top: 0px; width: 807px; height: 464px;" alt="Slice 1 (Mitte Oben)">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice8.png" style="left: 1490px; top: 0px; width: 558px; height: 582px;" alt="Slice 8 (Oben Rechts)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice7.png" style="left: 0px; top: 0px; width: 683px; height: 582px;" alt="Slice 7 (Oben Links)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice1.jpg" style="left: 683px; top: 0px; width: 807px; height: 464px;" alt="Slice 1 (Mitte Oben)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice8.png" style="left: 1490px; top: 0px; width: 558px; height: 582px;" alt="Slice 8 (Oben Rechts)">
 
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice9.jpg" style="left: 683px; top: 464px; width: 135px; height: 118px;" alt="Slice 9">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice2.png" style="left: 818px; top: 464px; width: 544px; height: 118px;" alt="Slice 2 (Webseitentitel/Überschrift)">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice10.jpg" style="left: 1362px; top: 464px; width: 128px; height: 118px;" alt="Slice 10">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice9.jpg" style="left: 683px; top: 464px; width: 135px; height: 118px;" alt="Slice 9">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice2.png" style="left: 818px; top: 464px; width: 544px; height: 118px;" alt="Slice 2 (Webseitentitel/Überschrift)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice10.jpg" style="left: 1362px; top: 464px; width: 128px; height: 118px;" alt="Slice 10">
 
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice23.png" style="left: 0px; top: 582px; width: 683px; height: 258px;" alt="Slice 23 (Unter Slice 7)">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice27.jpg" style="left: 683px; top: 582px; width: 135px; height: 130px;" alt="Slice 27">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice12.jpg" style="left: 818px; top: 582px; width: 544px; height: 130px;" alt="Slice 12 (Videosektion)">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice28.jpg" style="left: 1362px; top: 582px; width: 128px; height: 130px;" alt="Slice 28">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice22.jpg" style="left: 1490px; top: 582px; width: 558px; height: 357px;" alt="Slice 22 (Unter Slice 8)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice23.png" style="left: 0px; top: 582px; width: 683px; height: 258px;" alt="Slice 23 (Unter Slice 7)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice27.jpg" style="left: 683px; top: 582px; width: 135px; height: 130px;" alt="Slice 27">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12.jpg" style="left: 818px; top: 582px; width: 544px; height: 130px;" alt="Slice 12 (Videosektion)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice28.jpg" style="left: 1362px; top: 582px; width: 128px; height: 130px;" alt="Slice 28">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice22.jpg" style="left: 1490px; top: 582px; width: 558px; height: 357px;" alt="Slice 22 (Unter Slice 8)">
 
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice11.png" style="left: 683px; top: 712px; width: 296px; height: 128px;" alt="Slice 11 (Musiklink)">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice25.png" style="left: 979px; top: 712px; width: 128px; height: 128px;" alt="Slice 25 (Rechts neben Slice 11)">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice24.png" style="left: 1107px; top: 712px; width: 383px; height: 227px;" alt="Slice 24 (Rechts neben Slice 25)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice11.png" style="left: 683px; top: 712px; width: 296px; height: 128px;" alt="Slice 11 (Musiklink)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice25.png" style="left: 979px; top: 712px; width: 128px; height: 128px;" alt="Slice 25 (Rechts neben Slice 11)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24.png" style="left: 1107px; top: 712px; width: 383px; height: 227px;" alt="Slice 24 (Rechts neben Slice 25)">
 
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice29.jpg" style="left: 0px; top: 840px; width: 489px; height: 472px;" alt="Slice 29 (Unter Slice 23)">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice14.png" style="left: 489px; top: 840px; width: 490px; height: 472px;" alt="Slice 14 (Fuchs/Elefant)">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice3.png" style="left: 979px; top: 840px; width: 128px; height: 472px;" alt="Slice 3 (Wasserfall - Unter Slice 25)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice29.jpg" style="left: 0px; top: 840px; width: 489px; height: 472px;" alt="Slice 29 (Unter Slice 23)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14.png" style="left: 489px; top: 840px; width: 490px; height: 472px;" alt="Slice 14 (Fuchs/Elefant)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice3.png" style="left: 979px; top: 840px; width: 128px; height: 472px;" alt="Slice 3 (Wasserfall - Unter Slice 25)">
 
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice15.png" style="left: 1107px; top: 939px; width: 721px; height: 373px;" alt="Slice 15 (Fotosektion - Bärenbild, Unter Slice 24)">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice26.jpg" style="left: 1828px; top: 939px; width: 220px; height: 373px;" alt="Slice 26 (Rechts neben Slice 15)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15.png" style="left: 1107px; top: 939px; width: 721px; height: 373px;" alt="Slice 15 (Fotosektion - Bärenbild, Unter Slice 24)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice26.jpg" style="left: 1828px; top: 939px; width: 220px; height: 373px;" alt="Slice 26 (Rechts neben Slice 15)">
 
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice16.jpg" style="left: 0px; top: 1312px; width: 917px; height: 736px;" alt="Slice 16 (Linke untere Ecke)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice16.jpg" style="left: 0px; top: 1312px; width: 917px; height: 736px;" alt="Slice 16 (Linke untere Ecke)">
 
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice13.png" style="left: 917px; top: 1312px; width: 277px; height: 198px;" alt="Slice 13 (Oben im Stapel)">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice4.png" style="left: 917px; top: 1510px; width: 277px; height: 202px;" alt="Slice 4">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice6.png" style="left: 917px; top: 1712px; width: 277px; height: 296px;" alt="Slice 6">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice20.jpg" style="left: 917px; top: 2008px; width: 277px; height: 41px;" alt="Slice 20 (Unten im Stapel)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice13.png" style="left: 917px; top: 1312px; width: 277px; height: 198px;" alt="Slice 13 (Oben im Stapel)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice4.png" style="left: 917px; top: 1510px; width: 277px; height: 202px;" alt="Slice 4">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice6.png" style="left: 917px; top: 1712px; width: 277px; height: 296px;" alt="Slice 6">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice20.jpg" style="left: 917px; top: 2008px; width: 277px; height: 41px;" alt="Slice 20 (Unten im Stapel)">
 
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice17.jpg" style="left: 1194px; top: 1312px; width: 854px; height: 337px;" alt="Slice 17 (Rechts Oben)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice17.jpg" style="left: 1194px; top: 1312px; width: 854px; height: 337px;" alt="Slice 17 (Rechts Oben)">
 
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice5.png" style="left: 1194px; top: 1649px; width: 296px; height: 237px;" alt="Slice 5">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice19.jpg" style="left: 1194px; top: 1886px; width: 296px; height: 162px;" alt="Slice 19 (Unten links im Stapel)">
-    <img class="slice" src="https://xanderfoxy.github.io/asmaaswunderland/slices/slice18.jpg" style="left: 1490px; top: 1649px; width: 558px; height: 399px;" alt="Slice 18 (Rechte untere Ecke)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice5.png" style="left: 1194px; top: 1649px; width: 296px; height: 237px;" alt="Slice 5">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice19.jpg" style="left: 1194px; top: 1886px; width: 296px; height: 162px;" alt="Slice 19 (Unten links im Stapel)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice18.jpg" style="left: 1490px; top: 1649px; width: 558px; height: 399px;" alt="Slice 18 (Rechte untere Ecke)">
 </div>
 
 </body>
