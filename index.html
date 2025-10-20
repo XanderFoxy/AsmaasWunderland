@@ -12,27 +12,55 @@
     width: 100%;
     overflow: hidden;
     background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    position: relative;
     width: 2048px;
     height: 2048px;
-    transform: translate(-50%, -50%);
+    /* Container Mitte auf Display Mitte */
+    transform-origin: center center;
   }
 
-  /* Responsive Skalierung: Höhe = 100%, Breite skaliert automatisch */
-  @media (max-width: 100%) {
-    .container {
+  .container img {
+    position: absolute;
+  }
+
+  /* Responsives Skalieren */
+  body > .container {
+    /* maximal skalieren, ohne das Seitenverhältnis zu zerstören */
+    max-width: 100vw;
+    max-height: 100vh;
+    width: auto;
+    height: auto;
+    transform: scale(1);
+  }
+
+  @media (max-aspect-ratio: 1/1) {
+    /* Hochformat: Höhe = 100% */
+    body > .container {
       height: 100vh;
       width: auto;
     }
   }
 
-  .container img {
+  @media (min-aspect-ratio: 1/1) {
+    /* Querformat: Breite = 100% */
+    body > .container {
+      width: 100vw;
+      height: auto;
+    }
+  }
+
+  /* Zentrieren */
+  body > .container {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
   }
 </style>
 </head>
