@@ -11,62 +11,54 @@
         body {
             margin: 0; 
             padding: 0; 
-            overflow: hidden; 
+            overflow: hidden; /* KEIN Scrollen erlaubt */
             
-            /* Grid-Layout für stabilste Zentrierung des Frames */
-            display: grid;
-            place-items: center; /* Zentriert horizontal und vertikal */
-
-            min-height: 100dvh; /* Volle Höhe */
-            min-height: 100vh; /* Fallback */
+            /* Volle Höhe für das body-Element */
+            min-height: 100vh;
             background-color: #000;
         }
 
         /* -------------------------------------------
-         * HAUPT-CONTAINER: SKALIERUNGSLOGIK MIT FALLBACKS
+         * HAUPT-CONTAINER: ERZWUNGENE HÖHE UND ZENTRIERUNG
          * ------------------------------------------- */
         .website-frame {
-            position: relative; 
-            
-            /* HÖHEN-SKALIERUNG ERZWINGEN (garantiert oben/unten bündig) */
-            height: 100dvh;     
-            height: 100vh;
-            
-            /* PROPORTIONALITÄT ERZWINGEN */
-            aspect-ratio: 1 / 1; 
+            position: absolute;
+            top: 0;
+            left: 50%; /* Startpunkt für die horizontale Zentrierung */
 
+            /* ************************************************************* */
+            /* KORREKTUR: HÖHE ERZWINGEN & PROPORTIONALITÄT SICHERSTELLEN */
+            /* ************************************************************* */
+            
+            /* Höchste Priorität: Das Frame soll mindestens die volle Viewport-Höhe einnehmen. */
+            min-height: 100vh; 
+            
+            /* Die Breite wird zur gleichen Größe gezwungen wie die Höhe, um das Quadrat zu garantieren.
+               Dies zwingt den Überlauf an den Seiten, wie gewünscht. */
+            width: 100vh; 
+            
+            /* Fallback für dicke Browser-Leisten (dvh) */
+            min-height: 100dvh; 
+            width: 100dvh; 
+
+            /* Die aspect-ratio Regel kann in Konflikt geraten, wir entfernen sie hier und verlassen uns auf 
+               die expliziten height/width-Werte im Zusammenhang mit den vh/dvh-Einheiten. */
+            
             overflow: hidden; 
             
-            /* STARTZUSTAND FÜR DEN ÜBERGANG */
-            transform: scale(1); 
+            /* MANUELLE ZENTRIERUNG und STARTZUSTAND (Kein Stauchen mehr durch scale(1)) */
+            transform: translateX(-50%) scale(1); 
             
             /* Skalierung geht vom UNTEREN Rand aus */
             transform-origin: 50% 100%;
 
             /* Geschmeidiger Übergang für den Zoom-Effekt (3s) */
             transition: transform 3s ease-out; 
-            
-            /* *** NEU: IPHONE KORREKTUR ***
-               Das Frame wird niemals breiter als der Viewport.
-               Wenn die Höhe zu groß berechnet wird, zwingt uns dies dazu, die Breite als Basis zu nehmen. */
-            max-width: 100vw; 
-        }
-        
-        /* Zusätzliche Zentrierungs-Korrektur für Mobilgeräte */
-        @media (orientation: portrait) {
-            .website-frame {
-                /* Manuelle Zentrierung für ältere iOS-Versionen, falls grid fehlschlägt */
-                top: 0;
-                left: 50%;
-                transform: translateX(-50%) scale(1); 
-                transform-origin: 50% 100%;
-            }
         }
         
         /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
         .zoom-in {
-            /* Wir entfernen transform: scale(1.15) hier und verwenden es im JS, um Konflikte zu vermeiden.
-               Wir stellen sicher, dass die Zentrierung auch beim Zoomen korrekt funktioniert. */
+            /* Zentrierung beibehalten und zusätzlich skalieren */
             transform: translateX(-50%) scale(1.15) !important; 
         }
 
@@ -77,11 +69,26 @@
             position: absolute;
             box-sizing: border-box;
             display: block;
+            
+            /* ************************************************************* */
+            /* KORREKTUR: SPALT SCHLIESSEN (Negativer Margin-Hack) */
+            /* ************************************************************* */
+            /* Zwingt die Slices, sich minimal (z.B. 0.5px) zu überlappen, um Rundungsfehler zu verdecken. */
+            margin: -0.05%; 
         }
-        .slice img { display: block; width: 100%; height: 100%; object-fit: fill; }
+        /* Der Negativ-Margin Hack erfordert, dass die Positionen leicht korrigiert werden,
+           aber die absolute Positionierung der Slices in Prozent sollte dies abfedern. */
+           
+        .slice img { 
+            display: block; 
+            width: 100%; 
+            height: 100%; 
+            /* object-fit: fill; ist notwendig, um sicherzustellen, dass das Bild den Container füllt */
+            object-fit: fill; 
+        }
         
         /* -------------------------------------------
-         * PRELOADER STYLES
+         * PRELOADER STYLES (unverändert)
          * ------------------------------------------- */
         #preloader {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
