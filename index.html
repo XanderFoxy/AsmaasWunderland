@@ -84,22 +84,19 @@
             overflow: hidden; 
             
             /* ************************************************************* */
-            /* ANPASSUNG DES ANKERPUNKTS (transform-origin) */
-            /* Horizontal: 59.824% (Zieht Bild nach Links) */
-            /* Vertikal: 38.233% (Zieht Bild um eine weitere Box nach Oben) */
-            transform-origin: 59.824% 38.233%; 
+            /* KORREKTUR DES ANKERPUNKTS (transform-origin) */
+            /* Horizontal: 63.120% (Weiter nach links verschoben) */
+            /* Vertikal: 44.581% (Deutlich höher im Ausschnitt) */
+            transform-origin: 63.120% 44.581%; 
             /* ************************************************************* */
 
             transition: transform 3s ease-out; 
         }
         
-        /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT */
+        /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Skalierung unverändert) */
         .zoom-in {
-            /* ************************************************************* */
-            /* ANPASSUNG DES SKALIERUNGSFAKTORS (ZOOM) */
-            /* 1.13: Weniger Zoom, um eine zusätzliche Boxenbreite rechts zu zeigen */
+            /* Skalierung: 1.13 (Breiter Ausschnitt beibehalten) */
             transform: translateX(-50%) scale(1.13) !important; 
-            /* ************************************************************* */
         }
 
         /* -------------------------------------------
