@@ -2,26 +2,53 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Webseite Titel: Slice 2 (Überschrift)</title>
+    <title>Asmaas Wunderland</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body {
             margin: 0;
             padding: 0;
             background-color: #f0f0f0;
             font-family: sans-serif;
+            /* Sorgt dafür, dass der Body die volle Display-Höhe einnimmt */
+            min-height: 100vh;
+            /* Verhindert Scrollbalken durch den horizontalen Überlauf des skalierten Frames */
+            overflow: hidden; 
         }
+
+        /* Der Container für das Gesamtbild (2048x2048px) */
         .website-frame {
-            position: relative;
+            position: absolute;
+            
+            /* Originalgröße des Inhalts */
             width: 2048px;
-            height: 2048px;
-            margin: 20px auto;
-            border: 1px solid #ccc;
-            overflow: hidden;
+            height: 2048px; 
+            
+            /* *************************************************************** */
+            /* DER SCHLÜSSEL ZUR VERTKALEN PASSFORM (Full-Height) UND ZENTRIERUNG: */
+            /* *************************************************************** */
+            
+            /* 1. Skalierungsfaktor berechnen: (100% Viewport-Höhe / 2048px Originalhöhe) */
+            --scale: calc(100vh / 2048);
+            
+            /* 2. Zentrierungspunkt festlegen: Skaliere von der oberen Mitte (50% X, 0% Y) */
+            transform-origin: 50% 0; 
+            
+            /* 3. Transformationen anwenden: */
+            transform: 
+                /* Skaliert das gesamte Element auf die gewünschte vertikale Größe */
+                scale(var(--scale)) 
+                /* Zentriert den skalierten Frame horizontal auf dem Viewport. 
+                   Dies lässt die Ränder wie gewünscht überlaufen. */
+                translateX(-50%); 
         }
+        
         .slice {
+            /* Die Positionierung der Slices MUSS relative zum unskalierten Frame (2048x2048) bleiben */
             position: absolute;
             box-sizing: border-box;
             display: block;
+            /* Diese Slices sind nun klickbar und können durch andere Elemente ersetzt werden */
         }
     </style>
 </head>
@@ -36,9 +63,9 @@
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice2.png" style="left: 818px; top: 464px; width: 544px; height: 118px;" alt="Slice 2 (Webseitentitel/Überschrift)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice10.jpg" style="left: 1362px; top: 464px; width: 128px; height: 118px;" alt="Slice 10">
 
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice23.png" style="left: 0px; top: 582px; width: 683px; height: 258px;" alt="Slice 23 (Unter Slice 7)"> **<-- Korrektur: PNG**
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice23.png" style="left: 0px; top: 582px; width: 683px; height: 258px;" alt="Slice 23 (Unter Slice 7)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice27.jpg" style="left: 683px; top: 582px; width: 135px; height: 130px;" alt="Slice 27">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12.jpg" style="left: 818px; top: 582px; width: 544px; height: 130px;" alt="Slice 12 (Videosektion)"> **<-- Korrektur: JPG**
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12.jpg" style="left: 818px; top: 582px; width: 544px; height: 130px;" alt="Slice 12 (Videosektion)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice28.jpg" style="left: 1362px; top: 582px; width: 128px; height: 130px;" alt="Slice 28">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice22.jpg" style="left: 1490px; top: 582px; width: 558px; height: 357px;" alt="Slice 22 (Unter Slice 8)">
 
