@@ -11,33 +11,28 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #000; /* optional: schwarzer Hintergrund */
+    background: #000;
   }
 
-  /* Container für das komplette Bild */
   .container {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     width: 2048px;
     height: 2048px;
-    transform-origin: center center;
+    transform: translate(-50%, -50%);
   }
 
-  /* Slices absolut innerhalb des Containers */
-  .container img {
-    position: absolute;
-  }
-
-  /* Responsive Skalierung */
+  /* Responsive Skalierung: Höhe = 100%, Breite skaliert automatisch */
   @media (max-width: 100%) {
     .container {
-      /* Skaliert die Höhe auf 100% des Viewports */
       height: 100vh;
       width: auto;
-      transform: translate(0, 0);
     }
+  }
+
+  .container img {
+    position: absolute;
   }
 </style>
 </head>
