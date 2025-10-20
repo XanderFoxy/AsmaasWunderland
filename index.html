@@ -17,7 +17,7 @@
         }
 
         /* -------------------------------------------
-         * PRELOADER KORREKTUR (9:16 Basis und Skalierung)
+         * PRELOADER (Unverändert)
          * ------------------------------------------- */
         #preloader {
             position: fixed; top: 0; left: 0; 
@@ -41,42 +41,38 @@
             box-sizing: border-box;
             padding-top: 20dvh; 
             padding-bottom: 20dvh; 
-            text-align: center; /* Wichtig für die Zentrierung des Textes */
+            text-align: center; 
         }
 
         #preloader-text-container {
-            /* Flexbox-Container zentriert seine Kinder horizontal (Text und Balken) */
             display: flex;
             flex-direction: column;
             align-items: center; 
-            max-width: 80%; /* Begrenzung, falls der Text zu lang ist */
+            max-width: 80%; 
         }
         
         #preloader-text {
             display: flex; align-items: center; white-space: nowrap; margin-bottom: 10px; 
         }
 
-        /* ************************************************************* */
-        /* KORREKTUR: LADEBALKEN AUF TEXTLÄNGE SKALIERT (max-content ist optimal) */
         #loading-bar-container {
-            width: max-content; /* Passt die Breite an den Inhalt an */
-            min-width: 250px; /* Mindestbreite beibehalten */
-            max-width: 100%; /* Maximal die Breite des übergeordneten Containers */
+            width: max-content; 
+            min-width: 250px; 
+            max-width: 100%; 
             height: 8px; 
             background-color: #333; 
             border-radius: 4px; 
             overflow: hidden;
-            align-self: center; /* Stellt sicher, dass es zentriert bleibt */
+            align-self: center; 
         }
 
         #loading-bar {
             height: 100%; width: 0%; background-color: #8A2BE2;
             border-radius: 4px; transition: width 0.1s linear; 
         }
-        /* ************************************************************* */
 
         /* -------------------------------------------
-         * HAUPT-CONTAINER
+         * HAUPT-CONTAINER: KORRIGIERTE $9:16$ BASIS
          * ------------------------------------------- */
         .website-frame {
             position: absolute;
@@ -90,8 +86,8 @@
             /* ************************************************************* */
             /* ANPASSUNG DES ANKERPUNKTS (transform-origin) */
             /* Horizontal: 59.824% (Zieht Bild nach Links) */
-            /* Vertikal: 31.885% (Zieht Bild eine Box nach Oben) */
-            transform-origin: 59.824% 31.885%; 
+            /* Vertikal: 38.233% (Zieht Bild um eine weitere Box nach Oben) */
+            transform-origin: 59.824% 38.233%; 
             /* ************************************************************* */
 
             transition: transform 3s ease-out; 
@@ -101,8 +97,8 @@
         .zoom-in {
             /* ************************************************************* */
             /* ANPASSUNG DES SKALIERUNGSFAKTORS (ZOOM) */
-            /* 1.22: Sorgt für den gewünschten breiteren Ausschnitt (mehr links/rechts) */
-            transform: translateX(-50%) scale(1.22) !important; 
+            /* 1.13: Weniger Zoom, um eine zusätzliche Boxenbreite rechts zu zeigen */
+            transform: translateX(-50%) scale(1.13) !important; 
             /* ************************************************************* */
         }
 
