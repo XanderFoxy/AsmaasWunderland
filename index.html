@@ -12,7 +12,7 @@
             font-family: sans-serif;
             /* Sorgt dafür, dass der Body die volle Display-Höhe einnimmt */
             min-height: 100vh;
-            /* Verhindert Scrollbalken durch den horizontalen Überlauf des skalierten Frames */
+            /* Verhindert unnötige Scrollbalken durch horizontalen Überlauf */
             overflow: hidden; 
         }
 
@@ -25,30 +25,31 @@
             height: 2048px; 
             
             /* *************************************************************** */
-            /* DER SCHLÜSSEL ZUR VERTKALEN PASSFORM (Full-Height) UND ZENTRIERUNG: */
+            /* CSS-LOGIK FÜR VERTKALE PASSFORM (100vh) UND HORIZONTALE ZENTRIERUNG: */
             /* *************************************************************** */
             
             /* 1. Skalierungsfaktor berechnen: (100% Viewport-Höhe / 2048px Originalhöhe) */
             --scale: calc(100vh / 2048);
             
-            /* 2. Zentrierungspunkt festlegen: Skaliere von der oberen Mitte (50% X, 0% Y) */
+            /* 2. Startpunkt für Zentrierung: linke Kante auf 50% des Viewports */
+            left: 50%;
+            
+            /* 3. Zentrierungspunkt festlegen: Skaliere von der oberen Mitte (50% X, 0% Y) */
             transform-origin: 50% 0; 
             
-            /* 3. Transformationen anwenden: */
+            /* 4. Transformationen anwenden: */
             transform: 
-                /* Skaliert das gesamte Element auf die gewünschte vertikale Größe */
-                scale(var(--scale)) 
-                /* Zentriert den skalierten Frame horizontal auf dem Viewport. 
-                   Dies lässt die Ränder wie gewünscht überlaufen. */
-                translateX(-50%); 
+                /* Verschiebt den Frame um die Hälfte seiner Breite nach links (Zentrierung) */
+                translateX(-50%) 
+                /* Skaliert das gesamte Element proportional auf 100vh */
+                scale(var(--scale)); 
         }
         
         .slice {
-            /* Die Positionierung der Slices MUSS relative zum unskalierten Frame (2048x2048) bleiben */
+            /* Behält die originalen 2048x2048-Koordinaten und ist klickbar */
             position: absolute;
             box-sizing: border-box;
             display: block;
-            /* Diese Slices sind nun klickbar und können durch andere Elemente ersetzt werden */
         }
     </style>
 </head>
