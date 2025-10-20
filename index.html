@@ -10,7 +10,8 @@
             padding: 0;
             background-color: #f0f0f0;
             font-family: sans-serif;
-            min-height: 100vh;
+            /* Sicherstellen, dass der Body die volle Höhe einnimmt */
+            min-height: 100dvh; 
             overflow: hidden; 
         }
 
@@ -27,24 +28,29 @@
             left: 0;
             
             /* *************************************************************** */
-            /* KORRIGIERTE LOGIK: VERTIKAL PASSEN (100vh), HORIZONTAL ZENTRIERT */
+            /* KORRIGIERTE LOGIK: VERTIKALER VOLLINHALT (100dvh), ZENTRIERT */
             /* *************************************************************** */
             
-            /* 1. Skalierungsfaktor berechnen: (100% Viewport-Höhe / 2048px Originalhöhe) */
-            --scale: calc(100vh / 2048);
+            /* 1. Skalierungsfaktor berechnen: Nutzt 100dvh für maximale vertikale Sichtbarkeit 
+               (berücksichtigt mobile Adressleisten). Fallback auf vh. */
+            --scale: calc(100dvh / 2048);
             
             /* 2. Zentrierungspunkt festlegen: Horizontale Mitte (50%), Obere Kante (0%) */
-            /* Die Skalierung und Zentrierung basiert auf diesem Punkt. */
             transform-origin: 50% 0; 
             
             /* 3. Transformation anwenden */
-            /* transform: scale() allein in Kombination mit transform-origin: 50% 0; */
-            /* ist die sauberste Methode, um die vertikale Passform und horizontale Zentrierung zu erzielen. */
             transform: scale(var(--scale)); 
         }
         
+        /* Fallback für Browser, die dvh nicht unterstützen */
+        @supports not (height: 100dvh) {
+            .website-frame {
+                --scale: calc(100vh / 2048);
+                transform: scale(var(--scale)); 
+            }
+        }
+
         .slice {
-            /* Behält die originalen 2048x2048-Koordinaten und ist klickbar */
             position: absolute;
             box-sizing: border-box;
             display: block;
@@ -56,7 +62,9 @@
 <div class="website-frame">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice7.png" style="left: 0px; top: 0px; width: 683px; height: 582px;" alt="Slice 7 (Oben Links)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice1.jpg" style="left: 683px; top: 0px; width: 807px; height: 464px;" alt="Slice 1 (Mitte Oben)">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice8.png" style="left: 1490px; top: 0px; width: 558px; height: 582px;" alt="Slice 8 (Oben Rechts)"> <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice9.jpg" style="left: 683px; top: 464px; width: 135px; height: 118px;" alt="Slice 9">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice8.png" style="left: 1490px; top: 0px; width: 558px; height: 582px;" alt="Slice 8 (Oben Rechts)">
+
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice9.jpg" style="left: 683px; top: 464px; width: 135px; height: 118px;" alt="Slice 9">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice2.png" style="left: 818px; top: 464px; width: 544px; height: 118px;" alt="Slice 2 (Webseitentitel/Überschrift)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice10.jpg" style="left: 1362px; top: 464px; width: 128px; height: 118px;" alt="Slice 10">
 
