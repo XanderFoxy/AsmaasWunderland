@@ -10,9 +10,7 @@
             padding: 0;
             background-color: #f0f0f0;
             font-family: sans-serif;
-            /* Sorgt dafür, dass der Body die volle Display-Höhe einnimmt */
             min-height: 100vh;
-            /* Verhindert unnötige Scrollbalken durch horizontalen Überlauf */
             overflow: hidden; 
         }
 
@@ -20,33 +18,37 @@
         .website-frame {
             position: absolute;
             
+            /* Setzt den Startpunkt oben links (0, 0) */
+            top: 0;
+            left: 0;
+            
             /* Originalgröße des Inhalts */
             width: 2048px;
             height: 2048px; 
             
             /* *************************************************************** */
-            /* CSS-LOGIK FÜR VERTKALE PASSFORM (100vh) UND HORIZONTALE ZENTRIERUNG: */
+            /* KORRIGIERTE LOGIK: VERTIKAL PASSEN, HORIZONTAL ZENTRIERT ÜBERLAUFEN */
             /* *************************************************************** */
             
             /* 1. Skalierungsfaktor berechnen: (100% Viewport-Höhe / 2048px Originalhöhe) */
             --scale: calc(100vh / 2048);
             
-            /* 2. Startpunkt für Zentrierung: linke Kante auf 50% des Viewports */
-            left: 50%;
-            
-            /* 3. Zentrierungspunkt festlegen: Skaliere von der oberen Mitte (50% X, 0% Y) */
+            /* 2. Zentrierungspunkt festlegen: 
+               - Horizontale Mitte des Frames (50%)
+               - Obere Kante des Frames (0%)
+               Die Skalierung erfolgt von dieser Position aus.
+               Da der Ursprung horizontal in der Mitte liegt, 
+               wird das Bild automatisch zentriert. */
             transform-origin: 50% 0; 
             
-            /* 4. Transformationen anwenden: */
-            transform: 
-                /* Verschiebt den Frame um die Hälfte seiner Breite nach links (Zentrierung) */
-                translateX(-50%) 
-                /* Skaliert das gesamte Element proportional auf 100vh */
-                scale(var(--scale)); 
+            /* 3. Transformation anwenden */
+            transform: scale(var(--scale)); 
+            
+            /* Wichtig: Entferne translateX(-50%), da transform-origin: 50% 0; 
+               bereits die horizontale Zentrierung des skalierten Inhalts bewirkt. */
         }
         
         .slice {
-            /* Behält die originalen 2048x2048-Koordinaten und ist klickbar */
             position: absolute;
             box-sizing: border-box;
             display: block;
@@ -58,7 +60,7 @@
 <div class="website-frame">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice7.png" style="left: 0px; top: 0px; width: 683px; height: 582px;" alt="Slice 7 (Oben Links)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice1.jpg" style="left: 683px; top: 0px; width: 807px; height: 464px;" alt="Slice 1 (Mitte Oben)">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice8.png" style="left: 1490px; top: 0px; width: 558px; height: 582px;" alt="Slice 8 (Oben Rechts)">
+    <img class="slice" src="https://xanderfoxy.github.io->AsmaasWunderland/Slices/Slice8.png" style="left: 1490px; top: 0px; width: 558px; height: 582px;" alt="Slice 8 (Oben Rechts)">
 
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice9.jpg" style="left: 683px; top: 464px; width: 135px; height: 118px;" alt="Slice 9">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice2.png" style="left: 818px; top: 464px; width: 544px; height: 118px;" alt="Slice 2 (Webseitentitel/Überschrift)">
