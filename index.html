@@ -5,90 +5,32 @@
     <title>Asmaas Wunderland</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body {
+        html, body {
             margin: 0;
             padding: 0;
+            height: 100%;
+            overflow: hidden; /* Kein Scrollen */
             background-color: #f0f0f0;
-            font-family: sans-serif;
-            min-height: 100vh; /* Mindesthöhe für Desktop */
-            overflow: hidden; /* WICHTIG: Verhindert Scrollbalken */
-            display: flex; /* Für die Zentrierung */
-            justify-content: center;
-            align-items: center; /* Zentriert vertikal (als Fallback) */
         }
 
-        /* Der Container für das Gesamtbild (2048x2048px) */
+        /* Container für das gesamte Layout */
         .website-frame {
-            position: relative;
-            
-            /* Originalgröße des Inhalts - Beibehalten, damit die Slices korrekt positioniert sind */
+            position: absolute;
             width: 2048px;
-            height: 2048px; 
-            
-            /* **Skalierungsfaktor** */
-            --scale: 1; /* Standardmäßig keine Skalierung */
-            
-            /* Zentrierung und Skalierung für DESKTOP (kann hier funktionieren) */
-            transform-origin: center center; 
-            
-            /* Skalierung auf Höhe erzwingen (altes, inkonsistentes Verhalten) */
-            /* transform: scale(var(--scale)); */
-        }
-        
-        /* *************************************************************** */
-        /* NEUE LOGIK: ZIELGERICHTETE ANPASSUNG FÜR HOCHFORMAT (PORTRAIT) */
-        /* *************************************************************** */
-        
-        @media (orientation: portrait) {
-            /* Im Hochformat (Smartphone/iPad) soll die gesamte Höhe des 2048px-Frames 
-               in den 100% der Viewport-Höhe sichtbar sein. */
-            
-            .website-frame {
-                /* NEUE BERECHNUNG: Die Höhe des Viewports teilen wir durch die Originalhöhe (2048) */
-                --scale-mobile: calc(100vh / 2048); 
-                
-                /* Zentrierung von oben/links und dann Skalierung (die zuverlässigste Methode) */
-                top: 0;
-                left: 0;
-                transform: scale(var(--scale-mobile));
-                transform-origin: top left; /* Startet die Skalierung von der oberen linken Ecke */
-                
-                /* Zentrierung manuell hinzufügen: Da die Skalierung jetzt von oben links beginnt,
-                   müssen wir den Frame nachträglich horizontal zentrieren. 
-                   Der Frame muss um die Hälfte seiner SKALIERTEN BREITE nach links verschoben werden. 
-                   Skalierte Breite = 2048px * --scale-mobile. 
-                   Da das kompliziert ist, nutzen wir die bewährte Methode, aber mit top: 0, left: 50%. */
+            height: 2048px;
 
-                /* WICHTIGSTE KORREKTUR: Skalierung und Zentrierung VEREINFACHT */
-                left: 50%;
-                top: 0;
-                transform: 
-                    translateX(-50%) /* Verschiebt den skalierten Frame um die Hälfte der Breite zurück */
-                    scale(var(--scale-mobile));
-                transform-origin: 50% 0; /* Skalierung beginnt von der oberen Mitte */
-            }
+            /* Skalierung auf die Höhe des Viewports */
+            top: 0;
+            left: 50%;
+            transform-origin: top center;
+            transform: translateX(-50%) scale(calc(100vh / 2048));
         }
-        
-        /* Fallback für Querformat (Landscape) und ältere Geräte */
-        @media (orientation: landscape) {
-             .website-frame {
-                /* Im Querformat nutzen wir die Breite, da diese meist kleiner ist als die Höhe. 
-                   Dies sorgt für die beste "Contain"-Darstellung. */
-                --scale-landscape: calc(100vw / 2048);
-                
-                left: 50%;
-                top: 50%;
-                transform: 
-                    translate(-50%, -50%) /* Zentriert sowohl horizontal als auch vertikal */
-                    scale(var(--scale-landscape)); /* Skaliert auf die Breite */
-                transform-origin: center center;
-            }
-        }
-        
+
+        /* Alle Slices absolut positioniert */
         .slice {
             position: absolute;
-            box-sizing: border-box;
             display: block;
+            box-sizing: border-box;
         }
     </style>
 </head>
