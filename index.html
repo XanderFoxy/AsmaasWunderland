@@ -17,50 +17,33 @@
     align-items: center;
   }
 
+  /* Container für das komplette Puzzle */
   .container {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     width: 2048px;
     height: 2048px;
-    /* Container Mitte auf Display Mitte */
-    transform-origin: center center;
+    transform: translate(-50%, -50%);
   }
 
   .container img {
     position: absolute;
   }
 
-  /* Responsives Skalieren */
-  body > .container {
-    /* maximal skalieren, ohne das Seitenverhältnis zu zerstören */
-    max-width: 100vw;
-    max-height: 100vh;
-    width: auto;
-    height: auto;
-    transform: scale(1);
-  }
-
+  /* Responsive: Bild immer maximal sichtbar, Seitenverhältnis bleibt */
   @media (max-aspect-ratio: 1/1) {
-    /* Hochformat: Höhe = 100% */
-    body > .container {
+    .container {
       height: 100vh;
       width: auto;
     }
   }
 
   @media (min-aspect-ratio: 1/1) {
-    /* Querformat: Breite = 100% */
-    body > .container {
+    .container {
       width: 100vw;
       height: auto;
     }
-  }
-
-  /* Zentrieren */
-  body > .container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1);
   }
 </style>
 </head>
@@ -75,26 +58,25 @@
   <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice10.jpg" style="left:1362px; top:464px; width:128px; height:118px;">
   <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice8.png" style="left:1490px; top:0px; width:558px; height:582px;">
 
-  <!-- Zweite Zeile -->
+  <!-- Unter Überschrift -->
+  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12.png" style="left:818px; top:582px; width:544px; height:130px;">
+
+  <!-- Zweite Zeile / Musik & rechte Slices -->
   <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice23.png" style="left:0px; top:582px; width:683px; height:258px;">
   <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice27.jpg" style="left:683px; top:582px; width:135px; height:130px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12.png" style="left:818px; top:582px; width:544px; height:130px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice28.jpg" style="left:1362px; top:582px; width:128px; height:130px;">
+  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice25.png" style="left:979px; top:712px; width:128px; height:128px;">
+  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24.png" style="left:1107px; top:712px; width:383px; height:227px;">
   <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice22.jpg" style="left:1490px; top:582px; width:558px; height:357px;">
 
-  <!-- Dritte Zeile / Musik & Erweiterung -->
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice11.png" style="left:683px; top:712px; width:296px; height:128px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice25.png" style="left:979px; top:712px; width:128px; height:128px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24.png" style="left:1107px; top:712px; width:383px; height:727px;">
+  <!-- Bärenbild unter Slice24 -->
+  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15.png" style="left:1107px; top:939px; width:721px; height:373px;">
 
-  <!-- Vierte Zeile / Bilder & Wasserfall -->
+  <!-- Unterste Zeile / links -->
   <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice29.jpg" style="left:0px; top:840px; width:489px; height:472px;">
   <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14.png" style="left:489px; top:840px; width:490px; height:472px;">
   <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice3.png" style="left:979px; top:840px; width:128px; height:472px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15.png" style="left:1107px; top:1066px; width:721px; height:373px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice26.jpg" style="left:1828px; top:1066px; width:220px; height:373px;">
 
-  <!-- Unterste Zeile -->
+  <!-- Unterste Zeile / rechts -->
   <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice16.jpg" style="left:0px; top:1312px; width:917px; height:736px;">
   <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice13.png" style="left:917px; top:1312px; width:277px; height:198px;">
   <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice4.png" style="left:917px; top:1510px; width:277px; height:202px;">
