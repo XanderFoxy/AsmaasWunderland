@@ -45,10 +45,13 @@
         /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
         .zoom-in {
             /* ************************************************************* */
-            /* KORRIGIERTER ZIEL-AUSSCHNITT: Zoom-Faktor 1.4 */
+            /* ZIEL-AUSSCHNITT KORREKTUR: Neuer Zoom-Faktor 1.914 */
+            /* VERTIKALE KORREKTUR: translateX und translateY kombinieren */
             /* ************************************************************* */
-            /* 1.4 sollte mehr vom zentralen Bereich zeigen als 1.15, aber weniger als 1.7. */
-            transform: translateX(-50%) scale(1.4) !important; 
+            
+            /* Kombination aus horizontaler Zentrierung, vertikaler Verschiebung und neuem Zoom-Faktor */
+            /* translateY(2dvh) zieht das gesamte gezoomte Bild 2% der Viewporthöhe nach unten */
+            transform: translateX(-50%) translateY(2dvh) scale(1.914) !important; 
         }
 
         /* -------------------------------------------
