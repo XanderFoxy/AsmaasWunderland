@@ -17,29 +17,28 @@
         }
 
         /* -------------------------------------------
-         * HAUPT-CONTAINER: ERZWUNGENE HÖHE UND ZENTRIERUNG
+         * HAUPT-CONTAINER: KORRIGIERTE BASIS-DARSTELLUNG
          * ------------------------------------------- */
         .website-frame {
             position: absolute;
-            top: 0;
+            
+            /* ************************************************************* */
+            /* NEUE BASIS: Bildgröße auf Viewport-Breite beschränken */
+            /* Dadurch passt das quadratische Bild unverzerrt in die Breite. */
+            width: 100dvw; 
+            height: 100dvw; 
+            
+            /* START-ZENTRIERUNG FÜR DIE BASIS-DARSTELLUNG (Mitte des Viewports) */
+            top: 50%; /* Startpunkt in der Mitte */
             left: 50%; 
-
-            /* Anti-Stauch-Korrektur (Breite = Höhe erzwingen) */
-            min-height: 100vh; 
-            width: 100vh; 
-            min-height: 100dvh; 
-            width: 100dvh; 
+            transform: translate(-50%, -50%) scale(1); 
+            /* ************************************************************* */
 
             overflow: hidden; 
             
-            /* MANUELLE ZENTRIERUNG und STARTZUSTAND (scale(1)) */
-            transform: translateX(-50%) scale(1); 
-            
-            /* ************************************************************* */
-            /* KORREKTUR DER VERTIKALEN POSITIONIERUNG: 100% -> 80% */
-            /* Skalierung geht von 80% der Höhe aus, um die Überschrift sichtbar zu halten. */
+            /* Skalierung soll weiterhin von einem fixen Punkt ausgehen */
+            /* Wir verwenden 80% (etwas oberhalb des Bodens), um die Überschrift vertikal zu korrigieren. */
             transform-origin: 50% 80%;
-            /* ************************************************************* */
 
             /* Geschmeidiger Übergang für den Zoom-Effekt (3s) */
             transition: transform 3s ease-out; 
@@ -48,12 +47,18 @@
         /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
         .zoom-in {
             /* ************************************************************* */
-            /* KORREKTUR DES ZIEL-AUSSCHNITTS: Zoom-Faktor 1.67 */
-            /* Zeigt 60% der Breite (mehr Umgebung) und korrigiert so die "zu riesig"-Wahrnehmung. */
-            transform: translateX(-50%) scale(1.67) !important; 
-            /* ************************************************************* */
+            /* NEUER ZOOM-ENDPUNKT: Korrigiert und zentriert */
+            /* Zoom 1.67 (zeigt 60% der Frame-Breite) */
+            /* Der Zoom-Punkt (80%) ist bereits in .website-frame definiert. */
+            /* Wir müssen das Bild am Ende nur noch neu zentrieren, da translate(-50%, -50%) in die falsche Position führt. */
+
+            /* Zoom-Endzustand: 
+               1. Horizontal mittig (-50%)
+               2. Vertikal leicht nach oben verschoben (-15dvh)
+               3. Auf 1.67 skaliert. */
+            transform: translateX(-50%) translateY(-15dvh) scale(1.67) !important; 
         }
-        
+
         /* -------------------------------------------
          * SLICE STYLES (Spalt-Korrektur beibehalten)
          * ------------------------------------------- */
