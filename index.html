@@ -11,17 +11,18 @@
             background-color: #f0f0f0;
             font-family: sans-serif;
             
-            /* Volle Höhe nutzen */
+            /* Volle Höhe nutzen und Vertikales Scrollen verbieten */
             min-height: 100dvh;
-            min-height: 100vh; /* Fallback */
-
-            overflow-x: hidden; /* KEIN Scrollen horizontal */
-            overflow-y: hidden; /* KEIN Scrollen vertikal */
+            min-height: 100vh;
+            overflow-y: hidden;
             
-            /* Zentrierung des Frames: Nur horizontal! */
+            /* **WICHTIG:** Erlaube horizontalen Überlauf, der zentriert werden muss */
+            overflow-x: hidden; 
+            
+            /* Flexbox für horizontale Zentrierung */
             display: flex; 
-            justify-content: center;
-            align-items: flex-start; /* Bild beginnt oben bündig */
+            justify-content: center; /* Zentriert den überlaufenden Frame horizontal */
+            align-items: flex-start; /* Stellt den Frame oben bündig (Top: 0) */
         }
 
         /* Der Container für das Gesamtbild (2048x2048px) */
@@ -29,23 +30,21 @@
             position: relative;
             
             /* *************************************************************** */
-            /* KORREKTUR DER HAUPTSKALIERUNG: ANPASSUNG AN DIE HÖHE */
+            /* ZWINGENDE PROPORTIONALE HÖHEN-ANPASSUNG UND ÜBERLAUF-BERECHNUNG */
             /* *************************************************************** */
             
-            /* 1. Die Höhe des Frames wird auf die gesamte Display-Höhe gesetzt. */
+            /* 1. Höhe des Frames auf die Display-Höhe setzen (garantiert oben/unten bündig) */
             height: 100dvh;
-            height: 100vh; /* Fallback */
+            height: 100vh;
             
-            /* 2. Die Breite wird proportional zur Höhe gesetzt (Da 2048x2048px quadratisch ist). 
-               Wenn die Viewport-Höhe 600px ist, wird die Frame-Breite ebenfalls 600px.
-               Da die Slices in Prozent sind, bleibt die Proportion erhalten. 
-               Die tatsächliche Breite des Frames ist nun größer als die Viewport-Breite, was zum Überlauf führt. */
+            /* 2. Breite MUSS proportional zur Höhe sein, da das Original quadratisch ist (2048x2048).
+               Breite = Höhe, was Zwangsläufig zum Überlauf führt, wenn die Display-Breite kleiner ist. */
             width: 100dvh;
-            width: 100vh; /* Fallback */
-
-            /* Zusätzliche Anpassung, um die Proportionalität zu gewährleisten, falls die tatsächliche Breite
-               des Viewports kleiner ist als die Höhe (typisch für Hochformat): */
-            /* max-width: 100vw; */ /* Wird hier nicht benötigt, da wir die Höhe priorisieren */
+            width: 100vh;
+            
+            /* Da der Body Flexbox zur Zentrierung nutzt, ist keine zusätzliche transform: translateX(-50%) 
+               oder left: 50% mehr nötig. Der gesamte Frame wird in der Mitte des Viewports positioniert, 
+               wobei die Ränder links und rechts nach außen laufen. ✅ */
         }
         
         .slice {
