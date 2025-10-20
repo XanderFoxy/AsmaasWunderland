@@ -10,44 +10,51 @@
             padding: 0;
             background-color: #f0f0f0;
             font-family: sans-serif;
+            
+            /* **Flexbox-Container** für die Zentrierung: */
+            display: flex;
+            justify-content: center; /* Zentriert den Inhalt horizontal */
+            align-items: flex-start; /* Stellt den Inhalt an den oberen Rand */
+            
+            /* Verwenden der vollen dynamischen Höhe für alle Geräte */
             min-height: 100vh;
-            overflow: hidden; 
+            min-height: 100dvh; /* Bessere Unterstützung auf Mobilgeräten */
+            
+            /* Erlaubt horizontalen Überlauf, falls das Bild breiter ist als das Display */
+            overflow-x: auto; 
+            overflow-y: hidden; /* Verhindert vertikalen Scrollbalken */
         }
 
         /* Der Container für das Gesamtbild (2048x2048px) */
         .website-frame {
-            position: absolute;
+            position: relative; /* Muss relativ sein, da der Body Flex ist */
             
             /* Originalgröße des Inhalts */
             width: 2048px;
             height: 2048px; 
             
             /* *************************************************************** */
-            /* ZUVERLÄSSIGE LOGIK: VERTICAL BÜNDIG, HORIZONTAL ZENTRIERT */
+            /* KORRIGIERTE LOGIK: VERTIKAL BÜNDIG, HORIZONTAL ZENTRIERT DURCH SCALE */
             /* *************************************************************** */
             
             /* 1. Skalierungsfaktor berechnen: (100% Viewport-Höhe / 2048px Originalhöhe) */
-            /* Wir verwenden vh, da dvh Komplikationen mit transform-Funktionen verursachen kann. */
-            --scale: calc(100vh / 2048); 
+            --scale: calc(100dvh / 2048); 
             
-            /* 2. Den Startpunkt für die Skalierung festlegen: Obere Mitte des Frames (50% X, 0% Y) */
-            /* Dies gewährleistet, dass die obere Kante des skalierten Bildes oben bündig ist. */
-            transform-origin: 50% 0; 
-            
-            /* 3. Transformation anwenden: Nur die Skalierung! */
-            /* Da der transform-origin auf 50% (Mitte) liegt und der Frame bei top: 0 beginnt, 
-               wird das proportional skalierte Bild automatisch horizontal zentriert. */
+            /* 2. Transformation anwenden: Skaliert und positioniert den Frame */
+            /* Der Frame wird nicht verschoben, da Flexbox die horizontale Zentrierung übernimmt. */
             transform: scale(var(--scale));
             
-            /* Zusätzliche Positionierung für die horizontale Zentrierung */
-            left: 50%; /* Setze den Startpunkt (linke Kante) des Frames auf die Mitte des Viewports. */
+            /* Zentrierungspunkt bleibt Obere Kante (0%) und Mitte (50%) */
+            /* Wichtig: transform-origin muss auf 0 0 gesetzt werden, wenn es im Flex-Kontext zentriert wird */
+            transform-origin: 0 0; 
             
-            /* Korrektur der Zentrierung nach der Skalierung: 
-               Der skalierte Frame muss um die Hälfte seiner SKALIERTEN Breite (2048 * scale) zurückverschoben werden.
-               Da dies komplex ist, verwenden wir stattdessen die transform-origin Zentrierung und justieren nur minimal: */
+            /* Korrektur: Die Flexbox-Zentrierung muss rückgängig gemacht werden, da sie auf dem *unskalierten* Frame passiert. 
+               Der einfachste Weg ist, das Frame auf 100% der Viewport-Breite zu zentrieren und es dort zu skalieren. */
             
-            /* Die Kombination aus left: 50%, transform-origin: 50% 0 und transform: scale() 
-               ist der einfachste Weg, dies zu erreichen. Wir entfernen die complexen translate() Befehle. */
+            /* **Alternative Methode zur zentrierten Skalierung** (Zuverlässiger) */
+            margin: 0 auto; /* Zentriert das Element im Body */
+            transform-origin: center top; /* Skaliere von der oberen Mitte */
+            transform: scale(var(--scale));
         }
         
         .slice {
