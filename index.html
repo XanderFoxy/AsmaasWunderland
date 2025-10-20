@@ -38,58 +38,71 @@
             pointer-events: all; 
             font-family: sans-serif;
             
-            /* Sicherstellen, dass die Schrift nicht angeschnitten wird */
             box-sizing: border-box;
-            padding-top: 20dvh; /* Oberer Puffer */
-            padding-bottom: 20dvh; /* Unterer Puffer */
+            padding-top: 20dvh; 
+            padding-bottom: 20dvh; 
+            text-align: center; /* Wichtig für die Zentrierung des Textes */
         }
 
+        #preloader-text-container {
+            /* Flexbox-Container zentriert seine Kinder horizontal (Text und Balken) */
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            max-width: 80%; /* Begrenzung, falls der Text zu lang ist */
+        }
+        
         #preloader-text {
             display: flex; align-items: center; white-space: nowrap; margin-bottom: 10px; 
         }
 
+        /* ************************************************************* */
+        /* KORREKTUR: LADEBALKEN AUF TEXTLÄNGE SKALIERT (max-content ist optimal) */
         #loading-bar-container {
-            width: 250px; height: 8px; background-color: #333; 
-            border-radius: 4px; overflow: hidden;
+            width: max-content; /* Passt die Breite an den Inhalt an */
+            min-width: 250px; /* Mindestbreite beibehalten */
+            max-width: 100%; /* Maximal die Breite des übergeordneten Containers */
+            height: 8px; 
+            background-color: #333; 
+            border-radius: 4px; 
+            overflow: hidden;
+            align-self: center; /* Stellt sicher, dass es zentriert bleibt */
         }
 
         #loading-bar {
             height: 100%; width: 0%; background-color: #8A2BE2;
             border-radius: 4px; transition: width 0.1s linear; 
         }
+        /* ************************************************************* */
 
         /* -------------------------------------------
-         * HAUPT-CONTAINER: KORRIGIERTE $9:16$ BASIS
+         * HAUPT-CONTAINER
          * ------------------------------------------- */
         .website-frame {
             position: absolute;
-            
-            /* BASIS: Bild füllt HÖHE, bleibt QUADRATISCH, zentriert horizontal */
             height: 100dvh; 
             width: 100dvh; 
-            
-            /* Startpunkt Oben und Horizontal Zentriert (Gesamtes Bild) */
             top: 0; 
             left: 50%; 
             transform: translateX(-50%) scale(1); 
-
             overflow: hidden; 
             
             /* ************************************************************* */
-            /* NEUE KORREKTUR: HORIZONTALE ZENTRIERUNG WEITER NACH RECHTS VERSCHOBEN (59.824%), um den Inhalt nach LINKS zu ziehen */
-            transform-origin: 59.824% 25.537%; 
+            /* ANPASSUNG DES ANKERPUNKTS (transform-origin) */
+            /* Horizontal: 59.824% (Zieht Bild nach Links) */
+            /* Vertikal: 31.885% (Zieht Bild eine Box nach Oben) */
+            transform-origin: 59.824% 31.885%; 
             /* ************************************************************* */
 
-            /* Geschmeidiger Übergang für den Zoom-Effekt (3s) */
             transition: transform 3s ease-out; 
         }
         
-        /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
+        /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT */
         .zoom-in {
             /* ************************************************************* */
-            /* ZOOM-ENDPUNKT: Weniger aggressiver Zoom (1.45) */
-            /* transform-origin erledigt die vertikale und horizontale Positionierung. */
-            transform: translateX(-50%) scale(1.45) !important; 
+            /* ANPASSUNG DES SKALIERUNGSFAKTORS (ZOOM) */
+            /* 1.22: Sorgt für den gewünschten breiteren Ausschnitt (mehr links/rechts) */
+            transform: translateX(-50%) scale(1.22) !important; 
             /* ************************************************************* */
         }
 
