@@ -10,7 +10,7 @@
             padding: 0;
             background-color: #f0f0f0;
             font-family: sans-serif;
-            min-height: 100vh; /* Mindestens 100vh als Fallback */
+            min-height: 100vh;
             overflow: hidden; 
         }
 
@@ -22,32 +22,36 @@
             width: 2048px;
             height: 2048px; 
             
-            /* Zentrierung auf der Mitte des Viewports (50%/50%) */
-            top: 50%;
+            /* Setzt den Frame auf 0, 0 des Viewports */
+            top: 0;
+            left: 0;
+            
+            /* *************************************************************** */
+            /* ZUVERLÄSSIGE LOGIK FÜR VOLLE VERTICALE HÖHE UND ZENTRIERUNG */
+            /* *************************************************************** */
+            
+            /* 1. Skalierungsfaktor berechnen: (100% Viewport-Höhe / 2048px Originalhöhe) */
+            /* Wir verwenden 100vh für die maximal verfügbare Höhe. */
+            --scale: calc(100vh / 2048); 
+            
+            /* 2. Transformation anwenden: */
+            /* Kombiniert Skalierung (Höhe bündig) und Zentrierung (horizontal) */
+            /* Hier wird das Element auf 50% der unskalierten Breite nach links verschoben, 
+               um es zu zentrieren, und dann skaliert. */
+            transform: 
+                translateX(calc(-50%)) 
+                scale(var(--scale));
+            
+            /* Setzt den Frame in die Mitte des Viewports, um die Zentrierung zu starten */
             left: 50%;
             
-            /* *************************************************************** */
-            /* KORRIGIERTE LOGIK: VERTIKAL PASSEN (100vh), ZENTRIERT ÜBER TRANSLATE */
-            /* *************************************************************** */
+            /* transform-origin muss auf 50% 0 gesetzt werden, 
+               damit die Skalierung von der oberen Kante ausgeht */
+            transform-origin: 50% 0; 
             
-            /* 1. Skalierungsfaktor berechnen: Nutzt 100vh (oder 100dvh) für maximale vertikale Sichtbarkeit */
-            --scale: calc(100vh / 2048); /* Fallback für Browser, die dvh nicht unterstützen */
-            --scale-dvh: calc(100dvh / 2048); /* Dynamic Viewport Height (modern) */
-            
-            /* 2. Transformation anwenden: 
-               - Zuerst auf 100dvh skalieren (um die vertikale Passform zu erzwingen)
-               - Dann um die Hälfte der eigenen Abmessungen zurückverschieben, 
-                 um es um die MITTE zu zentrieren. */
-            transform: 
-                translate(-50%, -50%) /* Zentriert den Frame relativ zum 50%/50% Punkt */
-                scale(var(--scale-dvh)); /* Skaliert das gesamte Element proportional */
-            
-            /* Fallback auf 100vh */
-            @supports not (height: 100dvh) {
-                 transform: 
-                    translate(-50%, -50%)
-                    scale(var(--scale));
-            }
+            /* HINWEIS: Die Kombination von left: 50% und translateX(-50%) ist die Standardmethode 
+               zur horizontalen Zentrierung, die hier mit der vertikalen Skalierung kombiniert wird. 
+               Dies sollte die zuverlässigste Lösung sein. */
         }
         
         .slice {
