@@ -73,6 +73,7 @@
 
         /* -------------------------------------------
          * HAUPT-CONTAINER: KORRIGIERTE $9:16$ BASIS
+         * HINWEIS: Skalierung und Position sind jetzt final gesetzt, um den Nachlade-Lag zu vermeiden.
          * ------------------------------------------- */
         .website-frame {
             position: absolute;
@@ -80,26 +81,19 @@
             width: 100dvh; 
             top: 0; 
             left: 50%; 
-            transform: translateX(-50%) scale(1); 
             overflow: hidden; 
             
             /* Deaktiviert Schwenken (Panning), um ungewollte Verschiebung nach Zoom zu verhindern */
             touch-action: none;
             
             /* ************************************************************* */
-            /* KORREKTUR DES ANKERPUNKTS (transform-origin) */
-            /* Horizontal: 74.656% (Eine Box nach rechts) */
-            /* Vertikal: 76.321% (Eine Box nach unten) */
-            transform-origin: 74.656% 76.321%; 
+            /* FINALE TRANSFORMATION (KEINE ANIMATION/TRANSITION HIER!) */
+            /* Horizontal: 87.840% (2 Boxen nach rechts verschoben) */
+            /* Vertikal: 76.321% (1 Box nach unten verschoben) */
+            /* Skalierung: 1.3403 (Um 4 Boxen vertikal eingezoomt) */
+            transform-origin: 87.840% 76.321%; 
+            transform: translateX(-50%) scale(1.3403); 
             /* ************************************************************* */
-
-            transition: transform 3s ease-out; 
-        }
-        
-        /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Skalierung angepasst) */
-        .zoom-in {
-            /* Skalierung: 1.3403 */
-            transform: translateX(-50%) scale(1.3403) !important; 
         }
 
         /* -------------------------------------------
@@ -161,14 +155,14 @@
         <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice11.png" style="left: 0; top: 0; width: 100%; height: 100%;" alt="Slice 11 (Musiklink)">
     </a>
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice25.png" style="left: 47.812%; top: 34.766%; width: 6.25%; height: 6.25%;" alt="Slice 25 (Rechts neben Slice 11)">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24.png" style="left: 54.062%; top: 34.766%; width: 18.701%; height: 11.084%;" alt="Slice 24 (Rechts neben Slice 25)">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice29.jpg" style="left: 0%; top: 41.016%; width: 23.877%; height: 23.047%;" alt="Slice 29 (Unter Slice 23)">
-    <a href="https://xanderfoxy.github.io/AsmaasWunderland/Spiele" class="slice link-slice" style="left: 23.877%; top: 41.016%; width: 23.926%; height: 23.047%;">
-        <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14.png" style="left: 0; top: 0; width: 100%; height: 100%;" alt="Slice 14 (Fuchs/Elefant, Link zu Spiele)">
+    <a href="https://xanderfoxy.github.io/AsmaasWunderland/Spiele" class="slice link-slice" style="left: 54.062%; top: 34.766%; width: 18.701%; height: 11.084%;">
+        <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24.png" style="left: 0; top: 0; width: 100%; height: 100%;" alt="Slice 24 (Link zu Spiele)">
     </a>
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice29.jpg" style="left: 0%; top: 41.016%; width: 23.877%; height: 23.047%;" alt="Slice 29 (Unter Slice 23)">
+    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14.png" style="left: 23.877%; top: 41.016%; width: 23.926%; height: 23.047%;" alt="Slice 14 (Fuchs/Elefant)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice3.png" style="left: 47.803%; top: 41.016%; width: 6.25%; height: 23.047%;" alt="Slice 3 (Wasserfall - Unter Slice 25)">
     <a href="https://xanderfoxy.github.io/Dabdoubi/" class="slice link-slice" style="left: 54.062%; top: 45.84%; width: 35.205%; height: 18.213%;">
-        <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15.png" style="left: 0; top: 0; width: 100%; height: 100%;" alt="Slice 15 (Fotosektion - Bärenbild, Link zur Dabdoubi-Seite)">
+        <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15.png" style="left: 0; top: 0; width: 100%; height: 100%;" alt="Slice 15 (Bärenbild, Link zur Dabdoubi-Seite)">
     </a>
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice26.jpg" style="left: 89.267%; top: 45.84%; width: 10.733%; height: 18.213%;" alt="Slice 26 (Rechts neben Slice 15)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice16.jpg" style="left: 0%; top: 64.062%; width: 44.775%; height: 35.938%;" alt="Slice 16 (Linke untere Ecke)">
@@ -184,7 +178,7 @@
 
 <script>
 // -------------------------------------------
-// JavaScript (unverändert)
+// JavaScript (angepasst für KEINE Zoom-Animation)
 // -------------------------------------------
 
 function trackLoadingProgress() {
@@ -233,18 +227,12 @@ function trackLoadingProgress() {
     ]);
 }
 
-function startZoomAnimation() {
-    const bildContainer = document.getElementById('website-frame');
-    bildContainer.classList.add('zoom-in');
-}
-
 function hidePreloader() {
     const preloader = document.getElementById('preloader');
     
     preloader.style.opacity = '0';
     
-    setTimeout(startZoomAnimation, 100);
-    
+    // Keine Zoom-Animation mehr, das Bild ist bereits in der korrekten Größe/Position
     setTimeout(() => {
         preloader.style.display = 'none';
         preloader.style.pointerEvents = 'none'; 
