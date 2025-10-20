@@ -76,9 +76,9 @@
             overflow: hidden; 
             
             /* ************************************************************* */
-            /* KORREKTUR DER VERTIKALEN & HORIZONTALEN ZENTRIERUNG FÜR ZOOM */
-            /* transform-origin liegt jetzt exakt im Zentrum der Überschrift */
-            transform-origin: 53.232% 25.537%; 
+            /* NEUE KORREKTUR: HORIZONTALE ZENTRIERUNG WEITER NACH LINKS VERSCHOBEN */
+            /* transform-origin liegt jetzt weiter links, im Zentrum der Überschrift */
+            transform-origin: 46.64% 25.537%; /* 53.232% - 6.592% = 46.64% */
             /* ************************************************************* */
 
             /* Geschmeidiger Übergang für den Zoom-Effekt (3s) */
@@ -88,7 +88,7 @@
         /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
         .zoom-in {
             /* ************************************************************* */
-            /* NEUER ZOOM-ENDPUNKT: Weniger aggressiver Zoom (1.45) */
+            /* ZOOM-ENDPUNKT: Weniger aggressiver Zoom (1.45) */
             /* transform-origin erledigt die vertikale und horizontale Positionierung. */
             transform: translateX(-50%) scale(1.45) !important; 
             /* ************************************************************* */
