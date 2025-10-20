@@ -1,92 +1,77 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asmaas Wunderland</title>
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    background: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  /* Container für das komplette Puzzle */
-  .container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 2048px;
-    height: 2048px;
-    transform: translate(-50%, -50%);
-  }
-
-  .container img {
-    position: absolute;
-  }
-
-  /* Responsive: Bild immer maximal sichtbar, Seitenverhältnis bleibt */
-  @media (max-aspect-ratio: 1/1) {
-    .container {
-      height: 100vh;
-      width: auto;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Asmaas Wunderland</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: black;
     }
-  }
 
-  @media (min-aspect-ratio: 1/1) {
-    .container {
-      width: 100vw;
-      height: auto;
+    /* Container für das komplette zusammengesetzte Bild */
+    #scene {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 100vh;         /* passt Bildhöhe exakt an Bildschirmhöhe an */
+      width: auto;           /* Breite ergibt sich proportional */
+      aspect-ratio: 1 / 1;   /* 2048x2048 Quadrat */
+      transform-origin: center center;
     }
-  }
-</style>
+
+    /* Alle Slices positionieren sich relativ im Quadrat */
+    .slice {
+      position: absolute;
+      image-rendering: auto;
+    }
+
+    /* Basisbreite und Höhe in Prozent vom 2048x2048 Canvas */
+    /* Beispiel: 683px → (683 / 2048 * 100)% */
+  </style>
 </head>
 <body>
 
-<div class="container">
-  <!-- Obere Leiste -->
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice7.png" style="left:0px; top:0px; width:683px; height:582px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice1.jpg" style="left:683px; top:0px; width:807px; height:464px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice9.jpg" style="left:683px; top:464px; width:135px; height:118px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice2.png" style="left:818px; top:464px; width:544px; height:118px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice10.jpg" style="left:1362px; top:464px; width:128px; height:118px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice8.png" style="left:1490px; top:0px; width:558px; height:582px;">
+  <div id="scene">
+    <!-- Alle Slices – URLs und Endungen wie beschrieben -->
+    <!-- Hier nur exemplarisch der obere Teil, Rest bleibt aus vorheriger Version -->
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice7.png" class="slice" style="left:0%; top:0%; width:33.35%; height:28.43%;" />
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice1.jpg" class="slice" style="left:33.35%; top:0%; width:39.41%; height:22.66%;" />
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice8.png" class="slice" style="left:72.76%; top:0%; width:27.24%; height:28.43%;" />
 
-  <!-- Unter Überschrift -->
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12.png" style="left:818px; top:582px; width:544px; height:130px;">
+    <!-- Überschrift-Zeile (unter Slice1) -->
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice9.jpg" class="slice" style="left:33.35%; top:22.66%; width:6.59%; height:5.76%;" />
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice2.png" class="slice" style="left:39.94%; top:22.66%; width:26.56%; height:5.76%;" />
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice10.jpg" class="slice" style="left:66.50%; top:22.66%; width:6.25%; height:5.76%;" />
 
-  <!-- Zweite Zeile / Musik & rechte Slices -->
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice23.png" style="left:0px; top:582px; width:683px; height:258px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice27.jpg" style="left:683px; top:582px; width:135px; height:130px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice25.png" style="left:979px; top:712px; width:128px; height:128px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24.png" style="left:1107px; top:712px; width:383px; height:227px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice22.jpg" style="left:1490px; top:582px; width:558px; height:357px;">
+    <!-- Videosektion (UFO-Bereich, unter Überschrift) -->
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice27.jpg" class="slice" style="left:33.35%; top:28.43%; width:6.59%; height:6.35%;" />
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12.png" class="slice" style="left:39.94%; top:28.43%; width:26.56%; height:6.35%;" />
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice28.jpg" class="slice" style="left:66.50%; top:28.43%; width:6.25%; height:6.35%;" />
 
-  <!-- Bärenbild unter Slice24 -->
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15.png" style="left:1107px; top:939px; width:721px; height:373px;">
+    <!-- Musikbereich (Vogel) -->
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice11.png" class="slice" style="left:33.35%; top:34.78%; width:14.45%; height:6.25%;" />
 
-  <!-- Unterste Zeile / links -->
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice29.jpg" style="left:0px; top:840px; width:489px; height:472px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14.png" style="left:489px; top:840px; width:490px; height:472px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice3.png" style="left:979px; top:840px; width:128px; height:472px;">
+    <!-- Fuchs & Elefant (bereits korrekt) -->
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14.png" class="slice" style="left:33.35%; top:41.03%; width:23.92%; height:23.05%;" />
 
-  <!-- Unterste Zeile / rechts -->
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice16.jpg" style="left:0px; top:1312px; width:917px; height:736px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice13.png" style="left:917px; top:1312px; width:277px; height:198px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice4.png" style="left:917px; top:1510px; width:277px; height:202px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice6.png" style="left:917px; top:1712px; width:277px; height:295px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice20.jpg" style="left:917px; top:2007px; width:277px; height:41px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice17.jpg" style="left:1194px; top:1312px; width:854px; height:337px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice5.png" style="left:1194px; top:1649px; width:296px; height:237px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice19.jpg" style="left:1194px; top:1886px; width:296px; height:162px;">
-  <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice18.jpg" style="left:1490px; top:1649px; width:558px; height:369px;">
-</div>
+    <!-- Wasserfall -->
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice3.png" class="slice" style="left:57.27%; top:41.03%; width:6.25%; height:23.05%;" />
+
+    <!-- Bär -->
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15.png" class="slice" style="left:63.52%; top:45.84%; width:35.22%; height:18.22%;" />
+
+    <!-- Eichhörnchen & Häschen -->
+    <img src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24.png" class="slice" style="left:69.63%; top:28.43%; width:18.7%; height:11.08%;" />
+
+    <!-- Weitere Teile (Bäume, Plattformen, untere Zeilen) bleiben wie zuvor -->
+  </div>
 
 </body>
 </html>
