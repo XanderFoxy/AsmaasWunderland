@@ -11,9 +11,7 @@
         body {
             margin: 0; 
             padding: 0; 
-            overflow: hidden; /* KEIN Scrollen erlaubt */
-            
-            /* Volle Höhe für das body-Element */
+            overflow: hidden; 
             min-height: 100vh;
             background-color: #000;
         }
@@ -24,7 +22,7 @@
         .website-frame {
             position: absolute;
             top: 0;
-            left: 50%; /* Startpunkt für die horizontale Zentrierung */
+            left: 50%; 
 
             /* ************************************************************* */
             /* KORREKTUR: HÖHE ERZWINGEN & PROPORTIONALITÄT SICHERSTELLEN */
@@ -32,21 +30,15 @@
             
             /* Höchste Priorität: Das Frame soll mindestens die volle Viewport-Höhe einnehmen. */
             min-height: 100vh; 
-            
-            /* Die Breite wird zur gleichen Größe gezwungen wie die Höhe, um das Quadrat zu garantieren.
-               Dies zwingt den Überlauf an den Seiten, wie gewünscht. */
-            width: 100vh; 
+            width: 100vh; /* Breite gleich Höhe erzwingen */
             
             /* Fallback für dicke Browser-Leisten (dvh) */
             min-height: 100dvh; 
             width: 100dvh; 
 
-            /* Die aspect-ratio Regel kann in Konflikt geraten, wir entfernen sie hier und verlassen uns auf 
-               die expliziten height/width-Werte im Zusammenhang mit den vh/dvh-Einheiten. */
-            
             overflow: hidden; 
             
-            /* MANUELLE ZENTRIERUNG und STARTZUSTAND (Kein Stauchen mehr durch scale(1)) */
+            /* MANUELLE ZENTRIERUNG und STARTZUSTAND (scale(1)) */
             transform: translateX(-50%) scale(1); 
             
             /* Skalierung geht vom UNTEREN Rand aus */
@@ -58,32 +50,26 @@
         
         /* KLASSE FÜR DEN GEZOOMTEN ENDPUNKT (Wird per JS hinzugefügt) */
         .zoom-in {
-            /* Zentrierung beibehalten und zusätzlich skalieren */
-            transform: translateX(-50%) scale(1.15) !important; 
+            /* ************************************************************* */
+            /* ZIEL-AUSSCHNITT KORREKTUR: Neuer Zoom-Faktor 1.7 */
+            /* ************************************************************* */
+            transform: translateX(-50%) scale(1.7) !important; 
         }
 
         /* -------------------------------------------
-         * SLICE STYLES
+         * SLICE STYLES (Spalt-Korrektur beibehalten)
          * ------------------------------------------- */
         .slice {
             position: absolute;
             box-sizing: border-box;
             display: block;
-            
-            /* ************************************************************* */
-            /* KORREKTUR: SPALT SCHLIESSEN (Negativer Margin-Hack) */
-            /* ************************************************************* */
-            /* Zwingt die Slices, sich minimal (z.B. 0.5px) zu überlappen, um Rundungsfehler zu verdecken. */
             margin: -0.05%; 
         }
-        /* Der Negativ-Margin Hack erfordert, dass die Positionen leicht korrigiert werden,
-           aber die absolute Positionierung der Slices in Prozent sollte dies abfedern. */
            
         .slice img { 
             display: block; 
             width: 100%; 
             height: 100%; 
-            /* object-fit: fill; ist notwendig, um sicherzustellen, dass das Bild den Container füllt */
             object-fit: fill; 
         }
         
