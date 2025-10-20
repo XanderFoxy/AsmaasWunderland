@@ -22,36 +22,32 @@
             width: 2048px;
             height: 2048px; 
             
-            /* Setzt den Frame auf 0, 0 des Viewports */
-            top: 0;
-            left: 0;
-            
             /* *************************************************************** */
-            /* ZUVERLÄSSIGE LOGIK FÜR VOLLE VERTICALE HÖHE UND ZENTRIERUNG */
+            /* ZUVERLÄSSIGE LOGIK: VERTICAL BÜNDIG, HORIZONTAL ZENTRIERT */
             /* *************************************************************** */
             
             /* 1. Skalierungsfaktor berechnen: (100% Viewport-Höhe / 2048px Originalhöhe) */
-            /* Wir verwenden 100vh für die maximal verfügbare Höhe. */
+            /* Wir verwenden vh, da dvh Komplikationen mit transform-Funktionen verursachen kann. */
             --scale: calc(100vh / 2048); 
             
-            /* 2. Transformation anwenden: */
-            /* Kombiniert Skalierung (Höhe bündig) und Zentrierung (horizontal) */
-            /* Hier wird das Element auf 50% der unskalierten Breite nach links verschoben, 
-               um es zu zentrieren, und dann skaliert. */
-            transform: 
-                translateX(calc(-50%)) 
-                scale(var(--scale));
-            
-            /* Setzt den Frame in die Mitte des Viewports, um die Zentrierung zu starten */
-            left: 50%;
-            
-            /* transform-origin muss auf 50% 0 gesetzt werden, 
-               damit die Skalierung von der oberen Kante ausgeht */
+            /* 2. Den Startpunkt für die Skalierung festlegen: Obere Mitte des Frames (50% X, 0% Y) */
+            /* Dies gewährleistet, dass die obere Kante des skalierten Bildes oben bündig ist. */
             transform-origin: 50% 0; 
             
-            /* HINWEIS: Die Kombination von left: 50% und translateX(-50%) ist die Standardmethode 
-               zur horizontalen Zentrierung, die hier mit der vertikalen Skalierung kombiniert wird. 
-               Dies sollte die zuverlässigste Lösung sein. */
+            /* 3. Transformation anwenden: Nur die Skalierung! */
+            /* Da der transform-origin auf 50% (Mitte) liegt und der Frame bei top: 0 beginnt, 
+               wird das proportional skalierte Bild automatisch horizontal zentriert. */
+            transform: scale(var(--scale));
+            
+            /* Zusätzliche Positionierung für die horizontale Zentrierung */
+            left: 50%; /* Setze den Startpunkt (linke Kante) des Frames auf die Mitte des Viewports. */
+            
+            /* Korrektur der Zentrierung nach der Skalierung: 
+               Der skalierte Frame muss um die Hälfte seiner SKALIERTEN Breite (2048 * scale) zurückverschoben werden.
+               Da dies komplex ist, verwenden wir stattdessen die transform-origin Zentrierung und justieren nur minimal: */
+            
+            /* Die Kombination aus left: 50%, transform-origin: 50% 0 und transform: scale() 
+               ist der einfachste Weg, dies zu erreichen. Wir entfernen die complexen translate() Befehle. */
         }
         
         .slice {
