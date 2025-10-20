@@ -10,90 +10,78 @@
             padding: 0;
             background-color: #f0f0f0;
             font-family: sans-serif;
-            /* Volle dynamische Höhe für Body */
-            min-height: 100dvh; 
-            /* Erlaube horizontalen Scrollbalken für überlaufende Breite */
-            overflow-x: auto; 
-            overflow-y: hidden;
-            
-            /* Zentriere den Inhalt im Body */
-            display: flex; 
+            min-height: 100vh; /* Mindesthöhe für Desktop */
+            overflow: hidden; /* WICHTIG: Verhindert Scrollbalken */
+            display: flex; /* Für die Zentrierung */
             justify-content: center;
+            align-items: center; /* Zentriert vertikal (als Fallback) */
         }
 
         /* Der Container für das Gesamtbild (2048x2048px) */
         .website-frame {
             position: relative;
             
-            /* *************************************************************** */
-            /* NEUE LOGIK: DIREKTE SKALIERUNG ÜBER HÖHE UND PROPORTIONALITÄT */
-            /* *************************************************************** */
-            
-            /* 1. Setze die Höhe des Containers direkt auf die Displayhöhe (100dvh). */
-            height: 100dvh;
-            
-            /* 2. Berechne die Breite proportional zur Höhe (da 2048x2048) */
-            /* WICHTIG: Die tatsächliche Pixelbreite (2048px) ist jetzt irrelevant, 
-               wir nutzen die Höhe als Basis für die Breite. */
-            width: 100dvh; /* Die Breite wird 1:1 zur Höhe gesetzt, da es ein Quadrat ist. */
-            
-            /* Zentrierung durch Flexbox im Body */
-            margin: 0 auto; 
-            
-            /* Damit die absoluten Slice-Positionen (z.B. top: 582px) sich korrekt skalieren, 
-               müssen wir sie relativ zur neuen 100dvh-Höhe neu berechnen. */
-        }
-        
-        /* Die Slices müssen jetzt ihre Positionen und Größen relativ zur neuen 100dvh-Höhe haben.
-           Da der Frame 100dvh hoch ist (was 2048px im Original entspricht), 
-           müssen wir alle Pixelwerte in Prozent oder Viewport-Einheiten umrechnen. */
-        
-        /* Beispiel für die Umrechnung (z.B. 582px von 2048px): 
-           582 / 2048 * 100 = ~28.42% 
-           oder 
-           582 / 2048 * 100dvh = ~0.2842 * 100dvh = 28.42dvh
-           
-           Da dies **zu kompliziert** für einen funktionierenden Code ist, 
-           kehren wir zur transform:scale() Methode zurück, da diese die Slices automatisch skaliert.
-        */
-        
-        /* **Rückkehr zur stabilsten Skalierungsmethode (ohne transform:scale())** */
-        
-        /* Wir nutzen die CSS 'max()' Funktion, um sicherzustellen, dass das Bild mindestens die 
-           Höhe ODER die Breite ausfüllt, was im Hochformat die Höhe sein wird (contain-Prinzip). */
-        
-        /* WIR GEHEN ZURÜCK ZUR VORHERIGEN METHODE, ABER MIT EINEM ZUSÄTZLICHEN CONTAINER */
-        
-        /* Wrapper-Container für die Zentrierung und den Overflow */
-        .wrapper {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            height: 100dvh;
-            width: 100%; /* Breiter als der Viewport */
-        }
-        
-        .website-frame {
-            position: absolute;
+            /* Originalgröße des Inhalts - Beibehalten, damit die Slices korrekt positioniert sind */
             width: 2048px;
-            height: 2048px;
-            top: 0;
-            left: 50%; /* Zentrierung im Wrapper */
+            height: 2048px; 
             
-            /* Skalierungsfaktor */
-            --scale: calc(100dvh / 2048); 
+            /* **Skalierungsfaktor** */
+            --scale: 1; /* Standardmäßig keine Skalierung */
             
-            /* Zentrierungspunkt Obere Mitte */
-            transform-origin: 50% 0;
+            /* Zentrierung und Skalierung für DESKTOP (kann hier funktionieren) */
+            transform-origin: center center; 
             
-            /* Skalierung anwenden und horizontal zentrieren */
-            transform: translateX(-50%) scale(var(--scale));
+            /* Skalierung auf Höhe erzwingen (altes, inkonsistentes Verhalten) */
+            /* transform: scale(var(--scale)); */
+        }
+        
+        /* *************************************************************** */
+        /* NEUE LOGIK: ZIELGERICHTETE ANPASSUNG FÜR HOCHFORMAT (PORTRAIT) */
+        /* *************************************************************** */
+        
+        @media (orientation: portrait) {
+            /* Im Hochformat (Smartphone/iPad) soll die gesamte Höhe des 2048px-Frames 
+               in den 100% der Viewport-Höhe sichtbar sein. */
             
-            /* Fallback */
-            @supports not (height: 100dvh) {
-                --scale: calc(100vh / 2048);
-                transform: translateX(-50%) scale(var(--scale));
+            .website-frame {
+                /* NEUE BERECHNUNG: Die Höhe des Viewports teilen wir durch die Originalhöhe (2048) */
+                --scale-mobile: calc(100vh / 2048); 
+                
+                /* Zentrierung von oben/links und dann Skalierung (die zuverlässigste Methode) */
+                top: 0;
+                left: 0;
+                transform: scale(var(--scale-mobile));
+                transform-origin: top left; /* Startet die Skalierung von der oberen linken Ecke */
+                
+                /* Zentrierung manuell hinzufügen: Da die Skalierung jetzt von oben links beginnt,
+                   müssen wir den Frame nachträglich horizontal zentrieren. 
+                   Der Frame muss um die Hälfte seiner SKALIERTEN BREITE nach links verschoben werden. 
+                   Skalierte Breite = 2048px * --scale-mobile. 
+                   Da das kompliziert ist, nutzen wir die bewährte Methode, aber mit top: 0, left: 50%. */
+
+                /* WICHTIGSTE KORREKTUR: Skalierung und Zentrierung VEREINFACHT */
+                left: 50%;
+                top: 0;
+                transform: 
+                    translateX(-50%) /* Verschiebt den skalierten Frame um die Hälfte der Breite zurück */
+                    scale(var(--scale-mobile));
+                transform-origin: 50% 0; /* Skalierung beginnt von der oberen Mitte */
+            }
+        }
+        
+        /* Fallback für Querformat (Landscape) und ältere Geräte */
+        @media (orientation: landscape) {
+             .website-frame {
+                /* Im Querformat nutzen wir die Breite, da diese meist kleiner ist als die Höhe. 
+                   Dies sorgt für die beste "Contain"-Darstellung. */
+                --scale-landscape: calc(100vw / 2048);
+                
+                left: 50%;
+                top: 50%;
+                transform: 
+                    translate(-50%, -50%) /* Zentriert sowohl horizontal als auch vertikal */
+                    scale(var(--scale-landscape)); /* Skaliert auf die Breite */
+                transform-origin: center center;
             }
         }
         
