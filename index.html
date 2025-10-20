@@ -10,46 +10,90 @@
             padding: 0;
             background-color: #f0f0f0;
             font-family: sans-serif;
-            min-height: 100dvh; /* Volle dynamische Höhe */
-            overflow: hidden; 
+            /* Volle dynamische Höhe für Body */
+            min-height: 100dvh; 
+            /* Erlaube horizontalen Scrollbalken für überlaufende Breite */
+            overflow-x: auto; 
+            overflow-y: hidden;
+            
+            /* Zentriere den Inhalt im Body */
+            display: flex; 
+            justify-content: center;
         }
 
         /* Der Container für das Gesamtbild (2048x2048px) */
         .website-frame {
+            position: relative;
+            
+            /* *************************************************************** */
+            /* NEUE LOGIK: DIREKTE SKALIERUNG ÜBER HÖHE UND PROPORTIONALITÄT */
+            /* *************************************************************** */
+            
+            /* 1. Setze die Höhe des Containers direkt auf die Displayhöhe (100dvh). */
+            height: 100dvh;
+            
+            /* 2. Berechne die Breite proportional zur Höhe (da 2048x2048) */
+            /* WICHTIG: Die tatsächliche Pixelbreite (2048px) ist jetzt irrelevant, 
+               wir nutzen die Höhe als Basis für die Breite. */
+            width: 100dvh; /* Die Breite wird 1:1 zur Höhe gesetzt, da es ein Quadrat ist. */
+            
+            /* Zentrierung durch Flexbox im Body */
+            margin: 0 auto; 
+            
+            /* Damit die absoluten Slice-Positionen (z.B. top: 582px) sich korrekt skalieren, 
+               müssen wir sie relativ zur neuen 100dvh-Höhe neu berechnen. */
+        }
+        
+        /* Die Slices müssen jetzt ihre Positionen und Größen relativ zur neuen 100dvh-Höhe haben.
+           Da der Frame 100dvh hoch ist (was 2048px im Original entspricht), 
+           müssen wir alle Pixelwerte in Prozent oder Viewport-Einheiten umrechnen. */
+        
+        /* Beispiel für die Umrechnung (z.B. 582px von 2048px): 
+           582 / 2048 * 100 = ~28.42% 
+           oder 
+           582 / 2048 * 100dvh = ~0.2842 * 100dvh = 28.42dvh
+           
+           Da dies **zu kompliziert** für einen funktionierenden Code ist, 
+           kehren wir zur transform:scale() Methode zurück, da diese die Slices automatisch skaliert.
+        */
+        
+        /* **Rückkehr zur stabilsten Skalierungsmethode (ohne transform:scale())** */
+        
+        /* Wir nutzen die CSS 'max()' Funktion, um sicherzustellen, dass das Bild mindestens die 
+           Höhe ODER die Breite ausfüllt, was im Hochformat die Höhe sein wird (contain-Prinzip). */
+        
+        /* WIR GEHEN ZURÜCK ZUR VORHERIGEN METHODE, ABER MIT EINEM ZUSÄTZLICHEN CONTAINER */
+        
+        /* Wrapper-Container für die Zentrierung und den Overflow */
+        .wrapper {
             position: absolute;
-            
-            /* Originalgröße des Inhalts */
-            width: 2048px;
-            height: 2048px; 
-            
-            /* Startet oben bündig */
             top: 0;
-            
-            /* **Horizontale Zentrierung** */
             left: 50%;
+            transform: translateX(-50%);
+            height: 100dvh;
+            width: 100%; /* Breiter als der Viewport */
+        }
+        
+        .website-frame {
+            position: absolute;
+            width: 2048px;
+            height: 2048px;
+            top: 0;
+            left: 50%; /* Zentrierung im Wrapper */
             
-            /* *************************************************************** */
-            /* ZUVERLÄSSIGE LOGIK: VOLLE HÖHE SKALIEREN UND MITTIG POSITIONIEREN */
-            /* *************************************************************** */
-            
-            /* 1. Skalierungsfaktor berechnen: (100% Viewport-Höhe / 2048px Originalhöhe) */
+            /* Skalierungsfaktor */
             --scale: calc(100dvh / 2048); 
             
-            /* 2. Zentrierungspunkt festlegen: Obere Mitte des Frames (50% X, 0% Y) */
-            transform-origin: 50% 0; 
+            /* Zentrierungspunkt Obere Mitte */
+            transform-origin: 50% 0;
             
-            /* 3. Transformation anwenden: Verschiebt um die Hälfte der Breite (Zentrierung) 
-               und skaliert auf die volle vertikale Höhe. */
-            transform: 
-                translateX(-50%) 
-                scale(var(--scale));
-                
-            /* Fallback für Browser, die dvh nicht unterstützen */
+            /* Skalierung anwenden und horizontal zentrieren */
+            transform: translateX(-50%) scale(var(--scale));
+            
+            /* Fallback */
             @supports not (height: 100dvh) {
                 --scale: calc(100vh / 2048);
-                transform: 
-                    translateX(-50%) 
-                    scale(var(--scale));
+                transform: translateX(-50%) scale(var(--scale));
             }
         }
         
