@@ -10,8 +10,7 @@
             padding: 0;
             background-color: #f0f0f0;
             font-family: sans-serif;
-            /* Sicherstellen, dass der Body die volle Höhe einnimmt */
-            min-height: 100dvh; 
+            min-height: 100vh; /* Mindestens 100vh als Fallback */
             overflow: hidden; 
         }
 
@@ -23,33 +22,34 @@
             width: 2048px;
             height: 2048px; 
             
-            /* Setzt den Startpunkt oben links (0, 0) */
-            top: 0;
-            left: 0;
+            /* Zentrierung auf der Mitte des Viewports (50%/50%) */
+            top: 50%;
+            left: 50%;
             
             /* *************************************************************** */
-            /* KORRIGIERTE LOGIK: VERTIKALER VOLLINHALT (100dvh), ZENTRIERT */
+            /* KORRIGIERTE LOGIK: VERTIKAL PASSEN (100vh), ZENTRIERT ÜBER TRANSLATE */
             /* *************************************************************** */
             
-            /* 1. Skalierungsfaktor berechnen: Nutzt 100dvh für maximale vertikale Sichtbarkeit 
-               (berücksichtigt mobile Adressleisten). Fallback auf vh. */
-            --scale: calc(100dvh / 2048);
+            /* 1. Skalierungsfaktor berechnen: Nutzt 100vh (oder 100dvh) für maximale vertikale Sichtbarkeit */
+            --scale: calc(100vh / 2048); /* Fallback für Browser, die dvh nicht unterstützen */
+            --scale-dvh: calc(100dvh / 2048); /* Dynamic Viewport Height (modern) */
             
-            /* 2. Zentrierungspunkt festlegen: Horizontale Mitte (50%), Obere Kante (0%) */
-            transform-origin: 50% 0; 
+            /* 2. Transformation anwenden: 
+               - Zuerst auf 100dvh skalieren (um die vertikale Passform zu erzwingen)
+               - Dann um die Hälfte der eigenen Abmessungen zurückverschieben, 
+                 um es um die MITTE zu zentrieren. */
+            transform: 
+                translate(-50%, -50%) /* Zentriert den Frame relativ zum 50%/50% Punkt */
+                scale(var(--scale-dvh)); /* Skaliert das gesamte Element proportional */
             
-            /* 3. Transformation anwenden */
-            transform: scale(var(--scale)); 
-        }
-        
-        /* Fallback für Browser, die dvh nicht unterstützen */
-        @supports not (height: 100dvh) {
-            .website-frame {
-                --scale: calc(100vh / 2048);
-                transform: scale(var(--scale)); 
+            /* Fallback auf 100vh */
+            @supports not (height: 100dvh) {
+                 transform: 
+                    translate(-50%, -50%)
+                    scale(var(--scale));
             }
         }
-
+        
         .slice {
             position: absolute;
             box-sizing: border-box;
