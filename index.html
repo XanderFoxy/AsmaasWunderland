@@ -17,37 +17,44 @@
             background-color: #000;
             font-family: sans-serif;
             touch-action: pan-y;
+            transition: opacity 2.0s ease-out; /* Für Fade-Out bei externen Links */
+        }
+
+        /* -------------------------------------------
+         * RAHMEN-GLOW (VIGNETTE) ALS SEPARATES LAYER
+         * ------------------------------------------- */
+        #vignette-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Wichtig: Lässt Klicks durch */
+            z-index: 10; /* Über dem Frame */
             
-            /* VERBESSERTER RAHMEN-GLOW (VIGNETTE) ALS BACKGROUND-IMAGE */
-            /* Heller, größerer transparenter Mittelbereich, goldgelb leuchtend */
+            /* Helle, weiche, goldgelbe Vignette, die NICHT abdunkelt */
             background-image: radial-gradient(circle at center, 
-                transparent 65%, /* Größerer freier Mittelbereich */
-                rgba(255, 223, 0, 0.5) 85%, /* Hellerer Goldton */
-                rgba(255, 223, 0, 0.3) 100% /* Hellerer Goldton am Rand */
+                transparent 75%, /* Sehr großer freier Mittelbereich */
+                rgba(255, 223, 0, 0.4) 85%, /* Heller Goldton */
+                rgba(255, 223, 0, 0.2) 100% /* Heller Goldton am Rand */
             );
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;
             
-            /* Modus, der den Hintergrund eher aufhellt */
-            background-blend-mode: lighten; 
-            
-            opacity: 1; /* Start-Opazität für die Animation */
+            opacity: 1; 
             animation: pulse-gradient 3s infinite alternate ease-in-out; 
-            transition: opacity 2.0s ease-out; /* Für Fade-Out bei externen Links */
-        }
-
-        /* -------------------------------------------
-         * RAHMEN-GLOW ANIMATION (PULSIERENDE VIGNETTE)
-         * ------------------------------------------- */
-        @keyframes pulse-gradient {
-            0% { opacity: 0.8; } /* Hellerer Start */
-            50% { opacity: 1.0; } /* Maximum Helligkeit */
-            100% { opacity: 0.8; } /* Zurück zum helleren Start */
+            transition: opacity 2.0s ease-out; /* Für Fade-Out bei Link-Klick */
         }
         
-        /* Zustand, wenn der Rahmen-Glow und der Body ausgeblendet werden soll (z.B. bei Weiterleitung) */
-        body.frame-glow-fade-out {
+        @keyframes pulse-gradient {
+            0% { opacity: 0.8; } 
+            50% { opacity: 1.0; } 
+            100% { opacity: 0.8; } 
+        }
+        
+        /* Zustand, wenn der Rahmen-Glow ausgeblendet werden soll */
+        #vignette-layer.fade-out-glow {
             opacity: 0 !important;
         }
 
@@ -76,6 +83,23 @@
             padding-bottom: 20dvh; 
             text-align: center; 
         }
+        
+        /* FIX: LADEBALKEN STYLES */
+        #loading-bar-container {
+            width: 300px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        #loading-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #ffd700; /* Goldgelb */
+            transition: width 0.1s linear;
+        }
 
         /* -------------------------------------------
          * HAUPT-CONTAINER: ZOOM-FAHRT
@@ -88,6 +112,7 @@
             left: 50%; 
             overflow: hidden; 
             touch-action: none;
+            z-index: 5;
             
             transition: opacity 2.0s ease-out, transform 4.0s ease-in-out; 
             opacity: 1;
@@ -143,14 +168,14 @@
             height: 100%;
             object-fit: fill;
             
-            opacity: 0; /* WICHTIG: Start bei 0, damit die CSS-Transition greift */
-            filter: brightness(1); /* Minimaler Filter zur Aktivierung der GPU-Beschleunigung */
+            opacity: 0; /* WICHTIG: Start bei 0 */
+            filter: brightness(1); 
             
-            /* VERBESSERTE TRANSITION FÜR SLICE 14 GLOW: Opacity langsam, Filter schnell */
+            /* WICHTIG: Slice 14 Fix: Lange Opacity Transition, kurze Filter Transition */
             transition: opacity 4.0s ease-out, filter 0.15s ease-out; 
             pointer-events: none; 
             
-            transform: translateZ(0); /* FIX FÜR IPAD ZITTERN */
+            transform: translateZ(0); 
         }
         
         /* -------------------------------------------
@@ -159,7 +184,7 @@
          
         /* Overlay wird beim Klick sichtbar (opacity) und erhält den Glow (filter) */
         .link-slice .overlay-slice.glow {
-            opacity: 1; /* Wird sofort auf 1 gesetzt (Transition von 0.15s greift hier) */
+            opacity: 1; 
         }
 
         /* --- SLICE 14 (MAGISCHER GLOW) - LANGE TRANSITION FÜR SEHR WEICHES AUSFADEN --- */
@@ -167,22 +192,16 @@
             filter: drop-shadow(0 0 25px rgba(0, 191, 255, 1)) drop-shadow(0 0 50px rgba(0, 191, 255, 0.8));
         }
         
-        /* --- VIDEOS (Slice 12) --- */
+        /* ... Andere Glows (unverändert) ... */
         .link-slice[data-slice-id='Slice12'] .overlay-slice.glow {
              filter: drop-shadow(0 0 25px rgba(138, 43, 226, 1)) drop-shadow(0 0 50px rgba(138, 43, 226, 0.8));
         }
-        
-        /* --- MUSIK (Slice 11 - VOGEL) - DEUTLICH GRÖSSERER SCHEIN --- */
         .link-slice[data-slice-id='Slice11'] .overlay-slice.glow {
              filter: drop-shadow(0 0 40px rgba(255, 0, 150, 1)) drop-shadow(0 0 80px rgba(255, 0, 150, 0.8));
         }
-
-        /* --- SPIELE (Slice 24) --- */
         .link-slice[data-slice-id='Slice24'] .overlay-slice.glow {
              filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.9)) drop-shadow(0 0 40px rgba(0, 255, 0, 0.6));
         }
-        
-        /* --- DABDOUBI/BÄR (Slice 15) --- */
         .link-slice[data-slice-id='Slice15'] .overlay-slice.glow {
              filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.9)) drop-shadow(0 0 40px rgba(255, 165, 0, 0.6));
         }
@@ -209,6 +228,8 @@
         </div>
     </div>
 </div>
+
+<div id="vignette-layer"></div>
 
 <div class="website-frame" id="website-frame">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice7.png" style="left: 0%; top: 0%; width: 33.359%; height: 28.418%;" alt="Slice 7 (Oben Links)">
@@ -292,7 +313,7 @@ function playSound(sliceId) {
 }
 
 /**
- * Verfolgt den Ladefortschritt der Bilder. (Unverändert)
+ * Verfolgt den Ladefortschritt der Bilder und aktualisiert den Ladebalken.
  */
 function trackLoadingProgress() {
     const images = document.querySelectorAll('#website-frame img');
@@ -374,7 +395,7 @@ function defaultClickHandler(e) {
     
     const overlaySlice = linkElement.querySelector('.overlay-slice');
     const websiteFrame = document.getElementById('website-frame');
-    const body = document.body;
+    const vignetteLayer = document.getElementById('vignette-layer');
 
     // Setze die Dauer für den Glow 
     const glowDuration = (sliceId === 'Slice14') ? GLOW_DURATION_MAGIC : GLOW_DURATION_DEFAULT;
@@ -384,7 +405,8 @@ function defaultClickHandler(e) {
 
     // 1. GLOW-START
     if (overlaySlice) {
-        overlaySlice.classList.add('glow');
+        // Opacity wird durch die 0.15s Transition sofort auf 1 gesetzt
+        overlaySlice.classList.add('glow'); 
     }
 
     // 2. TIMEOUT für Glow-Dauer
@@ -393,11 +415,16 @@ function defaultClickHandler(e) {
         if (!isGlowOnly) {
             // ECHTER Link (externe Seite): Starte den langsamen, edlen Überblendungs-Effekt
             
-            // Rahmen-Glow und Body für den Fade-Out ausblenden (Opazität des Bodys)
-            body.classList.add('frame-glow-fade-out');
+            // Rahmen-Glow Layer für den Fade-Out ausblenden (Opazität)
+            vignetteLayer.classList.add('fade-out-glow');
 
-            // Starte den Fade-Out des Inhalts
+            // Starte den Fade-Out des Inhalts (Frame)
             websiteFrame.classList.add('fade-out');
+
+            // Bevor wir weiterleiten, entfernen wir den Slice-Glow explizit (wichtig für den Reset-Fix).
+            if (overlaySlice) {
+                overlaySlice.classList.remove('glow');
+            }
 
             setTimeout(() => {
                 // Weiterleitung erfolgt erst nach Ende des Fades
@@ -421,11 +448,11 @@ function defaultClickHandler(e) {
 window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
         const websiteFrame = document.getElementById('website-frame');
-        const body = document.body;
+        const vignetteLayer = document.getElementById('vignette-layer');
         
         // Zuerst Klassen entfernen, um sofortigen Reset zu gewährleisten
         websiteFrame.classList.remove('fade-out');
-        body.classList.remove('frame-glow-fade-out'); // Rahmen-Glow wieder einblenden
+        vignetteLayer.classList.remove('fade-out-glow'); // Rahmen-Glow wieder einblenden
         
         setTimeout(() => {
             // Sicherstellen, dass die Zoom-Fahrt wieder im finalen Zustand ist
