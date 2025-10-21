@@ -68,7 +68,7 @@
 
         #loading-bar {
             height: 100%; width: 0%; background-color: #8A2BE2;
-            border-radius: 4px; transition: width 0.1s linear; 
+            border-radius: 44px; transition: width 0.1s linear; 
         }
 
         /* -------------------------------------------
@@ -108,14 +108,12 @@
             margin: -0.05%; 
         }
            
-        /* Reguläres Slice Bild */
+        /* Reguläres Slice Bild (Basis-Slice) */
         .slice img.base-slice { 
             display: block; 
             width: 100%; 
             height: 100%; 
             object-fit: fill; 
-            /* Übergang für den Glow Effekt */
-            transition: box-shadow 0.1s ease-out;
         }
         
         /* Overlay Bild (für den Glow Effekt) */
@@ -123,6 +121,9 @@
             position: absolute;
             top: 0;
             left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
             opacity: 0; /* Standardmäßig unsichtbar */
             transition: opacity 0.1s ease-out;
             pointer-events: none; /* Klicks gehen durch dieses Bild hindurch */
@@ -135,37 +136,36 @@
         }
         
         /* -------------------------------------------
-         * GLOW EFFEKTE
+         * GLOW EFFEKTE (ANGEWENDET AUF DAS OVERLAY)
          * ******************************************* */
          
         /* --- VIDEOS (Slice 12, 27) - Angenommenes Violett/Blau --- */
-        .link-slice[data-slice-id='Slice12'] .base-slice.glow,
-        .link-slice[data-slice-id='Slice27'] .base-slice.glow {
+        .link-slice[data-slice-id='Slice12'] .overlay-slice.glow,
+        .link-slice[data-slice-id='Slice27'] .overlay-slice.glow {
              /* Helles Violett/Blau */
              box-shadow: 0 0 10px 5px rgba(138, 43, 226, 0.7), 0 0 20px 10px rgba(138, 43, 226, 0.4);
+             opacity: 1;
         }
         
         /* --- MUSIK (Slice 11) - Angenommenes Pink/Rot --- */
-        .link-slice[data-slice-id='Slice11'] .base-slice.glow {
+        .link-slice[data-slice-id='Slice11'] .overlay-slice.glow {
             /* Helles Pink/Magenta */
              box-shadow: 0 0 10px 5px rgba(255, 0, 150, 0.7), 0 0 20px 10px rgba(255, 0, 150, 0.4);
+             opacity: 1;
         }
         
         /* --- SPIELE (Slice 24) - Angenommenes Grün/Gelb --- */
-        .link-slice[data-slice-id='Slice24'] .base-slice.glow {
+        .link-slice[data-slice-id='Slice24'] .overlay-slice.glow {
             /* Helles Grün/Lime */
              box-shadow: 0 0 10px 5px rgba(0, 255, 0, 0.7), 0 0 20px 10px rgba(0, 255, 0, 0.4);
+             opacity: 1;
         }
         
         /* --- DABDOUBI/BÄR (Slice 15) - Angenommenes Braun/Gelb --- */
-        .link-slice[data-slice-id='Slice15'] .base-slice.glow {
+        .link-slice[data-slice-id='Slice15'] .overlay-slice.glow {
             /* Warmes Orange/Gelb */
              box-shadow: 0 0 10px 5px rgba(255, 165, 0, 0.7), 0 0 20px 10px rgba(255, 165, 0, 0.4);
-        }
-
-        /* Das Overlay wird sichtbar, wenn der Glow aktiv ist */
-        .link-slice .overlay-slice.glow {
-            opacity: 1;
+             opacity: 1;
         }
 
     </style>
@@ -198,7 +198,7 @@
         <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice27Overlay.png" alt="Slice 27 Overlay">
     </a>
     <a href="https://xanderfoxy.github.io/AsmaasWunderland/Videos" class="slice link-slice" data-slice-id="Slice12" style="left: 39.951%; top: 28.418%; width: 26.562%; height: 6.348%;">
-        <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12.png" alt="Slice 12 (Videosektion, Link zu Videos)">
+        <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12.jpg" alt="Slice 12 (Videosektion, Link zu Videos)">
         <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12Overlay.png" alt="Slice 12 Overlay">
     </a>
     
@@ -322,21 +322,17 @@ function defaultClickHandler(e) {
     const targetUrl = linkElement.href;
     
     // Finde das Basis-Bild und das Overlay
-    const baseSlice = linkElement.querySelector('.base-slice');
     const overlaySlice = linkElement.querySelector('.overlay-slice');
     const websiteFrame = document.getElementById('website-frame');
 
-    if (!baseSlice || !targetUrl) {
+    if (!overlaySlice || !targetUrl) {
         // Falls kein Bild oder keine URL vorhanden ist, lade die Seite trotzdem direkt.
         window.location.href = targetUrl;
         return;
     }
 
-    // 1. Glow-Effekt starten
-    baseSlice.classList.add('glow');
-    if (overlaySlice) {
-        overlaySlice.classList.add('glow');
-    }
+    // 1. Glow-Effekt starten (Nur das Overlay)
+    overlaySlice.classList.add('glow');
     
     // 2. Kurze Pause für den Glow-Effekt, dann Überblendung starten
     setTimeout(() => {
