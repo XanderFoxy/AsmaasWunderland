@@ -10,19 +10,16 @@
          * ------------------------------------------- */
         html, body {
             height: 100%; 
-            /* Min-Height, um das "Stringing" (Bildkanten-Flackern) unten zu verhindern */
             min-height: 100%;
             margin: 0; 
             padding: 0; 
             overflow: hidden; 
             background-color: #000;
             font-family: sans-serif;
-            /* Verhindert ungewolltes vertikales Scroll-Bouncing auf Touch-Geräten */
             touch-action: pan-y;
             
-            /* NEU: Pulsierender Frame-Glow für den gesamten Body als Vignette */
+            /* PULSIERENDER FRAME-GLOW FÜR DEN GESAMTEN VIEWPORT (Muss mit dem Body beginnen!) */
             animation: pulse-shadow 3s infinite alternate ease-in-out; 
-            /* Initialer, minimaler Shadow-Start, damit die Animation direkt funktioniert */
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.3) inset, 0 0 15px rgba(255, 215, 0, 0.15) inset;
         }
 
@@ -31,15 +28,12 @@
          * ------------------------------------------- */
         @keyframes pulse-shadow {
             0% { 
-                /* Weicher Start */
                 box-shadow: 0 0 10px rgba(255, 215, 0, 0.3) inset, 0 0 15px rgba(255, 215, 0, 0.15) inset;
             }
             50% { 
-                /* Heller Peak */
                 box-shadow: 0 0 25px rgba(255, 215, 0, 0.6) inset, 0 0 40px rgba(255, 215, 0, 0.3) inset;
             }
             100% { 
-                /* Zurück zum weichen Start */
                 box-shadow: 0 0 10px rgba(255, 215, 0, 0.3) inset, 0 0 15px rgba(255, 215, 0, 0.15) inset;
             }
         }
@@ -82,16 +76,15 @@
             overflow: hidden; 
             touch-action: none;
             
-            /* TRANSITION FÜR DEN FADE und ZOOM */
             transition: opacity 2.0s ease-out, transform 4.0s ease-in-out; 
             opacity: 1;
             
-            /* 1. START-POSITION FÜR DIE ZOOM-FAHRT (Zentriert und unskaliert) */
+            /* START-POSITION FÜR DIE ZOOM-FAHRT (Zentriert und unskaliert) */
             transform-origin: 50% 50%; 
             transform: translateX(-50%) scale(1.0); 
         }
         
-        /* 2. END-POSITION FÜR DIE ZOOM-FAHRT (Wird per JS hinzugefügt) */
+        /* END-POSITION FÜR DIE ZOOM-FAHRT (Wird per JS hinzugefügt) */
         .website-frame.final-zoom {
             transform-origin: 57.840% 76.321%; 
             transform: translateX(-50%) scale(1.3403); 
@@ -108,7 +101,8 @@
             position: absolute;
             box-sizing: border-box;
             display: block;
-            margin: 0; 
+            /* FIX FÜR SCHWARZE KANTEN: Leichte Überlappung erzwingen */
+            margin: -0.05%; 
         }
            
         .slice.link-slice {
@@ -136,7 +130,7 @@
             object-fit: fill;
             
             opacity: 0.01; 
-            /* NEU: Minimaler Filter, um Hardware-Beschleunigung frühzeitig zu aktivieren */
+            /* Minimaler Filter zur Aktivierung der GPU-Beschleunigung */
             filter: brightness(1); 
             
             /* Standard Transition für Glow */
@@ -161,8 +155,8 @@
             transition: filter 4.0s ease-out, opacity 0.15s ease-out; 
         }
         .link-slice[data-slice-id='Slice14'] .overlay-slice.glow {
-            /* Der Glow muss hier gesetzt werden, damit er nach dem Klick sichtbar wird */
-            filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.9)) drop-shadow(0 0 40px rgba(0, 191, 255, 0.7));
+            /* Glow etwas stärker für bessere Sichtbarkeit */
+            filter: drop-shadow(0 0 25px rgba(0, 191, 255, 1)) drop-shadow(0 0 50px rgba(0, 191, 255, 0.8));
         }
         
         /* --- VIDEOS (Slice 12) --- */
@@ -170,9 +164,10 @@
              filter: drop-shadow(0 0 25px rgba(138, 43, 226, 1)) drop-shadow(0 0 50px rgba(138, 43, 226, 0.8));
         }
         
-        /* --- MUSIK (Slice 11) --- */
+        /* --- MUSIK (Slice 11 - VOGEL) - DEUTLICH GRÖSSERER SCHEIN --- */
         .link-slice[data-slice-id='Slice11'] .overlay-slice.glow {
-             filter: drop-shadow(0 0 25px rgba(255, 0, 150, 1)) drop-shadow(0 0 50px rgba(255, 0, 150, 0.8));
+             /* Schattenbreite auf 40px/80px erhöht */
+             filter: drop-shadow(0 0 40px rgba(255, 0, 150, 1)) drop-shadow(0 0 80px rgba(255, 0, 150, 0.8));
         }
 
         /* --- SPIELE (Slice 24) --- */
@@ -271,8 +266,7 @@
 // -------------------------------------------
 
 const GLOW_DURATION_DEFAULT = 150; 
-// SLICE 14 GLOW: Javascript entfernt die Klasse fast sofort (100ms), 
-// die CSS-Transition (4.0s) sorgt für den langen, weichen Fade-Out.
+// SLICE 14 GLOW: 100ms entfernt die Klasse, 4.0s CSS-Transition macht den langsamen Fade-Out
 const GLOW_DURATION_MAGIC = 100; 
 // LANGE DAUER FÜR DEN EDLEN, LANGSAMEN WEITERLEITUNGS-FADE (2 Sekunden)
 const FADE_DURATION_OUT = 2000; 
@@ -346,12 +340,10 @@ function hidePreloader() {
     const preloader = document.getElementById('preloader');
     const websiteFrame = document.getElementById('website-frame');
 
-    // 1. Zoom-Fahrt starten
-    // Fügt die Klasse hinzu, um die CSS-Transition für den Zoom auszulösen
-    // Die Klasse muss vor dem Preloader-Fade hinzugefügt werden, damit die Animation sofort beginnt.
+    // 1. Zoom-Fahrt starten (CSS-Transition übernimmt 4.0s)
     websiteFrame.classList.add('final-zoom');
 
-    // 2. Preloader entfernen (nach 1.5s weichem Fade-Out)
+    // 2. Preloader entfernen (1.5s weicher Fade-Out)
     preloader.style.opacity = '0';
     
     setTimeout(() => {
@@ -394,8 +386,7 @@ function defaultClickHandler(e) {
         if (!isGlowOnly) {
             // ECHTER Link: Starte den langsamen, edlen Überblendungs-Effekt
             
-            // Entferne den pulsierenden Rahmen-Glow (Animation) für den Fade-Out
-            body.style.animation = 'none';
+            // Frame-Glow für den Fade-Out deaktivieren, aber Animation nicht stoppen
             body.style.boxShadow = 'none';
 
             // Starte den Fade-Out
@@ -407,7 +398,7 @@ function defaultClickHandler(e) {
             }, FADE_DURATION_OUT);
             
         } else {
-            // NUR Glow: Glow entfernen (CSS-Transition übernimmt das sehr langsame Ausfaden)
+            // NUR Glow: Glow entfernen (CSS-Transition (4.0s) übernimmt das sehr langsame Ausfaden)
             if (overlaySlice) {
                 overlaySlice.classList.remove('glow');
             }
@@ -428,10 +419,9 @@ window.addEventListener('pageshow', (event) => {
         websiteFrame.classList.remove('fade-out');
         
         setTimeout(() => {
-            // Frame und Glow zurücksetzen
-            websiteFrame.classList.add('final-zoom');
-            body.style.animation = 'pulse-shadow 3s infinite alternate ease-in-out';
-            body.style.boxShadow = ''; // Lässt den Box-Shadow über CSS-Keyframes wirken
+            // Frame-Glow zurücksetzen, Animation läuft im Hintergrund weiter
+            // Setzt den Box-Shadow auf den Standardwert im CSS zurück
+            body.style.boxShadow = ''; 
             
             // Entferne alle Slice-Glow-Klassen
             document.querySelectorAll('.overlay-slice.glow').forEach(el => {
