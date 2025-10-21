@@ -108,6 +108,13 @@
             margin: -0.05%; 
         }
            
+        /* Stil für Link-Slices: Muss position:relative haben, damit Overlay korrekt positioniert wird */
+        .slice.link-slice {
+            text-decoration: none; 
+            color: inherit;
+            position: absolute; /* Wichtig für die korrekte Platzierung des <a>-Containers */
+        }
+
         /* Reguläres Slice Bild (Basis-Slice) */
         .slice img.base-slice { 
             display: block; 
@@ -118,6 +125,7 @@
         
         /* Overlay Bild (für den Glow Effekt) */
         .slice img.overlay-slice {
+            /* Das Overlay muss absolut im <a>-Container liegen und dessen Größe übernehmen */
             position: absolute;
             top: 0;
             left: 0;
@@ -125,47 +133,43 @@
             height: 100%;
             object-fit: fill;
             opacity: 0; /* Standardmäßig unsichtbar */
-            transition: opacity 0.1s ease-out;
-            pointer-events: none; /* Klicks gehen durch dieses Bild hindurch */
-        }
-        
-        /* Stil für Link-Slices */
-        .slice.link-slice {
-            text-decoration: none; 
-            color: inherit;
+            transition: opacity 0.1s ease-out, box-shadow 0.1s ease-out; /* box-shadow-Transition für flüssigeren Glow */
+            pointer-events: none; /* Klicks gehen durch dieses Bild hindurch auf das <a>-Element */
         }
         
         /* -------------------------------------------
          * GLOW EFFEKTE (ANGEWENDET AUF DAS OVERLAY)
          * ******************************************* */
          
-        /* --- VIDEOS (Slice 12, 27) - Angenommenes Violett/Blau --- */
+        /* Das Overlay wird sichtbar, wenn der Glow aktiv ist und erhält den Glow-Effekt */
+        .link-slice .overlay-slice.glow {
+            opacity: 1;
+        }
+
+        /* --- VIDEOS (Slice 12, 27) - Violett/Blau --- */
         .link-slice[data-slice-id='Slice12'] .overlay-slice.glow,
         .link-slice[data-slice-id='Slice27'] .overlay-slice.glow {
-             /* Helles Violett/Blau */
              box-shadow: 0 0 10px 5px rgba(138, 43, 226, 0.7), 0 0 20px 10px rgba(138, 43, 226, 0.4);
-             opacity: 1;
         }
         
-        /* --- MUSIK (Slice 11) - Angenommenes Pink/Rot --- */
+        /* --- MUSIK (Slice 11) - Pink/Rot --- */
         .link-slice[data-slice-id='Slice11'] .overlay-slice.glow {
-            /* Helles Pink/Magenta */
              box-shadow: 0 0 10px 5px rgba(255, 0, 150, 0.7), 0 0 20px 10px rgba(255, 0, 150, 0.4);
-             opacity: 1;
         }
         
-        /* --- SPIELE (Slice 24) - Angenommenes Grün/Gelb --- */
+        /* --- SLICE 25 (Unter Vogel) - Gold/Gelb (NEU) --- */
+        .link-slice[data-slice-id='Slice25'] .overlay-slice.glow {
+            box-shadow: 0 0 10px 5px rgba(255, 215, 0, 0.7), 0 0 20px 10px rgba(255, 215, 0, 0.4);
+        }
+        
+        /* --- SPIELE (Slice 24) - Grün/Lime --- */
         .link-slice[data-slice-id='Slice24'] .overlay-slice.glow {
-            /* Helles Grün/Lime */
              box-shadow: 0 0 10px 5px rgba(0, 255, 0, 0.7), 0 0 20px 10px rgba(0, 255, 0, 0.4);
-             opacity: 1;
         }
         
-        /* --- DABDOUBI/BÄR (Slice 15) - Angenommenes Braun/Gelb --- */
+        /* --- DABDOUBI/BÄR (Slice 15) - Warmes Orange/Gelb --- */
         .link-slice[data-slice-id='Slice15'] .overlay-slice.glow {
-            /* Warmes Orange/Gelb */
              box-shadow: 0 0 10px 5px rgba(255, 165, 0, 0.7), 0 0 20px 10px rgba(255, 165, 0, 0.4);
-             opacity: 1;
         }
 
     </style>
@@ -210,7 +214,10 @@
         <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice11Overlay.png" alt="Slice 11 Overlay">
     </a>
     
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice25.png" style="left: 47.812%; top: 34.766%; width: 6.25%; height: 6.25%;" alt="Slice 25 (Rechts neben Slice 11)">
+    <a href="#" class="slice link-slice" data-slice-id="Slice25" style="left: 47.812%; top: 34.766%; width: 6.25%; height: 6.25%;">
+        <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice25.png" alt="Slice 25 (Rechts neben Slice 11)">
+        <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice25Overlay.png" alt="Slice 25 Overlay">
+    </a>
     
     <a href="https://xanderfoxy.github.io/AsmaasWunderland/Spiele" class="slice link-slice" data-slice-id="Slice24" style="left: 54.062%; top: 34.766%; width: 18.701%; height: 11.084%;">
         <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24.png" alt="Slice 24 (Link zu Spiele)">
@@ -240,11 +247,11 @@
 
 <script>
 // -------------------------------------------
-// JavaScript (angepasst für Klick-Effekt und Überblendung)
+// JavaScript
 // -------------------------------------------
 
 const GLOW_DURATION = 100; // Dauer des Leuchteffekts in ms
-const FADE_DURATION = 800; // Dauer der Überblendung in ms (muss mit CSS transition übereinstimmen)
+const FADE_DURATION = 800; // Dauer der Überblendung in ms
 
 /**
  * Verfolgt den Ladefortschritt der Bilder.
@@ -310,42 +317,62 @@ function hidePreloader() {
 }
 
 /**
- * Behandelt Klicks auf alle Link-Sektionen (a.link-slice)
- * und fügt den Glow- und Fade-Out-Effekt hinzu.
+ * Behandelt Klicks auf alle Link-Sektionen (a.link-slice).
  * @param {Event} e - Das Klick-Ereignis.
  */
 function defaultClickHandler(e) {
-    // Verhindert das sofortige Laden der Seite
     e.preventDefault(); 
 
     const linkElement = e.currentTarget;
-    const targetUrl = linkElement.href;
-    
-    // Finde das Basis-Bild und das Overlay
+    let targetUrl = linkElement.href;
+
     const overlaySlice = linkElement.querySelector('.overlay-slice');
     const websiteFrame = document.getElementById('website-frame');
 
-    if (!overlaySlice || !targetUrl) {
-        // Falls kein Bild oder keine URL vorhanden ist, lade die Seite trotzdem direkt.
-        window.location.href = targetUrl;
+    if (!overlaySlice) {
+        if (targetUrl && targetUrl !== '#') {
+             window.location.href = targetUrl;
+        }
         return;
     }
 
-    // 1. Glow-Effekt starten (Nur das Overlay)
+    // 1. Glow-Effekt starten
     overlaySlice.classList.add('glow');
     
-    // 2. Kurze Pause für den Glow-Effekt, dann Überblendung starten
+    // 2. Kurze Pause für den Glow-Effekt, dann Überblendung starten oder nur Glow entfernen
     setTimeout(() => {
-        // 3. Überblendung starten
-        websiteFrame.classList.add('fade-out');
+        if (targetUrl && targetUrl !== '#' && targetUrl.indexOf('void(0)') === -1) {
+            // Wenn es ein echter Link ist, starte die Überblendung
+            websiteFrame.classList.add('fade-out');
 
-        // 4. Nach Abschluss der Überblendung zur Zielseite wechseln
-        setTimeout(() => {
-            window.location.href = targetUrl;
-        }, FADE_DURATION);
+            // 3. Nach Abschluss der Überblendung zur Zielseite wechseln
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, FADE_DURATION);
+        } else {
+            // Wenn es nur ein Glow-Effekt ohne Weiterleitung ist, Glow entfernen
+            overlaySlice.classList.remove('glow');
+        }
 
     }, GLOW_DURATION);
 }
+
+/**
+ * Behebt das Problem mit dem schwarzen Bildschirm beim Klick auf "Zurück".
+ * Stellt die Website-Frame-Sichtbarkeit wieder her, wenn die Seite vom Cache geladen wird.
+ */
+window.addEventListener('pageshow', (event) => {
+    // Wenn die Seite aus dem Cache (z.B. nach "Zurück") geladen wird, entferne die fade-out-Klasse.
+    if (event.persisted) {
+        const websiteFrame = document.getElementById('website-frame');
+        websiteFrame.classList.remove('fade-out');
+        
+        // Entferne sicherheitshalber auch alle Glow-Klassen
+        document.querySelectorAll('.overlay-slice.glow').forEach(el => {
+            el.classList.remove('glow');
+        });
+    }
+});
 
 
 document.addEventListener('DOMContentLoaded', () => {
