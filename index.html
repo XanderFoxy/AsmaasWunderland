@@ -32,11 +32,11 @@
             pointer-events: none; /* Wichtig: Lässt Klicks durch */
             z-index: 10; /* Über dem Frame */
             
-            /* Helle, weiche, goldgelbe Vignette, die NICHT abdunkelt */
-            background-image: radial-gradient(circle at center, 
-                transparent 75%, /* Sehr großer freier Mittelbereich */
-                rgba(255, 223, 0, 0.4) 85%, /* Heller Goldton */
-                rgba(255, 223, 0, 0.2) 100% /* Heller Goldton am Rand */
+            /* OVALER, SCHMALER, WEICHER, NEBELARTIGER GOLD-GLOW */
+            background-image: radial-gradient(ellipse 200% 100% at center, /* Hochkant-Oval */
+                transparent 95%, /* SEHR großer freier Mittelbereich */
+                rgba(255, 223, 0, 0.2) 99%, /* Extrem weicher Übergang, heller Goldton */
+                rgba(255, 223, 0, 0.1) 100% /* Am Rand kaum sichtbar */
             );
             background-size: cover;
             background-position: center center;
@@ -84,12 +84,19 @@
             text-align: center; 
         }
         
-        /* FIX: LADEBALKEN STYLES */
+        /* NEU: Zentriert den Text und den Ladebalken */
+        #preloader-text-container {
+            width: 100%;
+            max-width: 350px; /* Optional: maximale Breite setzen */
+            margin: 0 auto;
+            text-align: center;
+        }
+        
         #loading-bar-container {
             width: 300px;
             height: 4px;
             background-color: rgba(255, 255, 255, 0.2);
-            margin-top: 20px;
+            margin: 20px auto 0 auto; /* NEU: Zentrierung durch 'auto' */
             border-radius: 2px;
             overflow: hidden;
         }
@@ -97,7 +104,7 @@
         #loading-bar {
             height: 100%;
             width: 0%;
-            background-color: #ffd700; /* Goldgelb */
+            background-color: **#8a2be2**; /* FIX: LILA (BlueViolet) */
             transition: width 0.1s linear;
         }
 
@@ -134,13 +141,12 @@
         }
 
         /* -------------------------------------------
-         * SLICE STYLES
+         * SLICE STYLES (Unverändert)
          * ------------------------------------------- */
         .slice {
             position: absolute;
             box-sizing: border-box;
             display: block;
-            /* FIX FÜR SCHWARZE KANTEN: Leichte Überlappung erzwingen */
             margin: -0.05%; 
         }
            
@@ -151,7 +157,6 @@
             touch-action: manipulation; 
         }
 
-        /* Basis-Slice */
         .slice img.base-slice { 
             display: block; 
             width: 100%; 
@@ -171,7 +176,7 @@
             opacity: 0; /* WICHTIG: Start bei 0 */
             filter: brightness(1); 
             
-            /* WICHTIG: Slice 14 Fix: Lange Opacity Transition, kurze Filter Transition */
+            /* Slice 14 Fix: Lange Opacity Transition, kurze Filter Transition */
             transition: opacity 4.0s ease-out, filter 0.15s ease-out; 
             pointer-events: none; 
             
@@ -210,11 +215,11 @@
 </head>
 <body>
 
-<audio id="sound-Slice11" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/Musik.mp3" preload="auto"></audio>
-<audio id="sound-Slice12" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/Videos.mp3" preload="auto"></audio>
-<audio id="sound-Slice14" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/Slice14.mp3" preload="auto"></audio>
-<audio id="sound-Slice15" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/Bilder.mp3" preload="auto"></audio>
-<audio id="sound-Slice24" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/Spiele.mp3" preload="auto"></audio>
+<audio id="sound-slice11" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/musik.mp3" preload="auto"></audio>
+<audio id="sound-slice12" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/videos.mp3" preload="auto"></audio>
+<audio id="sound-slice14" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/slice14.mp3" preload="auto"></audio>
+<audio id="sound-slice15" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/bilder.mp3" preload="auto"></audio>
+<audio id="sound-slice24" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/spiele.mp3" preload="auto"></audio>
 
 
 <div id="preloader">
@@ -242,7 +247,7 @@
     
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice27.jpg" style="left: 33.359%; top: 28.418%; width: 6.592%; height: 6.348%;" alt="Slice 27 (Statisch)">
     
-    <a href="https://xanderfoxy.github.io/AsmaasWunderland/Videos" class="slice link-slice" data-slice-id="Slice12" style="left: 39.951%; top: 28.418%; width: 26.572%; height: 6.358%;">
+    <a href="https://xanderfoxy.github.io/AsmaasWunderland/videos" class="slice link-slice" data-slice-id="Slice12" style="left: 39.951%; top: 28.418%; width: 26.572%; height: 6.358%;">
         <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12.png" alt="Slice 12 Basis">
         <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12Overlay.png" alt="Slice 12 Overlay">
     </a>
@@ -250,14 +255,14 @@
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice28.jpg" style="left: 66.513%; top: 28.418%; width: 6.25%; height: 6.348%;" alt="Slice 28">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice22.jpg" style="left: 72.763%; top: 28.418%; width: 27.237%; height: 17.432%;" alt="Slice 22 (Unter Slice 8)">
     
-    <a href="https://xanderfoxy.github.io/AsmaasWunderland/Musik" class="slice link-slice" data-slice-id="Slice11" style="left: 33.359%; top: 34.766%; width: 14.463%; height: 6.26%;">
+    <a href="https://xanderfoxy.github.io/AsmaasWunderland/musik" class="slice link-slice" data-slice-id="Slice11" style="left: 33.359%; top: 34.766%; width: 14.463%; height: 6.26%;">
         <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice11.png" alt="Slice 11 Basis">
         <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice11Overlay.png" alt="Slice 11 Overlay">
     </a>
     
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice25.png" style="left: 47.812%; top: 34.766%; width: 6.25%; height: 6.25%;" alt="Slice 25 (Rechts neben Slice 11)">
     
-    <a href="https://xanderfoxy.github.io/AsmaasWunderland/Spiele" class="slice link-slice" data-slice-id="Slice24" style="left: 54.062%; top: 34.766%; width: 18.711%; height: 11.094%;">
+    <a href="https://xanderfoxy.github.io/AsmaasWunderland/spiele" class="slice link-slice" data-slice-id="Slice24" style="left: 54.062%; top: 34.766%; width: 18.711%; height: 11.094%;">
         <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24.png" alt="Slice 24 Basis">
         <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24Overlay.png" alt="Slice 24 Overlay">
     </a>
@@ -294,16 +299,15 @@
 // -------------------------------------------
 
 const GLOW_DURATION_DEFAULT = 150; 
-// SLICE 14 GLOW: 100ms entfernt die Klasse, 4.0s CSS-Transition macht den langsamen Fade-Out
 const GLOW_DURATION_MAGIC = 100; 
-// LANGE DAUER FÜR DEN EDLEN, LANGSAMEN WEITERLEITUNGS-FADE (2 Sekunden)
 const FADE_DURATION_OUT = 2000; 
 
 /**
  * Spielt den Sound für den angegebenen Slice ab.
  */
 function playSound(sliceId) {
-    const audio = document.getElementById(`sound-${sliceId}`);
+    // Die Audio-ID wird in Kleinbuchstaben gesucht (da die Dateinamen klein sind)
+    const audio = document.getElementById(`sound-${sliceId.toLowerCase()}`);
     if (audio) {
         audio.currentTime = 0; 
         audio.play().catch(error => {
@@ -330,12 +334,19 @@ function trackLoadingProgress() {
     const updateProgress = () => {
         const progress = (loadedCount / totalCount) * 100;
         loadingBar.style.width = progress + '%';
+        
+        // HACK: Wenn der Ladebalken nicht ganz voll wird, wird hier 100% erzwungen,
+        // sobald alle Bilder geladen sind, um den "Nicht-voll-Problem" zu beheben.
+        if (loadedCount === totalCount) {
+             loadingBar.style.width = '100%';
+        }
     };
 
     const promises = [];
 
     images.forEach(img => {
-        if (!img.complete) {
+        // Stelle sicher, dass das Bild wirklich im DOM ist, bevor wir es verfolgen
+        if (img.src && !img.complete) {
             promises.push(new Promise(resolve => {
                 const onLoadOrError = () => {
                     loadedCount++;
@@ -345,7 +356,8 @@ function trackLoadingProgress() {
                 img.onload = onLoadOrError;
                 img.onerror = onLoadOrError; 
             }));
-        } else {
+        } else if (img.src) {
+            // Bild ist bereits geladen/fehlerhaft (wird sofort gezählt)
             loadedCount++;
             updateProgress();
         }
@@ -397,7 +409,6 @@ function defaultClickHandler(e) {
     const websiteFrame = document.getElementById('website-frame');
     const vignetteLayer = document.getElementById('vignette-layer');
 
-    // Setze die Dauer für den Glow 
     const glowDuration = (sliceId === 'Slice14') ? GLOW_DURATION_MAGIC : GLOW_DURATION_DEFAULT;
 
     // 0. Sound abspielen
@@ -405,7 +416,6 @@ function defaultClickHandler(e) {
 
     // 1. GLOW-START
     if (overlaySlice) {
-        // Opacity wird durch die 0.15s Transition sofort auf 1 gesetzt
         overlaySlice.classList.add('glow'); 
     }
 
@@ -413,15 +423,15 @@ function defaultClickHandler(e) {
     setTimeout(() => {
         
         if (!isGlowOnly) {
-            // ECHTER Link (externe Seite): Starte den langsamen, edlen Überblendungs-Effekt
+            // ECHTER Link (externe Seite): Starte den langsamen Überblendungs-Effekt
             
-            // Rahmen-Glow Layer für den Fade-Out ausblenden (Opazität)
+            // Rahmen-Glow Layer für den Fade-Out ausblenden
             vignetteLayer.classList.add('fade-out-glow');
 
             // Starte den Fade-Out des Inhalts (Frame)
             websiteFrame.classList.add('fade-out');
 
-            // Bevor wir weiterleiten, entfernen wir den Slice-Glow explizit (wichtig für den Reset-Fix).
+            // Vor Weiterleitung: Entferne den Slice-Glow, um den 4.0s CSS-Fade-out zu starten
             if (overlaySlice) {
                 overlaySlice.classList.remove('glow');
             }
@@ -432,11 +442,10 @@ function defaultClickHandler(e) {
             }, FADE_DURATION_OUT);
             
         } else {
-            // NUR Glow (interne Aktion): Glow entfernen (CSS-Transition (4.0s) übernimmt das sehr langsame Ausfaden)
+            // NUR Glow (interne Aktion): GLOW ENTFERNEN (Startet den 4.0s CSS-Fade-out)
             if (overlaySlice) {
                 overlaySlice.classList.remove('glow');
             }
-            // Rahmen-Glow bleibt bei internen Klicks aktiv und pulsiert weiter
         }
 
     }, glowDuration);
@@ -450,15 +459,15 @@ window.addEventListener('pageshow', (event) => {
         const websiteFrame = document.getElementById('website-frame');
         const vignetteLayer = document.getElementById('vignette-layer');
         
-        // Zuerst Klassen entfernen, um sofortigen Reset zu gewährleisten
+        // Klassen entfernen
         websiteFrame.classList.remove('fade-out');
-        vignetteLayer.classList.remove('fade-out-glow'); // Rahmen-Glow wieder einblenden
+        vignetteLayer.classList.remove('fade-out-glow'); 
         
         setTimeout(() => {
-            // Sicherstellen, dass die Zoom-Fahrt wieder im finalen Zustand ist
+            // Sicherstellen, dass die Zoom-Fahrt wieder im finalen Zustand ist (iPad Fix)
             websiteFrame.classList.add('final-zoom');
             
-            // Entferne alle Slice-Glow-Klassen
+            // Entferne alle Slice-Glow-Klassen (Reset)
             document.querySelectorAll('.overlay-slice.glow').forEach(el => {
                 el.classList.remove('glow');
             });
