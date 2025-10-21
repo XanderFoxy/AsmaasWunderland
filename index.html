@@ -17,7 +17,7 @@
         }
 
         /* -------------------------------------------
-         * PRELOADER (FIXED FÜR MOBILE ABDECKUNG)
+         * PRELOADER
          * ------------------------------------------- */
         #preloader {
             position: fixed; 
@@ -41,9 +41,24 @@
             padding-bottom: 20dvh; 
             text-align: center; 
         }
-
+        
         /* -------------------------------------------
-         * HAUPT-CONTAINER: FINALE POSITION UND ZOOM/GLOW
+         * FRAME-GLOW ANIMATION (PULSIEREND)
+         * ------------------------------------------- */
+        @keyframes pulse-glow {
+            0% { 
+                filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3)) drop-shadow(0 0 15px rgba(255, 215, 0, 0.15));
+            }
+            50% { 
+                filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.6)) drop-shadow(0 0 40px rgba(255, 215, 0, 0.3));
+            }
+            100% { 
+                filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3)) drop-shadow(0 0 15px rgba(255, 215, 0, 0.15));
+            }
+        }
+        
+        /* -------------------------------------------
+         * HAUPT-CONTAINER: ZOOM-FAHRT UND GLOW
          * ------------------------------------------- */
         .website-frame {
             position: absolute;
@@ -52,22 +67,26 @@
             top: 0; 
             left: 50%; 
             overflow: hidden; 
-            
             touch-action: none;
             
-            /* ZOOM-FAHRT WIEDERHERGESTELLT */
-            transform-origin: 57.840% 76.321%; 
-            transform: translateX(-50%) scale(1.3403); 
-            
-            /* LANGE TRANSITION FÜR DEN WEICHEN, EDLEN ÜBERGANG */
-            transition: opacity 2.0s ease-out, filter 2.0s ease-out; 
+            /* TRANSITION FÜR DEN FADE, ZOOM UND GLOW-FILTER */
+            transition: opacity 2.0s ease-out, transform 4.0s ease-in-out, filter 0.5s ease-out; 
             opacity: 1;
+            
+            /* 1. START-POSITION FÜR DIE ZOOM-FAHRT (Verkleinert und zentriert auf 0,0) */
+            transform-origin: 50% 50%; 
+            transform: translateX(-50%) scale(1.0); /* Startet nur mittig */
         }
         
-        /* NEUER FRAME-GLOW FÜR DAS GESAMTE ELEMENT */
+        /* 2. END-POSITION FÜR DIE ZOOM-FAHRT */
+        .website-frame.final-zoom {
+            transform-origin: 57.840% 76.321%; 
+            transform: translateX(-50%) scale(1.3403); /* Endet gezoomt auf Zielposition */
+        }
+        
+        /* PULSIERENDER FRAME-GLOW WIRD HIER ANGEWENDET */
         .website-frame.frame-glow {
-            /* Goldgelber, sanfter Glow um den ganzen Rahmen */
-            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4)) drop-shadow(0 0 30px rgba(255, 215, 0, 0.2));
+            animation: pulse-glow 3s infinite alternate ease-in-out; /* 3 Sekunden Dauer, hin und her */
         }
         
         .fade-out {
@@ -81,7 +100,7 @@
             position: absolute;
             box-sizing: border-box;
             display: block;
-            margin: 0; /* Margin entfernt, da es zu Lücken führte */
+            margin: 0; 
         }
            
         .slice.link-slice {
@@ -91,7 +110,7 @@
             touch-action: manipulation; 
         }
 
-        /* Basis-Slice (Der normale Inhalt) */
+        /* Basis-Slice */
         .slice img.base-slice { 
             display: block; 
             width: 100%; 
@@ -99,7 +118,7 @@
             object-fit: fill; 
         }
         
-        /* Overlay Bild (NUR FÜR DIE GLOW-ELEMENTE WIEDERHERGESTELLT) */
+        /* Overlay Bild (NUR FÜR GLOW) */
         .slice img.overlay-slice {
             position: absolute;
             top: 0;
@@ -110,19 +129,17 @@
             
             opacity: 0.01; 
             
-            /* STANDARD-TRANSITION FÜR DIE LINKS (SCHNELLER GLOW) */
+            /* Standard Transition für Glow */
             transition: filter 0.15s ease-out, opacity 0.15s ease-out; 
             pointer-events: none; 
             
-            /* FIX FÜR IPAD ZITTERN: GPU-Beschleunigung erzwingen */
             transform: translateZ(0); 
         }
         
         /* -------------------------------------------
-         * GLOW EFFEKTE (ANGEWENDET AUF DAS OVERLAY)
+         * GLOW EFFEKTE
          * ******************************************* */
          
-        /* Das Overlay wird beim Klick sichtbar (opacity) und erhält den Glow (filter) */
         .link-slice .overlay-slice.glow {
             opacity: 1;
         }
@@ -133,26 +150,25 @@
             transition: filter 4.0s ease-out, opacity 0.15s ease-out; 
         }
         .link-slice[data-slice-id='Slice14'] .overlay-slice.glow {
-            /* Glow stärker und breiter */
             filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.9)) drop-shadow(0 0 40px rgba(0, 191, 255, 0.7));
         }
         
-        /* --- VIDEOS (Slice 12) - GLOW STÄRKER & BREITER --- */
+        /* --- VIDEOS (Slice 12) --- */
         .link-slice[data-slice-id='Slice12'] .overlay-slice.glow {
              filter: drop-shadow(0 0 25px rgba(138, 43, 226, 1)) drop-shadow(0 0 50px rgba(138, 43, 226, 0.8));
         }
         
-        /* --- MUSIK (Slice 11) - GLOW STÄRKER & BREITER (für Vogel) --- */
+        /* --- MUSIK (Slice 11) --- */
         .link-slice[data-slice-id='Slice11'] .overlay-slice.glow {
              filter: drop-shadow(0 0 25px rgba(255, 0, 150, 1)) drop-shadow(0 0 50px rgba(255, 0, 150, 0.8));
         }
 
-        /* --- SPIELE (Slice 24) - Standard Glow beibehalten, aber leicht verstärkt --- */
+        /* --- SPIELE (Slice 24) --- */
         .link-slice[data-slice-id='Slice24'] .overlay-slice.glow {
              filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.9)) drop-shadow(0 0 40px rgba(0, 255, 0, 0.6));
         }
         
-        /* --- DABDOUBI/BÄR (Slice 15) - Standard Glow beibehalten, aber leicht verstärkt --- */
+        /* --- DABDOUBI/BÄR (Slice 15) --- */
         .link-slice[data-slice-id='Slice15'] .overlay-slice.glow {
              filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.9)) drop-shadow(0 0 40px rgba(255, 165, 0, 0.6));
         }
@@ -180,7 +196,7 @@
     </div>
 </div>
 
-<div class="website-frame frame-glow" id="website-frame">
+<div class="website-frame" id="website-frame">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice7.png" style="left: 0%; top: 0%; width: 33.359%; height: 28.418%;" alt="Slice 7 (Oben Links)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice1.jpg" style="left: 33.359%; top: 0%; width: 39.404%; height: 22.656%;" alt="Slice 1 (Mitte Oben)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice8.png" style="left: 72.763%; top: 0%; width: 27.237%; height: 28.418%;" alt="Slice 8 (Oben Rechts)">
@@ -248,6 +264,8 @@ const GLOW_DURATION_DEFAULT = 150;
 const GLOW_DURATION_MAGIC = 100; 
 // LANGE DAUER FÜR DEN EDLEN, LANGSAMEN WEITERLEITUNGS-FADE (2 Sekunden)
 const FADE_DURATION_OUT = 2000; 
+// DAUER DER ZOOM-FAHRT (Sollte länger sein als der Preloader-Fade)
+const ZOOM_DURATION = 4000; // 4 Sekunden
 
 /**
  * Spielt den Sound für den angegebenen Slice ab.
@@ -312,21 +330,24 @@ function trackLoadingProgress() {
 }
 
 /**
- * Versteckt den Preloader und startet den Frame-Glow.
+ * Versteckt den Preloader und startet die Zoom-Fahrt und den Frame-Glow.
  */
 function hidePreloader() {
     const preloader = document.getElementById('preloader');
     const websiteFrame = document.getElementById('website-frame');
 
-    // Entfernt den Preloader
+    // 1. Zoom-Fahrt starten
+    // Fügt die Klasse hinzu, um die CSS-Transition für den Zoom auszulösen
+    websiteFrame.classList.add('final-zoom');
+
+    // 2. Preloader entfernen (nach 1.5s weichem Fade-Out)
     preloader.style.opacity = '0';
     
-    // Nach dem Preloader-Fade-Out (1.5s)
     setTimeout(() => {
         preloader.style.display = 'none';
         preloader.style.pointerEvents = 'none'; 
         
-        // Fügt den Frame-Glow hinzu, nachdem der Preloader weg ist
+        // 3. Frame-Glow nach Preloader-Ende hinzufügen (sichtbar im final gezoomten Frame)
         websiteFrame.classList.add('frame-glow');
     }, 1500); 
 }
