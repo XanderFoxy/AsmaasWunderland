@@ -17,15 +17,15 @@
         }
 
         /* -------------------------------------------
-         * PRELOADER
+         * PRELOADER (FIXED FÜR MOBILE ABDECKUNG)
          * ------------------------------------------- */
         #preloader {
-            position: fixed; top: 0; left: 0; 
-            width: 100dvh; 
-            height: 100dvh; 
-            left: 50%;
-            transform: translateX(-50%); 
-
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            
             background-color: #000; z-index: 9999; 
             display: flex;
             flex-direction: column; 
@@ -43,7 +43,7 @@
         }
 
         /* -------------------------------------------
-         * HAUPT-CONTAINER: FINALE POSITION
+         * HAUPT-CONTAINER: FINALE POSITION UND ZOOM/GLOW
          * ------------------------------------------- */
         .website-frame {
             position: absolute;
@@ -55,13 +55,19 @@
             
             touch-action: none;
             
-            /* FINALE TRANSFORMATION */
+            /* ZOOM-FAHRT WIEDERHERGESTELLT */
             transform-origin: 57.840% 76.321%; 
             transform: translateX(-50%) scale(1.3403); 
             
             /* LANGE TRANSITION FÜR DEN WEICHEN, EDLEN ÜBERGANG */
-            transition: opacity 2.0s ease-out; 
+            transition: opacity 2.0s ease-out, filter 2.0s ease-out; 
             opacity: 1;
+        }
+        
+        /* NEUER FRAME-GLOW FÜR DAS GESAMTE ELEMENT */
+        .website-frame.frame-glow {
+            /* Goldgelber, sanfter Glow um den ganzen Rahmen */
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4)) drop-shadow(0 0 30px rgba(255, 215, 0, 0.2));
         }
         
         .fade-out {
@@ -75,7 +81,7 @@
             position: absolute;
             box-sizing: border-box;
             display: block;
-            margin: -0.05%; 
+            margin: 0; /* Margin entfernt, da es zu Lücken führte */
         }
            
         .slice.link-slice {
@@ -93,7 +99,7 @@
             object-fit: fill; 
         }
         
-        /* Overlay Bild (wird nur für den Glow verwendet) */
+        /* Overlay Bild (NUR FÜR DIE GLOW-ELEMENTE WIEDERHERGESTELLT) */
         .slice img.overlay-slice {
             position: absolute;
             top: 0;
@@ -174,7 +180,7 @@
     </div>
 </div>
 
-<div class="website-frame" id="website-frame">
+<div class="website-frame frame-glow" id="website-frame">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice7.png" style="left: 0%; top: 0%; width: 33.359%; height: 28.418%;" alt="Slice 7 (Oben Links)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice1.jpg" style="left: 33.359%; top: 0%; width: 39.404%; height: 22.656%;" alt="Slice 1 (Mitte Oben)">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice8.png" style="left: 72.763%; top: 0%; width: 27.237%; height: 28.418%;" alt="Slice 8 (Oben Rechts)">
@@ -238,7 +244,7 @@
 
 const GLOW_DURATION_DEFAULT = 150; 
 // SLICE 14 GLOW: Javascript entfernt die Klasse fast sofort (100ms), 
-// aber die CSS-Transition (4.0s) sorgt für den langen, weichen Fade-Out.
+// die CSS-Transition (4.0s) sorgt für den langen, weichen Fade-Out.
 const GLOW_DURATION_MAGIC = 100; 
 // LANGE DAUER FÜR DEN EDLEN, LANGSAMEN WEITERLEITUNGS-FADE (2 Sekunden)
 const FADE_DURATION_OUT = 2000; 
@@ -306,16 +312,22 @@ function trackLoadingProgress() {
 }
 
 /**
- * Versteckt den Preloader. (Unverändert)
+ * Versteckt den Preloader und startet den Frame-Glow.
  */
 function hidePreloader() {
     const preloader = document.getElementById('preloader');
-    
+    const websiteFrame = document.getElementById('website-frame');
+
+    // Entfernt den Preloader
     preloader.style.opacity = '0';
     
+    // Nach dem Preloader-Fade-Out (1.5s)
     setTimeout(() => {
         preloader.style.display = 'none';
         preloader.style.pointerEvents = 'none'; 
+        
+        // Fügt den Frame-Glow hinzu, nachdem der Preloader weg ist
+        websiteFrame.classList.add('frame-glow');
     }, 1500); 
 }
 
@@ -351,6 +363,11 @@ function defaultClickHandler(e) {
         
         if (!isGlowOnly) {
             // ECHTER Link: Starte den langsamen, edlen Überblendungs-Effekt
+            
+            // Entferne den Frame-Glow für den Überblendungseffekt
+            websiteFrame.classList.remove('frame-glow');
+            
+            // Starte den Fade-Out
             websiteFrame.classList.add('fade-out');
 
             setTimeout(() => {
@@ -369,7 +386,7 @@ function defaultClickHandler(e) {
 }
 
 /**
- * Behebt das Problem mit dem schwarzen Bildschirm beim Klick auf "Zurück". (Unverändert)
+ * Behebt das Problem mit dem schwarzen Bildschirm beim Klick auf "Zurück".
  */
 window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
@@ -378,7 +395,10 @@ window.addEventListener('pageshow', (event) => {
         setTimeout(() => {
             websiteFrame.classList.remove('fade-out');
             
-            // Entferne alle Glow-Klassen
+            // Füge den Frame-Glow wieder hinzu
+            websiteFrame.classList.add('frame-glow');
+            
+            // Entferne alle Slice-Glow-Klassen
             document.querySelectorAll('.overlay-slice.glow').forEach(el => {
                 el.classList.remove('glow');
             });
