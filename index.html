@@ -157,9 +157,14 @@
              box-shadow: 0 0 10px 5px rgba(255, 0, 150, 0.7), 0 0 20px 10px rgba(255, 0, 150, 0.4);
         }
         
-        /* --- SLICE 25 (Unter Vogel) - Gold/Gelb (NEU) --- */
+        /* --- SLICE 25 (Unter Vogel) - Gold/Gelb --- */
         .link-slice[data-slice-id='Slice25'] .overlay-slice.glow {
             box-shadow: 0 0 10px 5px rgba(255, 215, 0, 0.7), 0 0 20px 10px rgba(255, 215, 0, 0.4);
+        }
+        
+        /* --- SLICE 14 (Fuchs/Elefant) - Blau/Hellblau (NEU) --- */
+        .link-slice[data-slice-id='Slice14'] .overlay-slice.glow {
+            box-shadow: 0 0 10px 5px rgba(0, 191, 255, 0.7), 0 0 20px 10px rgba(0, 191, 255, 0.4);
         }
         
         /* --- SPIELE (Slice 24) - Grün/Lime --- */
@@ -225,7 +230,12 @@
     </a>
     
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice29.jpg" style="left: 0%; top: 41.016%; width: 23.877%; height: 23.047%;" alt="Slice 29 (Unter Slice 23)">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14.png" style="left: 23.877%; top: 41.016%; width: 23.926%; height: 23.047%;" alt="Slice 14 (Fuchs/Elefant)">
+    
+    <a href="#" class="slice link-slice" data-slice-id="Slice14" style="left: 23.877%; top: 41.016%; width: 23.926%; height: 23.047%;">
+        <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14.png" alt="Slice 14 (Fuchs/Elefant)">
+        <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14Overlay.png" alt="Slice 14 Overlay">
+    </a>
+    
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice3.png" style="left: 47.803%; top: 41.016%; width: 6.25%; height: 23.047%;" alt="Slice 3 (Wasserfall - Unter Slice 25)">
     
     <a href="https://xanderfoxy.github.io/Dabdoubi/" class="slice link-slice" data-slice-id="Slice15" style="left: 54.062%; top: 45.84%; width: 35.205%; height: 18.213%;">
@@ -324,13 +334,14 @@ function defaultClickHandler(e) {
     e.preventDefault(); 
 
     const linkElement = e.currentTarget;
-    let targetUrl = linkElement.href;
-
+    const targetUrl = linkElement.href;
+    
     const overlaySlice = linkElement.querySelector('.overlay-slice');
     const websiteFrame = document.getElementById('website-frame');
 
     if (!overlaySlice) {
-        if (targetUrl && targetUrl !== '#') {
+        if (targetUrl && targetUrl !== '#' && targetUrl.indexOf('void(0)') === -1) {
+             // Lade Seite, falls kein Overlay und gültige URL
              window.location.href = targetUrl;
         }
         return;
@@ -341,6 +352,7 @@ function defaultClickHandler(e) {
     
     // 2. Kurze Pause für den Glow-Effekt, dann Überblendung starten oder nur Glow entfernen
     setTimeout(() => {
+        // Prüfe, ob es sich um einen echten Link handelt (kein # oder javascript:void(0))
         if (targetUrl && targetUrl !== '#' && targetUrl.indexOf('void(0)') === -1) {
             // Wenn es ein echter Link ist, starte die Überblendung
             websiteFrame.classList.add('fade-out');
