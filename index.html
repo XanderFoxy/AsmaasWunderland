@@ -18,26 +18,32 @@
             font-family: sans-serif;
             touch-action: pan-y;
             
-            /* PULSIERENDER FRAME-GLOW FÜR DEN GESAMTEN VIEWPORT (Muss mit dem Body beginnen!) */
-            animation: pulse-shadow 3s infinite alternate ease-in-out; 
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3) inset, 0 0 15px rgba(255, 215, 0, 0.15) inset;
+            /* INITIALER RAHMEN-GLOW (VIGNETTE) ALS BACKGROUND-IMAGE */
+            /* Erscheint mit der Zoom-Fahrt und wird durch Animation pulsieren */
+            background-image: radial-gradient(circle at center, transparent 35%, rgba(255, 215, 0, 0.4) 85%, rgba(255, 215, 0, 0.2) 100%);
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            opacity: 1; /* Start-Opazität für die Animation */
+            
+            animation: pulse-gradient 3s infinite alternate ease-in-out; 
+            transition: opacity 2.0s ease-out; /* Für Fade-Out bei externen Links */
         }
 
         /* -------------------------------------------
-         * FRAME-GLOW ANIMATION (PULSIEREND ALS BOX-SHADOW INSET)
+         * RAHMEN-GLOW ANIMATION (PULSIERENDE VIGNETTE)
          * ------------------------------------------- */
-        @keyframes pulse-shadow {
-            0% { 
-                box-shadow: 0 0 10px rgba(255, 215, 0, 0.3) inset, 0 0 15px rgba(255, 215, 0, 0.15) inset;
-            }
-            50% { 
-                box-shadow: 0 0 25px rgba(255, 215, 0, 0.6) inset, 0 0 40px rgba(255, 215, 0, 0.3) inset;
-            }
-            100% { 
-                box-shadow: 0 0 10px rgba(255, 215, 0, 0.3) inset, 0 0 15px rgba(255, 215, 0, 0.15) inset;
-            }
+        @keyframes pulse-gradient {
+            0% { opacity: 0.6; } /* Leichter, weicher Glow */
+            50% { opacity: 0.9; } /* Hellerer, intensiverer Glow */
+            100% { opacity: 0.6; } /* Zurück zum weichen Glow */
         }
         
+        /* Zustand, wenn der Rahmen-Glow ausgeblendet werden soll (z.B. bei Weiterleitung) */
+        body.frame-glow-fade-out {
+            opacity: 0 !important;
+        }
+
         /* -------------------------------------------
          * PRELOADER
          * ------------------------------------------- */
@@ -90,7 +96,8 @@
             transform: translateX(-50%) scale(1.3403); 
         }
         
-        .fade-out {
+        /* Für den Fade-Out des gesamten Inhalts bei Weiterleitung */
+        .website-frame.fade-out {
             opacity: 0 !important;
         }
 
@@ -129,31 +136,26 @@
             height: 100%;
             object-fit: fill;
             
-            opacity: 0.01; 
-            /* Minimaler Filter zur Aktivierung der GPU-Beschleunigung */
-            filter: brightness(1); 
+            opacity: 0; /* WICHTIG: Start bei 0, damit die CSS-Transition greift */
+            filter: brightness(1); /* Minimaler Filter zur Aktivierung der GPU-Beschleunigung */
             
-            /* Standard Transition für Glow */
-            transition: filter 0.15s ease-out, opacity 0.15s ease-out; 
+            /* WICHTIG: Lange Transition für das langsame Ausfaden der Opazität und des Filters */
+            transition: opacity 4.0s ease-out, filter 0.15s ease-out; 
             pointer-events: none; 
             
-            /* FIX FÜR IPAD ZITTERN */
-            transform: translateZ(0); 
+            transform: translateZ(0); /* FIX FÜR IPAD ZITTERN */
         }
         
         /* -------------------------------------------
          * GLOW EFFEKTE
          * ******************************************* */
          
+        /* Overlay wird beim Klick sichtbar (opacity) und erhält den Glow (filter) */
         .link-slice .overlay-slice.glow {
-            opacity: 1;
+            opacity: 1; /* Wird sofort auf 1 gesetzt */
         }
 
         /* --- SLICE 14 (MAGISCHER GLOW) - LANGE TRANSITION FÜR SEHR WEICHES AUSFADEN --- */
-        .link-slice[data-slice-id='Slice14'] .overlay-slice {
-            /* 4 Sekunden Übergangsdauer für das sanfte, langsame Abklingen */
-            transition: filter 4.0s ease-out, opacity 0.15s ease-out; 
-        }
         .link-slice[data-slice-id='Slice14'] .overlay-slice.glow {
             /* Glow etwas stärker für bessere Sichtbarkeit */
             filter: drop-shadow(0 0 25px rgba(0, 191, 255, 1)) drop-shadow(0 0 50px rgba(0, 191, 255, 0.8));
@@ -166,7 +168,6 @@
         
         /* --- MUSIK (Slice 11 - VOGEL) - DEUTLICH GRÖSSERER SCHEIN --- */
         .link-slice[data-slice-id='Slice11'] .overlay-slice.glow {
-             /* Schattenbreite auf 40px/80px erhöht */
              filter: drop-shadow(0 0 40px rgba(255, 0, 150, 1)) drop-shadow(0 0 80px rgba(255, 0, 150, 0.8));
         }
 
@@ -386,10 +387,10 @@ function defaultClickHandler(e) {
         if (!isGlowOnly) {
             // ECHTER Link: Starte den langsamen, edlen Überblendungs-Effekt
             
-            // Frame-Glow für den Fade-Out deaktivieren, aber Animation nicht stoppen
-            body.style.boxShadow = 'none';
+            // Rahmen-Glow für den Fade-Out ausblenden (Opazität des Bodys)
+            body.classList.add('frame-glow-fade-out');
 
-            // Starte den Fade-Out
+            // Starte den Fade-Out des Inhalts
             websiteFrame.classList.add('fade-out');
 
             setTimeout(() => {
@@ -417,11 +418,11 @@ window.addEventListener('pageshow', (event) => {
         
         // Zuerst Klassen entfernen, um sofortigen Reset zu gewährleisten
         websiteFrame.classList.remove('fade-out');
+        body.classList.remove('frame-glow-fade-out'); // Rahmen-Glow wieder einblenden
         
         setTimeout(() => {
-            // Frame-Glow zurücksetzen, Animation läuft im Hintergrund weiter
-            // Setzt den Box-Shadow auf den Standardwert im CSS zurück
-            body.style.boxShadow = ''; 
+            // Sicherstellen, dass die Zoom-Fahrt wieder im finalen Zustand ist
+            websiteFrame.classList.add('final-zoom');
             
             // Entferne alle Slice-Glow-Klassen
             document.querySelectorAll('.overlay-slice.glow').forEach(el => {
