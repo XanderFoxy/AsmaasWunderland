@@ -18,14 +18,21 @@
             font-family: sans-serif;
             touch-action: pan-y;
             
-            /* INITIALER RAHMEN-GLOW (VIGNETTE) ALS BACKGROUND-IMAGE */
-            /* Erscheint mit der Zoom-Fahrt und wird durch Animation pulsieren */
-            background-image: radial-gradient(circle at center, transparent 35%, rgba(255, 215, 0, 0.4) 85%, rgba(255, 215, 0, 0.2) 100%);
+            /* VERBESSERTER RAHMEN-GLOW (VIGNETTE) ALS BACKGROUND-IMAGE */
+            /* Heller, größerer transparenter Mittelbereich, goldgelb leuchtend */
+            background-image: radial-gradient(circle at center, 
+                transparent 65%, /* Größerer freier Mittelbereich */
+                rgba(255, 223, 0, 0.5) 85%, /* Hellerer Goldton */
+                rgba(255, 223, 0, 0.3) 100% /* Hellerer Goldton am Rand */
+            );
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;
-            opacity: 1; /* Start-Opazität für die Animation */
             
+            /* Modus, der den Hintergrund eher aufhellt */
+            background-blend-mode: lighten; 
+            
+            opacity: 1; /* Start-Opazität für die Animation */
             animation: pulse-gradient 3s infinite alternate ease-in-out; 
             transition: opacity 2.0s ease-out; /* Für Fade-Out bei externen Links */
         }
@@ -34,12 +41,12 @@
          * RAHMEN-GLOW ANIMATION (PULSIERENDE VIGNETTE)
          * ------------------------------------------- */
         @keyframes pulse-gradient {
-            0% { opacity: 0.6; } /* Leichter, weicher Glow */
-            50% { opacity: 0.9; } /* Hellerer, intensiverer Glow */
-            100% { opacity: 0.6; } /* Zurück zum weichen Glow */
+            0% { opacity: 0.8; } /* Hellerer Start */
+            50% { opacity: 1.0; } /* Maximum Helligkeit */
+            100% { opacity: 0.8; } /* Zurück zum helleren Start */
         }
         
-        /* Zustand, wenn der Rahmen-Glow ausgeblendet werden soll (z.B. bei Weiterleitung) */
+        /* Zustand, wenn der Rahmen-Glow und der Body ausgeblendet werden soll (z.B. bei Weiterleitung) */
         body.frame-glow-fade-out {
             opacity: 0 !important;
         }
@@ -139,7 +146,7 @@
             opacity: 0; /* WICHTIG: Start bei 0, damit die CSS-Transition greift */
             filter: brightness(1); /* Minimaler Filter zur Aktivierung der GPU-Beschleunigung */
             
-            /* WICHTIG: Lange Transition für das langsame Ausfaden der Opazität und des Filters */
+            /* VERBESSERTE TRANSITION FÜR SLICE 14 GLOW: Opacity langsam, Filter schnell */
             transition: opacity 4.0s ease-out, filter 0.15s ease-out; 
             pointer-events: none; 
             
@@ -152,12 +159,11 @@
          
         /* Overlay wird beim Klick sichtbar (opacity) und erhält den Glow (filter) */
         .link-slice .overlay-slice.glow {
-            opacity: 1; /* Wird sofort auf 1 gesetzt */
+            opacity: 1; /* Wird sofort auf 1 gesetzt (Transition von 0.15s greift hier) */
         }
 
         /* --- SLICE 14 (MAGISCHER GLOW) - LANGE TRANSITION FÜR SEHR WEICHES AUSFADEN --- */
         .link-slice[data-slice-id='Slice14'] .overlay-slice.glow {
-            /* Glow etwas stärker für bessere Sichtbarkeit */
             filter: drop-shadow(0 0 25px rgba(0, 191, 255, 1)) drop-shadow(0 0 50px rgba(0, 191, 255, 0.8));
         }
         
@@ -385,9 +391,9 @@ function defaultClickHandler(e) {
     setTimeout(() => {
         
         if (!isGlowOnly) {
-            // ECHTER Link: Starte den langsamen, edlen Überblendungs-Effekt
+            // ECHTER Link (externe Seite): Starte den langsamen, edlen Überblendungs-Effekt
             
-            // Rahmen-Glow für den Fade-Out ausblenden (Opazität des Bodys)
+            // Rahmen-Glow und Body für den Fade-Out ausblenden (Opazität des Bodys)
             body.classList.add('frame-glow-fade-out');
 
             // Starte den Fade-Out des Inhalts
@@ -399,10 +405,11 @@ function defaultClickHandler(e) {
             }, FADE_DURATION_OUT);
             
         } else {
-            // NUR Glow: Glow entfernen (CSS-Transition (4.0s) übernimmt das sehr langsame Ausfaden)
+            // NUR Glow (interne Aktion): Glow entfernen (CSS-Transition (4.0s) übernimmt das sehr langsame Ausfaden)
             if (overlaySlice) {
                 overlaySlice.classList.remove('glow');
             }
+            // Rahmen-Glow bleibt bei internen Klicks aktiv und pulsiert weiter
         }
 
     }, glowDuration);
