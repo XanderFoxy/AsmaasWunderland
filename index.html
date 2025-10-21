@@ -59,7 +59,8 @@
             transform-origin: 57.840% 76.321%; 
             transform: translateX(-50%) scale(1.3403); 
             
-            transition: opacity 0.8s ease-out; 
+            /* LANGE TRANSITION FÜR DEN WEICHEN, EDLEN ÜBERGANG */
+            transition: opacity 2.0s ease-out; 
             opacity: 1;
         }
         
@@ -74,7 +75,6 @@
             position: absolute;
             box-sizing: border-box;
             display: block;
-            /* Leichter Negativ-Margin für exaktes Aneinanderfügen der Slices */
             margin: -0.05%; 
         }
            
@@ -82,7 +82,6 @@
             text-decoration: none; 
             color: inherit;
             position: absolute;
-            /* Verhinderung von mobilem "Springen" beim Tippen */
             touch-action: manipulation; 
         }
 
@@ -105,9 +104,12 @@
             
             opacity: 0.01; 
             
-            /* Standard-Transition für den Glow (schneller) */
+            /* STANDARD-TRANSITION FÜR DIE LINKS (SCHNELLER GLOW) */
             transition: filter 0.15s ease-out, opacity 0.15s ease-out; 
             pointer-events: none; 
+            
+            /* FIX FÜR IPAD ZITTERN: GPU-Beschleunigung erzwingen */
+            transform: translateZ(0); 
         }
         
         /* -------------------------------------------
@@ -119,10 +121,10 @@
             opacity: 1;
         }
 
-        /* --- SLICE 14 (MAGISCHER GLOW) - LANGE TRANSITION FÜR LANGSAMES AUSFADEN --- */
+        /* --- SLICE 14 (MAGISCHER GLOW) - LANGE TRANSITION FÜR SEHR WEICHES AUSFADEN --- */
         .link-slice[data-slice-id='Slice14'] .overlay-slice {
-            /* Übergangsdauer auf 2 Sekunden gesetzt für langes Ausfaden */
-            transition: filter 2.0s ease-out, opacity 0.15s ease-out; 
+            /* 4 Sekunden Übergangsdauer für das sanfte, langsame Abklingen */
+            transition: filter 4.0s ease-out, opacity 0.15s ease-out; 
         }
         .link-slice[data-slice-id='Slice14'] .overlay-slice.glow {
             /* Glow stärker und breiter */
@@ -235,19 +237,20 @@
 // -------------------------------------------
 
 const GLOW_DURATION_DEFAULT = 150; 
-const GLOW_DURATION_MAGIC = 2000; // 2 Sekunden Glow-Dauer VOR dem Abklingen
+// SLICE 14 GLOW: Javascript entfernt die Klasse fast sofort (100ms), 
+// aber die CSS-Transition (4.0s) sorgt für den langen, weichen Fade-Out.
+const GLOW_DURATION_MAGIC = 100; 
+// LANGE DAUER FÜR DEN EDLEN, LANGSAMEN WEITERLEITUNGS-FADE (2 Sekunden)
+const FADE_DURATION_OUT = 2000; 
 
 /**
  * Spielt den Sound für den angegebenen Slice ab.
- * @param {string} sliceId - Die ID des Slices (z.B. 'Slice14').
  */
 function playSound(sliceId) {
     const audio = document.getElementById(`sound-${sliceId}`);
     if (audio) {
-        // Stoppt den vorherigen Durchlauf und spielt von vorne
         audio.currentTime = 0; 
         audio.play().catch(error => {
-            // Fängt Fehler ab, z.B. wenn der Browser Autoplay blockiert
             console.warn(`Sound für ${sliceId} konnte nicht abgespielt werden:`, error);
         });
     }
@@ -317,8 +320,7 @@ function hidePreloader() {
 }
 
 /**
- * Behandelt Klicks auf alle Link-Sektionen (a.link-slice). (Unverändert)
- * @param {Event} e - Das Klick-Ereignis.
+ * Behandelt Klicks auf alle Link-Sektionen (a.link-slice).
  */
 function defaultClickHandler(e) {
     e.preventDefault(); 
@@ -333,7 +335,7 @@ function defaultClickHandler(e) {
     const overlaySlice = linkElement.querySelector('.overlay-slice');
     const websiteFrame = document.getElementById('website-frame');
     
-    // Setze die Dauer für den Glow (bevor er anfängt auszufaden)
+    // Setze die Dauer für den Glow 
     const glowDuration = (sliceId === 'Slice14') ? GLOW_DURATION_MAGIC : GLOW_DURATION_DEFAULT;
 
     // 0. Sound abspielen
@@ -348,15 +350,16 @@ function defaultClickHandler(e) {
     setTimeout(() => {
         
         if (!isGlowOnly) {
-            // ECHTER Link: Überblendung und Weiterleitung
+            // ECHTER Link: Starte den langsamen, edlen Überblendungs-Effekt
             websiteFrame.classList.add('fade-out');
 
             setTimeout(() => {
+                // Weiterleitung erfolgt erst nach Ende des Fades
                 window.location.href = targetUrl;
-            }, FADE_DURATION);
+            }, FADE_DURATION_OUT);
             
         } else {
-            // NUR Glow: Glow nach Dauer entfernen (CSS-Transition übernimmt das langsame Ausfaden)
+            // NUR Glow: Glow entfernen (CSS-Transition übernimmt das sehr langsame Ausfaden)
             if (overlaySlice) {
                 overlaySlice.classList.remove('glow');
             }
