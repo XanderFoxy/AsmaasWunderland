@@ -17,7 +17,7 @@
         }
 
         /* -------------------------------------------
-         * PRELOADER (Unverändert)
+         * PRELOADER
          * ------------------------------------------- */
         #preloader {
             position: fixed; top: 0; left: 0; 
@@ -74,6 +74,7 @@
             position: absolute;
             box-sizing: border-box;
             display: block;
+            /* Leichter Negativ-Margin für exaktes Aneinanderfügen der Slices */
             margin: -0.05%; 
         }
            
@@ -81,6 +82,8 @@
             text-decoration: none; 
             color: inherit;
             position: absolute;
+            /* Verhinderung von mobilem "Springen" beim Tippen */
+            touch-action: manipulation; 
         }
 
         /* Basis-Slice (Der normale Inhalt) */
@@ -100,11 +103,7 @@
             height: 100%;
             object-fit: fill;
             
-            /* WICHTIG: Im Ruhezustand fast unsichtbar, um nur den Glow anzuzeigen */
-            opacity: 0.01; /* Fast unsichtbar, um Anti-Aliasing des PNGs zu vermeiden */
-            
-            /* Hält die Größe stabil und verhindert Verschiebung durch Glow */
-            outline: 1px solid transparent; 
+            opacity: 0.01; 
             
             /* Standard-Transition für den Glow (schneller) */
             transition: filter 0.15s ease-out, opacity 0.15s ease-out; 
@@ -122,36 +121,44 @@
 
         /* --- SLICE 14 (MAGISCHER GLOW) - LANGE TRANSITION FÜR LANGSAMES AUSFADEN --- */
         .link-slice[data-slice-id='Slice14'] .overlay-slice {
-            transition: filter 2.0s ease-out, opacity 0.15s ease-out; /* Langsames Ausfaden des Filters (Glow) */
+            /* Übergangsdauer auf 2 Sekunden gesetzt für langes Ausfaden */
+            transition: filter 2.0s ease-out, opacity 0.15s ease-out; 
         }
         .link-slice[data-slice-id='Slice14'] .overlay-slice.glow {
             /* Glow stärker und breiter */
-            filter: drop-shadow(0 0 15px rgba(0, 191, 255, 0.9)) drop-shadow(0 0 30px rgba(0, 191, 255, 0.7));
+            filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.9)) drop-shadow(0 0 40px rgba(0, 191, 255, 0.7));
         }
         
         /* --- VIDEOS (Slice 12) - GLOW STÄRKER & BREITER --- */
         .link-slice[data-slice-id='Slice12'] .overlay-slice.glow {
-             filter: drop-shadow(0 0 18px rgba(138, 43, 226, 1)) drop-shadow(0 0 35px rgba(138, 43, 226, 0.7));
+             filter: drop-shadow(0 0 25px rgba(138, 43, 226, 1)) drop-shadow(0 0 50px rgba(138, 43, 226, 0.8));
         }
         
         /* --- MUSIK (Slice 11) - GLOW STÄRKER & BREITER (für Vogel) --- */
         .link-slice[data-slice-id='Slice11'] .overlay-slice.glow {
-             filter: drop-shadow(0 0 18px rgba(255, 0, 150, 0.9)) drop-shadow(0 0 35px rgba(255, 0, 150, 0.6));
+             filter: drop-shadow(0 0 25px rgba(255, 0, 150, 1)) drop-shadow(0 0 50px rgba(255, 0, 150, 0.8));
         }
 
-        /* --- SPIELE (Slice 24) - Standard Glow --- */
+        /* --- SPIELE (Slice 24) - Standard Glow beibehalten, aber leicht verstärkt --- */
         .link-slice[data-slice-id='Slice24'] .overlay-slice.glow {
-             filter: drop-shadow(0 0 15px rgba(0, 255, 0, 0.9)) drop-shadow(0 0 30px rgba(0, 255, 0, 0.6));
+             filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.9)) drop-shadow(0 0 40px rgba(0, 255, 0, 0.6));
         }
         
-        /* --- DABDOUBI/BÄR (Slice 15) - Standard Glow --- */
+        /* --- DABDOUBI/BÄR (Slice 15) - Standard Glow beibehalten, aber leicht verstärkt --- */
         .link-slice[data-slice-id='Slice15'] .overlay-slice.glow {
-             filter: drop-shadow(0 0 15px rgba(255, 165, 0, 0.9)) drop-shadow(0 0 30px rgba(255, 165, 0, 0.6));
+             filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.9)) drop-shadow(0 0 40px rgba(255, 165, 0, 0.6));
         }
 
     </style>
 </head>
 <body>
+
+<audio id="sound-Slice11" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/Musik.mp3" preload="auto"></audio>
+<audio id="sound-Slice12" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/Videos.mp3" preload="auto"></audio>
+<audio id="sound-Slice14" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/Slice14.mp3" preload="auto"></audio>
+<audio id="sound-Slice15" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/Bilder.mp3" preload="auto"></audio>
+<audio id="sound-Slice24" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/Spiele.mp3" preload="auto"></audio>
+
 
 <div id="preloader">
     <div id="preloader-text-container">
@@ -176,7 +183,7 @@
     
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice27.jpg" style="left: 33.359%; top: 28.418%; width: 6.592%; height: 6.348%;" alt="Slice 27 (Statisch)">
     
-    <a href="https://xanderfoxy.github.io/AsmaasWunderland/Videos" class="slice link-slice" data-slice-id="Slice12" style="left: 39.951%; top: 28.418%; width: 26.562%; height: 6.348%;">
+    <a href="https://xanderfoxy.github.io/AsmaasWunderland/Videos" class="slice link-slice" data-slice-id="Slice12" style="left: 39.951%; top: 28.418%; width: 26.572%; height: 6.358%;">
         <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12.png" alt="Slice 12 Basis">
         <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12Overlay.png" alt="Slice 12 Overlay">
     </a>
@@ -184,28 +191,28 @@
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice28.jpg" style="left: 66.513%; top: 28.418%; width: 6.25%; height: 6.348%;" alt="Slice 28">
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice22.jpg" style="left: 72.763%; top: 28.418%; width: 27.237%; height: 17.432%;" alt="Slice 22 (Unter Slice 8)">
     
-    <a href="https://xanderfoxy.github.io/AsmaasWunderland/Musik" class="slice link-slice" data-slice-id="Slice11" style="left: 33.359%; top: 34.766%; width: 14.453%; height: 6.25%;">
+    <a href="https://xanderfoxy.github.io/AsmaasWunderland/Musik" class="slice link-slice" data-slice-id="Slice11" style="left: 33.359%; top: 34.766%; width: 14.463%; height: 6.26%;">
         <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice11.png" alt="Slice 11 Basis">
         <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice11Overlay.png" alt="Slice 11 Overlay">
     </a>
     
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice25.png" style="left: 47.812%; top: 34.766%; width: 6.25%; height: 6.25%;" alt="Slice 25 (Rechts neben Slice 11)">
     
-    <a href="https://xanderfoxy.github.io/AsmaasWunderland/Spiele" class="slice link-slice" data-slice-id="Slice24" style="left: 54.062%; top: 34.766%; width: 18.701%; height: 11.084%;">
+    <a href="https://xanderfoxy.github.io/AsmaasWunderland/Spiele" class="slice link-slice" data-slice-id="Slice24" style="left: 54.062%; top: 34.766%; width: 18.711%; height: 11.094%;">
         <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24.png" alt="Slice 24 Basis">
         <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24Overlay.png" alt="Slice 24 Overlay">
     </a>
     
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice29.jpg" style="left: 0%; top: 41.016%; width: 23.877%; height: 23.047%;" alt="Slice 29 (Unter Slice 23)">
     
-    <a href="javascript:void(0);" class="slice link-slice" data-slice-id="Slice14" style="left: 23.877%; top: 41.016%; width: 23.926%; height: 23.047%;">
+    <a href="javascript:void(0);" class="slice link-slice" data-slice-id="Slice14" style="left: 23.877%; top: 41.016%; width: 23.936%; height: 23.057%;">
         <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14.png" alt="Slice 14 Basis">
         <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14Overlay.png" alt="Slice 14 Overlay">
     </a>
     
     <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice3.png" style="left: 47.803%; top: 41.016%; width: 6.25%; height: 23.047%;" alt="Slice 3 (Wasserfall - Unter Slice 25)">
     
-    <a href="https://xanderfoxy.github.io/Dabdoubi/" class="slice link-slice" data-slice-id="Slice15" style="left: 54.062%; top: 45.84%; width: 35.205%; height: 18.213%;">
+    <a href="https://xanderfoxy.github.io/Dabdoubi/" class="slice link-slice" data-slice-id="Slice15" style="left: 54.062%; top: 45.84%; width: 35.215%; height: 18.223%;">
         <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15.png" alt="Slice 15 Basis">
         <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15Overlay.png" alt="Slice 15 Overlay">
     </a>
@@ -228,11 +235,26 @@
 // -------------------------------------------
 
 const GLOW_DURATION_DEFAULT = 150; 
-const GLOW_DURATION_MAGIC = 2000; // 2 Sekunden für Slice 14
-const FADE_DURATION = 800; 
+const GLOW_DURATION_MAGIC = 2000; // 2 Sekunden Glow-Dauer VOR dem Abklingen
 
 /**
- * Verfolgt den Ladefortschritt der Bilder.
+ * Spielt den Sound für den angegebenen Slice ab.
+ * @param {string} sliceId - Die ID des Slices (z.B. 'Slice14').
+ */
+function playSound(sliceId) {
+    const audio = document.getElementById(`sound-${sliceId}`);
+    if (audio) {
+        // Stoppt den vorherigen Durchlauf und spielt von vorne
+        audio.currentTime = 0; 
+        audio.play().catch(error => {
+            // Fängt Fehler ab, z.B. wenn der Browser Autoplay blockiert
+            console.warn(`Sound für ${sliceId} konnte nicht abgespielt werden:`, error);
+        });
+    }
+}
+
+/**
+ * Verfolgt den Ladefortschritt der Bilder. (Unverändert)
  */
 function trackLoadingProgress() {
     const images = document.querySelectorAll('#website-frame img');
@@ -281,7 +303,7 @@ function trackLoadingProgress() {
 }
 
 /**
- * Versteckt den Preloader.
+ * Versteckt den Preloader. (Unverändert)
  */
 function hidePreloader() {
     const preloader = document.getElementById('preloader');
@@ -295,7 +317,7 @@ function hidePreloader() {
 }
 
 /**
- * Behandelt Klicks auf alle Link-Sektionen (a.link-slice).
+ * Behandelt Klicks auf alle Link-Sektionen (a.link-slice). (Unverändert)
  * @param {Event} e - Das Klick-Ereignis.
  */
 function defaultClickHandler(e) {
@@ -311,8 +333,11 @@ function defaultClickHandler(e) {
     const overlaySlice = linkElement.querySelector('.overlay-slice');
     const websiteFrame = document.getElementById('website-frame');
     
-    // Setze die Dauer für den Glow
+    // Setze die Dauer für den Glow (bevor er anfängt auszufaden)
     const glowDuration = (sliceId === 'Slice14') ? GLOW_DURATION_MAGIC : GLOW_DURATION_DEFAULT;
+
+    // 0. Sound abspielen
+    playSound(sliceId);
 
     // 1. GLOW-START
     if (overlaySlice) {
@@ -323,18 +348,16 @@ function defaultClickHandler(e) {
     setTimeout(() => {
         
         if (!isGlowOnly) {
-            // Wenn es ein ECHTER Link ist: Überblendung und Weiterleitung
+            // ECHTER Link: Überblendung und Weiterleitung
             websiteFrame.classList.add('fade-out');
 
             setTimeout(() => {
-                // Die Weiterleitung erfolgt hier
                 window.location.href = targetUrl;
             }, FADE_DURATION);
             
         } else {
-            // Wenn es NUR Glow ist (z.B. Slice 14): Glow entfernen
+            // NUR Glow: Glow nach Dauer entfernen (CSS-Transition übernimmt das langsame Ausfaden)
             if (overlaySlice) {
-                // Das Entfernen der Klasse startet die CSS-Transition (Ausfaden)
                 overlaySlice.classList.remove('glow');
             }
         }
@@ -343,7 +366,7 @@ function defaultClickHandler(e) {
 }
 
 /**
- * Behebt das Problem mit dem schwarzen Bildschirm beim Klick auf "Zurück".
+ * Behebt das Problem mit dem schwarzen Bildschirm beim Klick auf "Zurück". (Unverändert)
  */
 window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
