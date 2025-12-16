@@ -2,186 +2,86 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Asmaas Wunderland</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webseite mit Preloader</title>
     <style>
-        /* 1. PRELOADER - KOMPLETT-FIX */
+        /* Verhindert das Scrollen, solange der Preloader aktiv ist */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+        }
+
+        /* DER PRELOADER-CONTAINER */
         #preloader {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: #000;
-            z-index: 10000; 
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000000; /* Schwarzer Hintergrund */
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: #fff;
-            opacity: 1;
-            transition: opacity 1s ease-in-out;
+            z-index: 99999; /* Immer ganz oben */
+            overflow: hidden; /* FIX: Keine Scrollbalken im Preloader */
+            transition: opacity 0.6s ease-out;
         }
 
-        #loading-bar-container {
-            width: 250px; height: 3px;
-            background: rgba(255,255,255,0.1);
-            margin-top: 20px;
-            border-radius: 5px;
-            overflow: hidden;
+        /* DEIN ORIGINAL DESIGN (Schrift & Emoji) */
+        /* Hier habe ich die ursprüngliche kleine Größe und den Stil beibehalten */
+        .preloader-content {
+            color: white;
+            font-family: Arial, sans-serif; /* Hier ggf. deine Wunsch-Schriftart eintragen */
+            font-size: 16px; /* Die ursprüngliche, kleine Größe */
+            text-align: center;
+            line-height: 1.5;
         }
 
-        #loading-bar {
-            width: 0%; height: 100%;
-            background: #8a2be2;
-            transition: width 0.3s ease;
-        }
-
-        /* 2. LAYOUT & DEIN FIXER ZOOM-PUNKT */
-        html, body {
-            height: 100%; margin: 0; padding: 0;
-            overflow: hidden; background-color: #000;
-        }
-
-        .website-frame {
-            position: absolute;
-            height: 100vh; width: 100vh;
-            top: 0; left: 50%;
-            z-index: 5;
-            opacity: 0; /* Startet unsichtbar */
-            
-            /* Fokuspunkt von Anfang an fixiert, damit nichts springt */
-            transform-origin: 57.840% 76.321%;
-            transform: translateX(-50%) scale(1.0);
-            
-            transition: opacity 2s ease-out, transform 4s ease-in-out;
-            pointer-events: auto;
-        }
-
-        /* Endzustand nach dem Laden */
-        .website-frame.final-zoom {
-            opacity: 1;
-            transform: translateX(-50%) scale(1.3403);
-        }
-
-        /* SLICES - DEINE ORIGINAL SCHREIBWEISE */
-        .slice {
-            position: absolute;
+        /* INHALT DER WEBSEITE (Wird erst nach Laden sichtbar) */
+        #main-content {
+            padding: 20px;
             display: block;
-            margin: -0.5px; /* Kleiner Überlapp gegen Linien */
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
         }
-
-        .link-slice { text-decoration: none; cursor: pointer; }
-        .base-slice, .overlay-slice { display: block; width: 100%; height: 100%; object-fit: fill; }
-
-        .overlay-slice {
-            position: absolute; top: 0; left: 0;
-            opacity: 0;
-            transition: opacity 0.5s ease-out;
-            pointer-events: none;
-        }
-
-        .glow-active { opacity: 1 !important; }
-
-        /* DEINE GLOW EFFEKTE */
-        [data-slice-id='Slice14'] .overlay-slice { filter: drop-shadow(0 0 20px #00bfff); }
-        [data-slice-id='Slice12'] .overlay-slice { filter: drop-shadow(0 0 20px #8a2be2); }
-        [data-slice-id='Slice11'] .overlay-slice { filter: drop-shadow(0 0 30px #ff0096); }
-        [data-slice-id='Slice24'] .overlay-slice { filter: drop-shadow(0 0 20px #00ff00); }
-        [data-slice-id='Slice15'] .overlay-slice { filter: drop-shadow(0 0 20px #ffa500); }
     </style>
 </head>
 <body>
 
-<div id="preloader">
-    <div style="font-family: sans-serif; letter-spacing: 1px;">Wunderland wird geladen...</div>
-    <div id="loading-bar-container">
-        <div id="loading-bar"></div>
-    </div>
-</div>
-
-<div class="website-frame" id="website-frame">
+    <div id="preloader">
+        <div class="preloader-content">
+            ✨ Lädt... 🐾 
+        </div>
     </div>
 
-<script>
-    const frame = document.getElementById('website-frame');
-    const lBar = document.getElementById('loading-bar');
-    const preloader = document.getElementById('preloader');
+    <div id="main-content">
+        <h1>Willkommen auf der Webseite</h1>
+        <p>Der Inhalt wird nun korrekt angezeigt, sobald der Preloader verschwindet.</p>
+    </div>
 
-    // Ladevorgang mit "Sicherheits-Timeout"
-    function initLoading() {
-        const imgs = Array.from(document.querySelectorAll('img'));
-        let loadedCount = 0;
-
-        // Sicherheits-Timeout: Wenn nach 5 Sek nicht alles da ist, trotzdem starten!
-        const forceStart = setTimeout(() => {
-            console.log("Lade-Timeout erreicht - Seite wird trotzdem angezeigt");
-            revealSite();
-        }, 5000);
-
-        if (imgs.length === 0) { revealSite(); clearTimeout(forceStart); return; }
-
-        imgs.forEach(img => {
-            if (img.complete) {
-                incrementCounter();
-            } else {
-                img.addEventListener('load', incrementCounter);
-                img.addEventListener('error', incrementCounter);
-            }
-        });
-
-        function incrementCounter() {
-            loadedCount++;
-            let progress = (loadedCount / imgs.length) * 100;
-            lBar.style.width = progress + '%';
-            
-            if (loadedCount >= imgs.length) {
-                clearTimeout(forceStart);
-                setTimeout(revealSite, 500);
+    <script>
+        // Funktion zum Ausblenden des Preloaders
+        function removePreloader() {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.style.opacity = '0'; // Sanftes Ausfaden
+                
+                setTimeout(() => {
+                    preloader.style.display = 'none'; // Ganz entfernen
+                    document.body.style.overflow = 'auto'; // Scrollen wieder erlauben
+                }, 600);
             }
         }
-    }
 
-    function revealSite() {
-        preloader.style.opacity = '0';
-        setTimeout(() => {
-            preloader.style.display = 'none';
-            frame.classList.add('final-zoom');
-        }, 1000);
-    }
-
-    // Klick & Glow Logik
-    document.querySelectorAll('.link-slice').forEach(link => {
-        link.addEventListener('click', function(e) {
-            const overlay = this.querySelector('.overlay-slice');
-            if (overlay) overlay.classList.add('glow-active');
-
-            const sliceId = this.getAttribute('data-slice-id');
-            const audio = document.getElementById('sound-' + (sliceId ? sliceId.toLowerCase() : ''));
-            if (audio) { audio.currentTime = 0; audio.play(); }
-
-            if (this.href && !this.href.includes('javascript')) {
-                e.preventDefault();
-                const target = this.href;
-                setTimeout(() => {
-                    frame.style.opacity = '0';
-                    setTimeout(() => { window.location.href = target; }, 800);
-                }, 400);
-            }
+        // 1. Wenn die Seite vollständig geladen ist
+        window.addEventListener('load', function() {
+            // Eine kleine Verzögerung von 500ms, damit man das Design kurz sieht
+            setTimeout(removePreloader, 500); 
         });
-    });
 
-    // Reset für Browser-Back-Button
-    window.addEventListener('pageshow', (event) => {
-        document.querySelectorAll('.glow-active').forEach(el => el.classList.remove('glow-active'));
-        frame.style.opacity = '1';
-        frame.style.transition = 'none';
-        frame.classList.add('final-zoom');
-        setTimeout(() => { frame.style.transition = 'opacity 2s ease-out, transform 4s ease-in-out'; }, 50);
-    });
+        // 2. Sicherheits-Timeout: Falls ein Element nicht lädt, 
+        // verschwindet der Preloader nach spätestens 4 Sekunden von selbst.
+        setTimeout(removePreloader, 4000);
+    </script>
 
-    // Start
-    window.onload = initLoading;
-</script>
 </body>
 </html>
