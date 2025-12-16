@@ -5,69 +5,82 @@
     <title>Asmaas Wunderland</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        html, body {
-            height: 100%; 
-            margin: 0; padding: 0; 
-            overflow: hidden; 
-            background-color: #000;
-        }
-
-        /* PRELOADER */
+        /* 1. PRELOADER - KOMPLETT-FIX */
         #preloader {
-            position: fixed; 
-            top: 0; left: 0; width: 100%; height: 100%; 
-            background-color: #000; z-index: 9999; 
-            display: flex; flex-direction: column; 
-            justify-content: center; align-items: center;
-            color: #fff; transition: opacity 1.2s ease-in-out; 
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #000;
+            z-index: 10000; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            opacity: 1;
+            transition: opacity 1s ease-in-out;
         }
 
-        /* WEBSITE-FRAME: FIXIERTE POSITIONIERUNG */
+        #loading-bar-container {
+            width: 250px; height: 3px;
+            background: rgba(255,255,255,0.1);
+            margin-top: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #loading-bar {
+            width: 0%; height: 100%;
+            background: #8a2be2;
+            transition: width 0.3s ease;
+        }
+
+        /* 2. LAYOUT & DEIN FIXER ZOOM-PUNKT */
+        html, body {
+            height: 100%; margin: 0; padding: 0;
+            overflow: hidden; background-color: #000;
+        }
+
         .website-frame {
             position: absolute;
-            height: 100dvh; width: 100dvh; 
-            top: 0; left: 50%; 
-            overflow: hidden; 
+            height: 100vh; width: 100vh;
+            top: 0; left: 50%;
             z-index: 5;
             opacity: 0; /* Startet unsichtbar */
             
-            /* WICHTIG: Der Fokuspunkt ist von Anfang an fixiert */
-            transform-origin: 57.840% 76.321%; 
-            transform: translateX(-50%) scale(1.0); 
+            /* Fokuspunkt von Anfang an fixiert, damit nichts springt */
+            transform-origin: 57.840% 76.321%;
+            transform: translateX(-50%) scale(1.0);
             
-            /* Sanfter Übergang nur für Scale und Opacity */
-            transition: opacity 2s ease-out, transform 4s ease-in-out; 
+            transition: opacity 2s ease-out, transform 4s ease-in-out;
+            pointer-events: auto;
         }
-        
-        /* Endzustand nach dem Laden - Nur der Scale ändert sich */
+
+        /* Endzustand nach dem Laden */
         .website-frame.final-zoom {
             opacity: 1;
-            transform: translateX(-50%) scale(1.3403); 
+            transform: translateX(-50%) scale(1.3403);
         }
-        
-        .website-frame.fade-out { opacity: 0 !important; }
 
-        /* SLICES: DEIN LAYOUT */
+        /* SLICES - DEINE ORIGINAL SCHREIBWEISE */
         .slice {
             position: absolute;
             display: block;
-            margin: -0.6px; /* Schließt Kachellinien durch minimale Überlappung */
+            margin: -0.5px; /* Kleiner Überlapp gegen Linien */
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            outline: 1px solid transparent; /* Hilft gegen Aliasing-Kanten */
         }
-           
+
         .link-slice { text-decoration: none; cursor: pointer; }
         .base-slice, .overlay-slice { display: block; width: 100%; height: 100%; object-fit: fill; }
-        
+
         .overlay-slice {
             position: absolute; top: 0; left: 0;
             opacity: 0;
-            transition: opacity 0.4s ease-out; /* Schnelleres Ansprechen beim Klick */
-            pointer-events: none; 
+            transition: opacity 0.5s ease-out;
+            pointer-events: none;
         }
-        
-        /* Die Klasse für das Leuchten */
+
         .glow-active { opacity: 1 !important; }
 
         /* DEINE GLOW EFFEKTE */
@@ -81,8 +94,9 @@
 <body>
 
 <div id="preloader">
-    <div id="loading-bar-container" style="width:200px; height:2px; background:rgba(255,255,255,0.2);">
-        <div id="loading-bar" style="width:0%; height:100%; background:#8a2be2;"></div>
+    <div style="font-family: sans-serif; letter-spacing: 1px;">Wunderland wird geladen...</div>
+    <div id="loading-bar-container">
+        <div id="loading-bar"></div>
     </div>
 </div>
 
@@ -91,32 +105,49 @@
 
 <script>
     const frame = document.getElementById('website-frame');
-    const loadingBar = document.getElementById('loading-bar');
+    const lBar = document.getElementById('loading-bar');
+    const preloader = document.getElementById('preloader');
 
-    // Ladevorgang
-    function init() {
-        const images = document.querySelectorAll('img');
-        let loaded = 0;
-        if(images.length === 0) { finish(); return; }
-        images.forEach(img => {
-            if (img.complete) { loaded++; } 
-            else { img.onload = () => { loaded++; check(); }; img.onerror = () => { loaded++; check(); }; }
+    // Ladevorgang mit "Sicherheits-Timeout"
+    function initLoading() {
+        const imgs = Array.from(document.querySelectorAll('img'));
+        let loadedCount = 0;
+
+        // Sicherheits-Timeout: Wenn nach 5 Sek nicht alles da ist, trotzdem starten!
+        const forceStart = setTimeout(() => {
+            console.log("Lade-Timeout erreicht - Seite wird trotzdem angezeigt");
+            revealSite();
+        }, 5000);
+
+        if (imgs.length === 0) { revealSite(); clearTimeout(forceStart); return; }
+
+        imgs.forEach(img => {
+            if (img.complete) {
+                incrementCounter();
+            } else {
+                img.addEventListener('load', incrementCounter);
+                img.addEventListener('error', incrementCounter);
+            }
         });
-        function check() {
-            loadingBar.style.width = (loaded / images.length * 100) + '%';
-            if (loaded >= images.length) finish();
+
+        function incrementCounter() {
+            loadedCount++;
+            let progress = (loadedCount / imgs.length) * 100;
+            lBar.style.width = progress + '%';
+            
+            if (loadedCount >= imgs.length) {
+                clearTimeout(forceStart);
+                setTimeout(revealSite, 500);
+            }
         }
-        check();
     }
 
-    function finish() {
+    function revealSite() {
+        preloader.style.opacity = '0';
         setTimeout(() => {
-            document.getElementById('preloader').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('preloader').style.display = 'none';
-                frame.classList.add('final-zoom');
-            }, 1200);
-        }, 500);
+            preloader.style.display = 'none';
+            frame.classList.add('final-zoom');
+        }, 1000);
     }
 
     // Klick & Glow Logik
@@ -129,34 +160,28 @@
             const audio = document.getElementById('sound-' + (sliceId ? sliceId.toLowerCase() : ''));
             if (audio) { audio.currentTime = 0; audio.play(); }
 
-            if (this.href.includes('http')) {
-                // Bei echten Links: Warten für Sound/Glow, dann Fade-Out
+            if (this.href && !this.href.includes('javascript')) {
                 e.preventDefault();
                 const target = this.href;
                 setTimeout(() => {
-                    frame.classList.add('fade-out');
-                    setTimeout(() => { window.location.href = target; }, 1000);
+                    frame.style.opacity = '0';
+                    setTimeout(() => { window.location.href = target; }, 800);
                 }, 400);
             }
         });
     });
 
-    // Reset beim Zurückkehren (Browser-Back)
+    // Reset für Browser-Back-Button
     window.addEventListener('pageshow', (event) => {
-        // 1. Alle Leuchteffekte aus
-        document.querySelectorAll('.overlay-slice').forEach(el => {
-            el.classList.remove('glow-active');
-        });
-        // 2. Sichtbarkeit wiederherstellen
-        frame.classList.remove('fade-out');
-        // 3. Zoom-Position halten (ohne erneute Animation)
+        document.querySelectorAll('.glow-active').forEach(el => el.classList.remove('glow-active'));
+        frame.style.opacity = '1';
         frame.style.transition = 'none';
         frame.classList.add('final-zoom');
-        // Transition nach kurzem Moment wieder aktivieren für spätere Klicks
-        setTimeout(() => { frame.style.transition = ''; }, 100);
+        setTimeout(() => { frame.style.transition = 'opacity 2s ease-out, transform 4s ease-in-out'; }, 50);
     });
 
-    window.onload = init;
+    // Start
+    window.onload = initLoading;
 </script>
 </body>
 </html>
