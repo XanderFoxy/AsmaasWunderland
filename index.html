@@ -10,7 +10,6 @@
             margin: 0; padding: 0; 
             overflow: hidden; 
             background-color: #000;
-            font-family: sans-serif;
         }
 
         /* PRELOADER */
@@ -20,191 +19,141 @@
             background-color: #000; z-index: 9999; 
             display: flex; flex-direction: column; 
             justify-content: center; align-items: center;
-            color: #fff; transition: opacity 1.5s ease-out; 
+            color: #fff; transition: opacity 1.2s ease-in-out; 
         }
 
-        #loading-bar-container {
-            width: 300px; height: 4px;
-            background-color: rgba(255, 255, 255, 0.2);
-            margin: 20px auto; border-radius: 2px; overflow: hidden;
-        }
-
-        #loading-bar {
-            height: 100%; width: 0%;
-            background-color: #8a2be2;
-        }
-
-        /* WEBSITE-FRAME: Deine exakten Positionswerte */
+        /* WEBSITE-FRAME: FIXIERTE POSITIONIERUNG */
         .website-frame {
             position: absolute;
             height: 100dvh; width: 100dvh; 
             top: 0; left: 50%; 
-            overflow: hidden; z-index: 5;
-            transition: opacity 2.0s ease-out, transform 4.0s ease-in-out; 
-            opacity: 1;
-            transform-origin: 50% 50%; 
+            overflow: hidden; 
+            z-index: 5;
+            opacity: 0; /* Startet unsichtbar */
+            
+            /* WICHTIG: Der Fokuspunkt ist von Anfang an fixiert */
+            transform-origin: 57.840% 76.321%; 
             transform: translateX(-50%) scale(1.0); 
+            
+            /* Sanfter Übergang nur für Scale und Opacity */
+            transition: opacity 2s ease-out, transform 4s ease-in-out; 
         }
         
-        /* Dein spezieller Zoom-Punkt */
+        /* Endzustand nach dem Laden - Nur der Scale ändert sich */
         .website-frame.final-zoom {
-            transform-origin: 57.840% 76.321%; 
+            opacity: 1;
             transform: translateX(-50%) scale(1.3403); 
         }
         
         .website-frame.fade-out { opacity: 0 !important; }
 
-        /* SLICES: Fix gegen Kachellinien */
+        /* SLICES: DEIN LAYOUT */
         .slice {
             position: absolute;
             display: block;
-            margin: -0.1px; /* Minimaler Überlapp gegen Linien */
-            transform: translateZ(0); /* Hardware-Beschleunigung */
+            margin: -0.6px; /* Schließt Kachellinien durch minimale Überlappung */
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            outline: 1px solid transparent; /* Hilft gegen Aliasing-Kanten */
         }
            
         .link-slice { text-decoration: none; cursor: pointer; }
-
-        .base-slice, .overlay-slice { 
-            display: block; width: 100%; height: 100%; object-fit: fill; 
-        }
+        .base-slice, .overlay-slice { display: block; width: 100%; height: 100%; object-fit: fill; }
         
         .overlay-slice {
             position: absolute; top: 0; left: 0;
             opacity: 0;
-            transition: opacity 4.0s ease-out, filter 0.15s ease-out; 
+            transition: opacity 0.4s ease-out; /* Schnelleres Ansprechen beim Klick */
             pointer-events: none; 
         }
         
-        .overlay-slice.glow { opacity: 1; }
+        /* Die Klasse für das Leuchten */
+        .glow-active { opacity: 1 !important; }
 
         /* DEINE GLOW EFFEKTE */
-        .link-slice[data-slice-id='Slice14'] .overlay-slice.glow { filter: drop-shadow(0 0 25px rgba(0, 191, 255, 1)); }
-        .link-slice[data-slice-id='Slice12'] .overlay-slice.glow { filter: drop-shadow(0 0 25px rgba(138, 43, 226, 1)); }
-        .link-slice[data-slice-id='Slice11'] .overlay-slice.glow { filter: drop-shadow(0 0 40px rgba(255, 0, 150, 1)); }
-        .link-slice[data-slice-id='Slice24'] .overlay-slice.glow { filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.9)); }
-        .link-slice[data-slice-id='Slice15'] .overlay-slice.glow { filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.9)); }
-
-        #vignette-layer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 10;
-            background-image: radial-gradient(ellipse 200% 100% at center, transparent 95%, rgba(255, 223, 0, 0.1) 100%);
-        }
+        [data-slice-id='Slice14'] .overlay-slice { filter: drop-shadow(0 0 20px #00bfff); }
+        [data-slice-id='Slice12'] .overlay-slice { filter: drop-shadow(0 0 20px #8a2be2); }
+        [data-slice-id='Slice11'] .overlay-slice { filter: drop-shadow(0 0 30px #ff0096); }
+        [data-slice-id='Slice24'] .overlay-slice { filter: drop-shadow(0 0 20px #00ff00); }
+        [data-slice-id='Slice15'] .overlay-slice { filter: drop-shadow(0 0 20px #ffa500); }
     </style>
 </head>
 <body>
 
-<audio id="sound-slice11" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/musik.mp3" preload="auto"></audio>
-<audio id="sound-slice12" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/videos.mp3" preload="auto"></audio>
-<audio id="sound-slice14" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/slice14.mp3" preload="auto"></audio>
-<audio id="sound-slice15" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/bilder.mp3" preload="auto"></audio>
-<audio id="sound-slice24" src="https://xanderfoxy.github.io/AsmaasWunderland/Sounds/spiele.mp3" preload="auto"></audio>
-
 <div id="preloader">
-    <div>✨ Betritt Asmaas Wunderland</div>
-    <div id="loading-bar-container"><div id="loading-bar"></div></div>
+    <div id="loading-bar-container" style="width:200px; height:2px; background:rgba(255,255,255,0.2);">
+        <div id="loading-bar" style="width:0%; height:100%; background:#8a2be2;"></div>
+    </div>
 </div>
-
-<div id="vignette-layer"></div>
 
 <div class="website-frame" id="website-frame">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice7.png" style="left: 0%; top: 0%; width: 33.359%; height: 28.418%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice1.jpg" style="left: 33.359%; top: 0%; width: 39.404%; height: 22.656%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice8.png" style="left: 72.763%; top: 0%; width: 27.237%; height: 28.418%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice9.jpg" style="left: 33.359%; top: 22.656%; width: 6.592%; height: 5.762%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice2.png" style="left: 39.951%; top: 22.656%; width: 26.562%; height: 5.762%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice10.jpg" style="left: 66.513%; top: 22.656%; width: 6.25%; height: 5.762%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice23.png" style="left: 0%; top: 28.418%; width: 33.359%; height: 12.598%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice27.jpg" style="left: 33.359%; top: 28.418%; width: 6.592%; height: 6.348%;">
-    
-    <a href="https://xanderfoxy.github.io/AsmaasWunderland/videos" class="slice link-slice" data-slice-id="Slice12" style="left: 39.951%; top: 28.418%; width: 26.572%; height: 6.358%;">
-        <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12.png">
-        <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice12Overlay.png">
-    </a>
-    
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice28.jpg" style="left: 66.513%; top: 28.418%; width: 6.25%; height: 6.348%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice22.jpg" style="left: 72.763%; top: 28.418%; width: 27.237%; height: 17.432%;">
-    
-    <a href="https://xanderfoxy.github.io/AsmaasWunderland/musik" class="slice link-slice" data-slice-id="Slice11" style="left: 33.359%; top: 34.766%; width: 14.463%; height: 6.26%;">
-        <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice11.png">
-        <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice11Overlay.png">
-    </a>
-    
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice25.png" style="left: 47.812%; top: 34.766%; width: 6.25%; height: 6.25%;">
-    
-    <a href="https://xanderfoxy.github.io/MemorySpiel" class="slice link-slice" data-slice-id="Slice24" style="left: 54.062%; top: 34.766%; width: 18.711%; height: 11.094%;">
-        <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24.png">
-        <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice24Overlay.png">
-    </a>
-    
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice29.jpg" style="left: 0%; top: 41.016%; width: 23.877%; height: 23.047%;">
-    
-    <a href="javascript:void(0);" class="slice link-slice" data-slice-id="Slice14" style="left: 23.877%; top: 41.016%; width: 23.936%; height: 23.057%;">
-        <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14.png">
-        <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice14Overlay.png">
-    </a>
-    
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice3.png" style="left: 47.803%; top: 41.016%; width: 6.25%; height: 23.047%;">
-    
-    <a href="https://xanderfoxy.github.io/Dabdoubi/" class="slice link-slice" data-slice-id="Slice15" style="left: 54.062%; top: 45.84%; width: 35.215%; height: 18.223%;">
-        <img class="base-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15.png">
-        <img class="overlay-slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice15Overlay.png">
-    </a>
-    
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice26.jpg" style="left: 89.267%; top: 45.84%; width: 10.733%; height: 18.213%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice16.jpg" style="left: 0%; top: 64.062%; width: 44.775%; height: 35.938%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice13.png" style="left: 44.775%; top: 64.062%; width: 13.525%; height: 9.668%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice4.png" style="left: 44.775%; top: 73.73%; width: 13.525%; height: 9.863%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice6.png" style="left: 44.775%; top: 83.593%; width: 13.525%; height: 14.453%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice20.jpg" style="left: 44.775%; top: 98.046%; width: 13.525%; height: 2.002%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice17.jpg" style="left: 58.300%; top: 64.062%; width: 41.700%; height: 16.455%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice5.png" style="left: 58.300%; top: 80.517%; width: 14.453%; height: 11.572%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice19.jpg" style="left: 58.300%; top: 92.089%; width: 14.453%; height: 7.909%;">
-    <img class="slice" src="https://xanderfoxy.github.io/AsmaasWunderland/Slices/Slice18.jpg" style="left: 72.753%; top: 80.517%; width: 27.247%; height: 19.483%;">
-</div>
+    </div>
 
 <script>
     const frame = document.getElementById('website-frame');
     const loadingBar = document.getElementById('loading-bar');
-    const preloader = document.getElementById('preloader');
 
+    // Ladevorgang
     function init() {
         const images = document.querySelectorAll('img');
         let loaded = 0;
+        if(images.length === 0) { finish(); return; }
         images.forEach(img => {
-            if (img.complete) loaded++;
-            else { img.onload = () => { loaded++; update(); }; img.onerror = () => { loaded++; update(); }; }
+            if (img.complete) { loaded++; } 
+            else { img.onload = () => { loaded++; check(); }; img.onerror = () => { loaded++; check(); }; }
         });
-        function update() { 
+        function check() {
             loadingBar.style.width = (loaded / images.length * 100) + '%';
-            if (loaded >= images.length) setTimeout(showSite, 800);
+            if (loaded >= images.length) finish();
         }
-        update();
+        check();
     }
 
-    function showSite() {
-        preloader.style.opacity = '0';
-        setTimeout(() => { preloader.style.display = 'none'; frame.classList.add('final-zoom'); }, 1500);
+    function finish() {
+        setTimeout(() => {
+            document.getElementById('preloader').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('preloader').style.display = 'none';
+                frame.classList.add('final-zoom');
+            }, 1200);
+        }, 500);
     }
 
+    // Klick & Glow Logik
     document.querySelectorAll('.link-slice').forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const sliceId = this.getAttribute('data-slice-id');
             const overlay = this.querySelector('.overlay-slice');
-            const audio = document.getElementById('sound-' + sliceId.toLowerCase());
+            if (overlay) overlay.classList.add('glow-active');
+
+            const sliceId = this.getAttribute('data-slice-id');
+            const audio = document.getElementById('sound-' + (sliceId ? sliceId.toLowerCase() : ''));
             if (audio) { audio.currentTime = 0; audio.play(); }
-            if (overlay) overlay.classList.add('glow');
+
             if (this.href.includes('http')) {
-                setTimeout(() => { frame.classList.add('fade-out'); setTimeout(() => window.location.href = this.href, 2000); }, 200);
-            } else { setTimeout(() => overlay.classList.remove('glow'), 4000); }
+                // Bei echten Links: Warten für Sound/Glow, dann Fade-Out
+                e.preventDefault();
+                const target = this.href;
+                setTimeout(() => {
+                    frame.classList.add('fade-out');
+                    setTimeout(() => { window.location.href = target; }, 1000);
+                }, 400);
+            }
         });
     });
 
-    // RESET BEIM ZURÜCKGEHEN
+    // Reset beim Zurückkehren (Browser-Back)
     window.addEventListener('pageshow', (event) => {
-        document.querySelectorAll('.overlay-slice').forEach(el => el.classList.remove('glow'));
+        // 1. Alle Leuchteffekte aus
+        document.querySelectorAll('.overlay-slice').forEach(el => {
+            el.classList.remove('glow-active');
+        });
+        // 2. Sichtbarkeit wiederherstellen
         frame.classList.remove('fade-out');
+        // 3. Zoom-Position halten (ohne erneute Animation)
+        frame.style.transition = 'none';
         frame.classList.add('final-zoom');
+        // Transition nach kurzem Moment wieder aktivieren für spätere Klicks
+        setTimeout(() => { frame.style.transition = ''; }, 100);
     });
 
     window.onload = init;
